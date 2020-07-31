@@ -35,7 +35,7 @@ for (let x = 0; x < COMMON_FILMS_COUNT; x++) {
 }
 
 const filmsListExtraElements = filmsElement.querySelectorAll(`.films-list--extra`);
-filmsListExtraElements.forEach(element => {
+filmsListExtraElements.forEach((element) => {
   let filmsListExtraContainerElement = element.querySelector(`.films-list__container`);
   for (let i = 0; i < EXTRA_FILMS_COUNT; i++) {
     render(filmsListExtraContainerElement, createFilmCardTemplate(), `beforeend`);

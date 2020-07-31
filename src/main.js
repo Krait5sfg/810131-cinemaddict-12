@@ -35,12 +35,12 @@ for (let x = 0; x < COMMON_FILMS_COUNT; x++) {
 }
 
 const filmsListExtraElements = filmsElement.querySelectorAll(`.films-list--extra`);
-for (let x = 0; x < filmsListExtraElements.length; x++) {
-  let filmsListExtraContainerElement = filmsListExtraElements[x].querySelector(`.films-list__container`);
+filmsListExtraElements.forEach(element => {
+  let filmsListExtraContainerElement = element.querySelector(`.films-list__container`);
   for (let i = 0; i < EXTRA_FILMS_COUNT; i++) {
     render(filmsListExtraContainerElement, createFilmCardTemplate(), `beforeend`);
   }
-}
+});
 
 render(footerStatisticsElement, createStatisticsTemplate(), `beforeend`);
 // render(bodyElement, createFilmDetailsTemplate(), `beforeend`);

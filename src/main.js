@@ -8,6 +8,8 @@ import {createFilmsListMostCommentedTemplate} from './view/films-list-most-comme
 import {createFilmCardTemplate} from './view/film-card.js';
 import {createStatisticsTemplate} from './view/statistics.js';
 // import {createFilmDetailsTemplate, bodyElement} from './view/film-details.js';
+//моки
+import {generateFilm} from './mock/film.js';
 
 const COMMON_FILMS_COUNT = 5;
 const EXTRA_FILMS_COUNT = 2;

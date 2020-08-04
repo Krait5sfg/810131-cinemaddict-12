@@ -11,7 +11,7 @@ const getRandomDouble = (min, max) => {
   const lower = Math.ceil(Math.min(min, max));
   const upper = Math.floor(Math.max(min, max));
 
-  return lower + Math.random() * (upper - lower + 1);
+  return (lower + Math.random() * (upper - lower + 1)).toFixed(1);
 };
 
 const titles = [
@@ -24,13 +24,13 @@ const titles = [
 const generateImage = () => {
 
   const images = [
-    `../../public/images/posters/made-for-each-other.png`,
-    `../../public/images/posters/the-man-with-the-golden-arm.png`,
-    `../../public/images/posters/the-great-flamarion.png`,
-    `../../public/images/posters/the-dance-of-life.png`,
-    `../../public/images/posters/santa-claus-conquers-the-martians.png`,
-    `../../public/images/posters/sagebrush-trail.png`,
-    `../../public/images/posters/popeye-meets-sinbad.png`,
+    `./images/posters/made-for-each-other.png`,
+    `./images/posters/the-man-with-the-golden-arm.jpg`,
+    `./images/posters/the-great-flamarion.jpg`,
+    `./images/posters/the-dance-of-life.jpg`,
+    `./images/posters/santa-claus-conquers-the-martians.jpg`,
+    `./images/posters/sagebrush-trail.jpg`,
+    `./images/posters/popeye-meets-sinbad.png`,
   ];
   const randomImage = images[getRandomInteger(0, images.length - 1)];
   return randomImage;
@@ -51,7 +51,7 @@ const generateDesciption = () => {
     `Nunc fermentum tortor ac porta dapibus.`,
     `In rutrum ac purus sit amet tempus.`];
 
-  const randomSentence = sentences.slice(getRandomInteger(0, 5)).join(``);
+  const randomSentence = sentences.slice(0, getRandomInteger(1, 5)).join(``);
 
   return randomSentence;
 };
@@ -85,11 +85,11 @@ export const generateFilm = () => {
   return {
     image: generateImage(),
     title: titles[getRandomInteger(0, titles.length - 1)],
-    rating: getRandomDouble(0, 10).toFixed(1),
+    rating: getRandomDouble(1, 9),
     year: getRandomInteger(1920, 2020),
     duration: generateDuration(),
     genre: generateGenre(),
     description: generateDesciption(),
-    comment: new Array(getRandomInteger(0, 5)).fill(generateComment()),
+    comments: new Array(getRandomInteger(0, 5)).fill(generateComment()),
   };
 };

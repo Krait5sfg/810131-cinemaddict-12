@@ -27,3 +27,13 @@ export const generateRandomDateForComment = () => {
 
   return `${randomDate.getFullYear()}/${randomDate.getMonth()}/${randomDate.getDate()} ${randomDate.getHours()}:${randomDate.getMinutes()}`;
 };
+
+export const createObjectCountFromArray = (values) => {
+  const result = {};
+
+  values.forEach((element) => {
+    result[element.title] = element.count;
+  });
+
+  return result;
+};

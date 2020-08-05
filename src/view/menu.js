@@ -1,12 +1,6 @@
-export const createMenuTemplate = (filmsCounts) => {
+export const createMenuTemplate = (countFilmsStatus) => {
 
-  const countFilmStatus = {};
-
-  filmsCounts.forEach((element) => {
-    countFilmStatus[element.title] = element.count;
-  });
-
-  const {watchlist, watched, favorite} = countFilmStatus;
+  const {watchlist, watched, favorite} = countFilmsStatus;
 
   return (`
     <nav class="main-navigation">

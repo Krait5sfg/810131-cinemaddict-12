@@ -12,8 +12,9 @@ import {generateFilm} from './mock/film.js'; // функция создает м
 import {generateUser} from './mock/user.js'; // мок для пользователя
 import {generateFilmMenuCount} from './mock/menu.js'; // счет фильмов для меню
 
-const COMMON_FILMS_COUNT = 5;
+const COMMON_FILMS_COUNT = 20;
 const EXTRA_FILMS_COUNT = 2;
+const RENDER_FOR_STEP = 5;
 
 // создание моков для фильма
 const commonFilms = new Array(COMMON_FILMS_COUNT).fill().map(generateFilm);
@@ -46,7 +47,7 @@ render(filmsElement, createFilmsListMostCommentedTemplate(), `beforeend`);
 
 const filmsListContainerElement = filmsElement.querySelector(`.films-list__container`);
 // render(bodyElement, createFilmDetailsTemplate(commonFilms[0]), `beforeend`); // попап карточки фильма
-for (let x = 0; x < COMMON_FILMS_COUNT; x++) {
+for (let x = 0; x < RENDER_FOR_STEP; x++) {
   render(filmsListContainerElement, createFilmCardTemplate(commonFilms[x]), `beforeend`);
 }
 
@@ -67,3 +68,23 @@ filmsListExtraElements.forEach((element) => {
 });
 
 render(footerStatisticsElement, createStatisticsTemplate(filmsCount), `beforeend`);
+
+// рендеринг фильмов при нажатии кнопки
+if (commonFilms.length > RENDER_FOR_STEP) {
+  let renderFilmCount = RENDER_FOR_STEP;
+  const showMoreElement = document.querySelector(`.films-list__show-more`);
+
+  showMoreElement.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    commonFilms
+      .slice(renderFilmCount, renderFilmCount + RENDER_FOR_STEP)
+      .forEach((film) => render(filmsListContainerElement, createFilmCardTemplate(film), `beforeend`));
+
+    renderFilmCount += RENDER_FOR_STEP;
+    if (renderFilmCount >= commonFilms.length) {
+      showMoreElement.remove();
+    }
+  });
+
+}
+

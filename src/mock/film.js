@@ -1,18 +1,5 @@
 import {generateComment} from './comment.js';
-
-const getRandomInteger = (min = 0, max = 1) => {
-  const lower = Math.ceil(Math.min(min, max));
-  const upper = Math.floor(Math.max(min, max));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-
-const getRandomDouble = (min, max) => {
-  const lower = Math.ceil(Math.min(min, max));
-  const upper = Math.floor(Math.max(min, max));
-
-  return (lower + Math.random() * (upper - lower + 1)).toFixed(1);
-};
+import {getRandomInteger, getRandomDouble, genRandomDate} from '../utils.js';
 
 const titles = [
   `The Dance of Life`,
@@ -63,11 +50,13 @@ const generateGenre = () => {
     `Western`,
     `Drama`,
     `Comedy`,
-    `Cartoon`
+    `Cartoon`,
+    `Film - Noir`,
+    `Mystery`
   ];
 
-  const randomGenre = genreTypes[getRandomInteger(0, genreTypes.length - 1)];
-  return randomGenre;
+  const randomGenres = genreTypes.slice(0, getRandomInteger(1, genreTypes.length - 1));
+  return randomGenres;
 };
 
 const generateDuration = () => {
@@ -81,15 +70,29 @@ const generateDuration = () => {
   return randomDuration;
 };
 
+const generateStatus = () => {
+  return {
+    favorite: Boolean(getRandomInteger(0, 1)),
+    watched: Boolean(getRandomInteger(0, 1)),
+    watchlist: Boolean(getRandomInteger(0, 1)),
+  };
+};
+
 export const generateFilm = () => {
   return {
     image: generateImage(),
     title: titles[getRandomInteger(0, titles.length - 1)],
     rating: getRandomDouble(1, 9),
-    year: getRandomInteger(1920, 2020),
+    director: `Anthony Mann`,
+    writers: `Anne Wigton, Heinz Herald, Richard Weil`,
+    actors: `Erich von Stroheim, Mary Beth Hughes, Dan Duryea`,
+    releaseDate: genRandomDate(),
     duration: generateDuration(),
-    genre: generateGenre(),
+    country: `USA`,
+    genres: generateGenre(),
     description: generateDesciption(),
-    comments: new Array(getRandomInteger(0, 5)).fill(generateComment()),
+    comments: new Array(getRandomInteger(0, 5)).fill().map(generateComment),
+    ageRating: `18+`,
+    status: generateStatus(),
   };
 };

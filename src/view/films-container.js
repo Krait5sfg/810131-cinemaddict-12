@@ -1,3 +1,1 @@
-const createFilmsContainerTemplate = () => `<section class="films"></section>`;
-
-export {createFilmsContainerTemplate};
+export const createFilmsContainerTemplate = () => `<section class="films"></section>`;

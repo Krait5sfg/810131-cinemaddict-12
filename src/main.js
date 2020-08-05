@@ -9,6 +9,8 @@ import {createFilmCardTemplate} from './view/film-card.js';
 import {createStatisticsTemplate} from './view/statistics.js';
 // import {createFilmDetailsTemplate, bodyElement} from './view/film-details.js';
 import {generateFilm} from './mock/film.js'; // функция создает мок для фильма
+import {generateUser} from './mock/user.js'; // мок для пользователя
+import {generateFilmMenuCount} from './mock/menu.js'; // счет фильмов для меню
 
 const COMMON_FILMS_COUNT = 5;
 const EXTRA_FILMS_COUNT = 2;
@@ -18,6 +20,11 @@ const commonFilms = new Array(COMMON_FILMS_COUNT).fill().map(generateFilm);
 const topRatedFilms = commonFilms.slice().sort((firstFilm, secondFilm) => firstFilm.rating < secondFilm.rating ? 1 : -1);
 const topCommentedFilms = commonFilms.slice().sort((firstFilm, secondFilm) => firstFilm.comments.length < secondFilm.comments.length ? 1 : -1
 );
+const filmsCount = commonFilms.length;
+// мок для пользователя
+const user = generateUser();
+// счет фильмов для меню
+const menuCounts = generateFilmMenuCount(commonFilms);
 
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
@@ -27,8 +34,8 @@ const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-render(headerElement, createUserProfileTemplate(), `beforeend`);
-render(mainElement, createMenuTemplate(), `beforeend`);
+render(headerElement, createUserProfileTemplate(user), `beforeend`);
+render(mainElement, createMenuTemplate(menuCounts), `beforeend`);
 render(mainElement, createSortingTemplate(), `beforeend`);
 render(mainElement, createFilmsContainerTemplate(), `beforeend`);
 
@@ -38,6 +45,7 @@ render(filmsElement, createFilmsListTopRatedTemplate(), `beforeend`);
 render(filmsElement, createFilmsListMostCommentedTemplate(), `beforeend`);
 
 const filmsListContainerElement = filmsElement.querySelector(`.films-list__container`);
+// render(bodyElement, createFilmDetailsTemplate(commonFilms[0]), `beforeend`); // попап карточки фильма
 for (let x = 0; x < COMMON_FILMS_COUNT; x++) {
   render(filmsListContainerElement, createFilmCardTemplate(commonFilms[x]), `beforeend`);
 }
@@ -58,5 +66,4 @@ filmsListExtraElements.forEach((element) => {
   }
 });
 
-render(footerStatisticsElement, createStatisticsTemplate(), `beforeend`);
-// render(bodyElement, createFilmDetailsTemplate(), `beforeend`);
+render(footerStatisticsElement, createStatisticsTemplate(filmsCount), `beforeend`);

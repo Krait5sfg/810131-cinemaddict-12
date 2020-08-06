@@ -5,8 +5,7 @@ const WatchCount = {
   FAN_UPPER_BOUND: 20,
 };
 
-export const generateUser = (countFilmsStatus) => {
-  const {watched} = countFilmsStatus;
+export const generateUser = ({watched}) => {
   const {NOVICE_LOW_BOUND, NOVICE_UPPER_BOUND, FAN_LOW_BOUND, FAN_UPPER_BOUND} = WatchCount;
 
   let userRating = ``;

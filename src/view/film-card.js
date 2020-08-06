@@ -1,4 +1,4 @@
-import {getRandomInteger} from '../utils.js';
+import {getRandomInteger, getHumanizeViewFromDuration} from '../utils.js';
 
 export const createFilmCardTemplate = (film) => {
 
@@ -6,6 +6,7 @@ export const createFilmCardTemplate = (film) => {
   const {favorite, watched, watchlist} = status;
   const genre = genres[getRandomInteger(0, genres.length - 1)];
   const year = releaseDate.slice(releaseDate.length - 4, releaseDate.length);
+  const humanizeDuration = getHumanizeViewFromDuration(duration);
 
   return (`
     <article class="film-card">
@@ -13,7 +14,7 @@ export const createFilmCardTemplate = (film) => {
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
-        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__duration">${humanizeDuration}</span>
         <span class="film-card__genre">${genre}</span>
       </p>
       <img src="${image}" alt="" class="film-card__poster">

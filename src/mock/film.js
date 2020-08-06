@@ -59,16 +59,10 @@ const generateGenre = () => {
   return randomGenres;
 };
 
-const generateDuration = () => {
-  const hour = getRandomInteger(0, 1);
-  const minute = getRandomInteger(0, 60);
-  let randomDuration = ``;
-
-  randomDuration += hour ? `${hour}h ` : ``;
-  randomDuration += minute ? `${minute}m` : ``;
-
-  return randomDuration;
-};
+const generateDuration = () => ({
+  hours: getRandomInteger(0, 1),
+  minutes: getRandomInteger(1, 60),
+});
 
 const generateStatus = () => ({
   favorite: getRandomBooleanValue(),

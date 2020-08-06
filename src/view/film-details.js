@@ -1,3 +1,5 @@
+import {getHumanizeViewFromDuration} from '../utils.js';
+
 const generateGenres = (genres) => {
   let result = ``;
   for (let i = 0; i < genres.length; i++) {
@@ -36,6 +38,8 @@ export const createFilmDetailsTemplate = (film) => {
   const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating} = film;
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
   const commentsCount = comments.length;
+  const humanizeDuration = getHumanizeViewFromDuration(duration);
+
 
   bodyElement.classList.add(`hide-overflow`);
 
@@ -83,7 +87,7 @@ export const createFilmDetailsTemplate = (film) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${duration}</td>
+                  <td class="film-details__cell">${humanizeDuration}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>

@@ -91,7 +91,7 @@ export const generateFilm = () => {
     country: `USA`,
     genres: generateGenre(),
     description: generateDesciption(),
-    comments: new Array(getRandomInteger(0, 5)).fill().map(generateComment),
+    comments: new Array(getRandomInteger(0, 5)).fill(``).map(generateComment),
     ageRating: `18+`,
     status: generateStatus(),
   };

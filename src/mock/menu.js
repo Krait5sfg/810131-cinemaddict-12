@@ -4,7 +4,7 @@ const countMapMenu = {
   watchlist: (values) => values.filter((element) => element.watchlist).length,
 };
 
-export const generateFilmMenuCount = (films) => {
+export const generateFilmsMenu = (films) => {
   const statuses = films.map((element) => element.status);
 
   return Object.entries(countMapMenu).map(([countMapMenuName, countFilm]) => ({

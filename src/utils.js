@@ -20,14 +20,6 @@ export const genRandomDate = () => {
   return randomDate.toLocaleString(`en-GB`, {day: `numeric`, month: `long`, year: `numeric`});
 };
 
-export const generateRandomDateForComment = () => {
-  const start = new Date(2019, 10, 30);
-  const end = new Date();
-  const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-
-  return `${randomDate.getFullYear()}/${randomDate.getMonth()}/${randomDate.getDate()} ${randomDate.getHours()}:${randomDate.getMinutes()}`;
-};
-
 export const createObjectCountFromArray = (values) => {
   const result = {};
 

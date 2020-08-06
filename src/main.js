@@ -20,7 +20,7 @@ const CountType = {
 };
 
 // создание моков для фильма
-const commonFilms = new Array(CountType.COMMON_FILMS_COUNT).fill().map(generateFilm);
+const commonFilms = new Array(CountType.COMMON_FILMS_COUNT).fill(``).map(generateFilm);
 const topRatedFilms = commonFilms.slice().sort((firstFilm, secondFilm) => firstFilm.rating < secondFilm.rating ? 1 : -1);
 const topCommentedFilms = commonFilms.slice().sort((firstFilm, secondFilm) => firstFilm.comments.length < secondFilm.comments.length ? 1 : -1
 );

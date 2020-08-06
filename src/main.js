@@ -60,14 +60,10 @@ filmsListExtraElements.forEach((element) => {
   const filmsListExtraContainerElement = element.querySelector(`.films-list__container`);
   const filmsListTitleElement = element.querySelector(`.films-list__title`);
 
-  if (filmsListTitleElement.textContent === `Top rated`) {
-    for (let i = 0; i < CountType.EXTRA_FILMS_COUNT; i++) {
-      render(filmsListExtraContainerElement, createFilmCardTemplate(topRatedFilms[i]), `beforeend`);
-    }
-  } else {
-    for (let i = 0; i < CountType.EXTRA_FILMS_COUNT; i++) {
-      render(filmsListExtraContainerElement, createFilmCardTemplate(topCommentedFilms[i]), `beforeend`);
-    }
+  const filmsForRendering = filmsListTitleElement.textContent === `Top rated` ? topRatedFilms : topCommentedFilms;
+
+  for (let i = 0; i < CountType.EXTRA_FILMS_COUNT; i++) {
+    render(filmsListExtraContainerElement, createFilmCardTemplate(filmsForRendering[i]), `beforeend`);
   }
 });
 

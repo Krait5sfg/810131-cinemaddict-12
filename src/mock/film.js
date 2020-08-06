@@ -1,5 +1,5 @@
 import {generateComment} from './comment.js';
-import {getRandomInteger, getRandomDouble, genRandomDate, getRandomBooleanValue} from '../utils.js';
+import {getRandomInteger, getRandomDouble, genRandomDate} from '../utils.js';
 
 const titles = [
   `The Dance of Life`,
@@ -63,6 +63,8 @@ const generateDuration = () => ({
   hours: getRandomInteger(0, 1),
   minutes: getRandomInteger(1, 60),
 });
+
+const getRandomBooleanValue = () => Boolean(getRandomInteger(0, 1));
 
 const generateStatus = () => ({
   favorite: getRandomBooleanValue(),

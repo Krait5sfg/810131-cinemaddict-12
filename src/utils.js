@@ -38,8 +38,6 @@ export const createObjectCountFromArray = (values) => {
   return result;
 };
 
-export const getRandomBooleanValue = () => Boolean(getRandomInteger(0, 1));
-
 export const getHumanizeViewFromDuration = ({hours, minutes}) => {
   let humanizeTimeString = ``;
   humanizeTimeString += hours ? `${hours}h ` : ``;

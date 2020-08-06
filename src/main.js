@@ -21,9 +21,8 @@ const CountType = {
 
 // создание моков для фильма
 const commonFilms = new Array(CountType.COMMON_FILMS_COUNT).fill(``).map(generateFilm);
-const topRatedFilms = commonFilms.slice().sort((firstFilm, secondFilm) => firstFilm.rating < secondFilm.rating ? 1 : -1);
-const topCommentedFilms = commonFilms.slice().sort((firstFilm, secondFilm) => firstFilm.comments.length < secondFilm.comments.length ? 1 : -1
-);
+const topRatedFilms = commonFilms.slice().sort((firstFilm, secondFilm) => secondFilm.rating - firstFilm.rating);
+const topCommentedFilms = commonFilms.slice().sort((firstFilm, secondFilm) => secondFilm.comments.length - firstFilm.comments.length);
 const filmsCount = commonFilms.length;
 // счет фильмов для меню, для статуса пользователя
 const filmsStatusCount = generateFilmMenuCount(commonFilms);

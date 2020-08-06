@@ -30,16 +30,29 @@ const generateComments = (comments) => {
   }
   return result;
 };
+const generateControls = ({favorite, watched, watchlist}) => {
+  return (
+    `
+    <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlist ? `checked` : ``}>
+    <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
+
+    <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${watched ? `checked` : ``}>
+    <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
+
+    <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${favorite ? `checked` : ``}>
+    <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
+    `
+  );
+};
 
 export const bodyElement = document.querySelector(`body`);
 
 export const createFilmDetailsTemplate = (film) => {
 
-  const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating} = film;
+  const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status} = film;
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
   const commentsCount = comments.length;
   const humanizeDuration = getHumanizeViewFromDuration(duration);
-
 
   bodyElement.classList.add(`hide-overflow`);
 
@@ -108,14 +121,7 @@ export const createFilmDetailsTemplate = (film) => {
           </div>
 
           <section class="film-details__controls">
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
-            <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
-
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
-            <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
-
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
-            <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
+            ${generateControls(status)}
           </section>
         </div>
 

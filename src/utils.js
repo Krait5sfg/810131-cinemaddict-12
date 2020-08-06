@@ -37,3 +37,5 @@ export const createObjectCountFromArray = (values) => {
 
   return result;
 };
+
+export const getRandomBooleanValue = () => Boolean(getRandomInteger(0, 1));

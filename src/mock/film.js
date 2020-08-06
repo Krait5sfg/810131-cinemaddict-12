@@ -1,5 +1,5 @@
 import {generateComment} from './comment.js';
-import {getRandomInteger, getRandomDouble, genRandomDate} from '../utils.js';
+import {getRandomInteger, getRandomDouble, genRandomDate, getRandomBooleanValue} from '../utils.js';
 
 const titles = [
   `The Dance of Life`,
@@ -70,13 +70,11 @@ const generateDuration = () => {
   return randomDuration;
 };
 
-const generateStatus = () => {
-  return {
-    favorite: Boolean(getRandomInteger(0, 1)),
-    watched: Boolean(getRandomInteger(0, 1)),
-    watchlist: Boolean(getRandomInteger(0, 1)),
-  };
-};
+const generateStatus = () => ({
+  favorite: getRandomBooleanValue(),
+  watched: getRandomBooleanValue(),
+  watchlist: getRandomBooleanValue(),
+});
 
 export const generateFilm = () => {
   return {

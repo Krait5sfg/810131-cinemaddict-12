@@ -11,7 +11,6 @@ import {createStatisticsTemplate} from './view/statistics.js';
 import {generateFilm} from './mock/film.js'; // функция создает мок для фильма
 import {generateUser} from './mock/user.js'; // мок для пользователя
 import {generateFilmsMenu} from './mock/menu.js'; // счет фильмов для меню
-import {createObjectCountFromArray} from './utils.js';
 
 const CountType = {
   COMMON_FILMS_COUNT: 20,
@@ -26,9 +25,8 @@ const topCommentedFilms = commonFilms.slice().sort((firstFilm, secondFilm) => se
 const filmsCount = commonFilms.length;
 // счет фильмов для меню, для статуса пользователя
 const filmsStatusCount = generateFilmsMenu(commonFilms);
-const countFilmsStatus = createObjectCountFromArray(filmsStatusCount);
 // мок для пользователя
-const user = generateUser(countFilmsStatus);
+const user = generateUser(filmsStatusCount);
 
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
@@ -39,7 +37,7 @@ const render = (container, template, place) => {
 };
 
 render(headerElement, createUserProfileTemplate(user), `beforeend`);
-render(mainElement, createMenuTemplate(countFilmsStatus), `beforeend`);
+render(mainElement, createMenuTemplate(filmsStatusCount), `beforeend`);
 render(mainElement, createSortingTemplate(), `beforeend`);
 render(mainElement, createFilmsContainerTemplate(), `beforeend`);
 

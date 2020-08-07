@@ -7,8 +7,14 @@ const countMapMenu = {
 export const generateFilmsMenu = (films) => {
   const statuses = films.map((element) => element.status);
 
-  return Object.entries(countMapMenu).map(([countMapMenuName, countFilm]) => ({
+  const filmsMenuCount = Object.entries(countMapMenu).map(([countMapMenuName, countFilm]) => ({
     title: countMapMenuName,
     count: countFilm(statuses),
   }));
+  const result = {};
+  filmsMenuCount.forEach(({title, count}) => {
+    result[title] = count;
+  });
+  return result;
 };
+

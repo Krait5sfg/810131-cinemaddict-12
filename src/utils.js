@@ -28,3 +28,4 @@ export const getHumanizeViewFromDuration = ({hours, minutes}) => {
   return humanizeTimeString;
 };
 
+export const getRandomValueFromArray = (values) => values[getRandomInteger(0, values.length - 1)];

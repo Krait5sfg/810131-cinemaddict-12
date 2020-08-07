@@ -1,5 +1,5 @@
 import {generateComment} from './comment.js';
-import {getRandomInteger, getRandomDouble, getRandomDate} from '../utils.js';
+import {getRandomInteger, getRandomDouble, getRandomDate, getRandomValueFromArray} from '../utils.js';
 
 const GENRE_TYPES = [
   `Musical`,
@@ -38,7 +38,6 @@ const SENTENCES = [
   `Nunc fermentum tortor ac porta dapibus.`,
   `In rutrum ac purus sit amet tempus.`];
 
-const generateImage = (images) => images[getRandomInteger(0, images.length - 1)];
 const generateDesciption = (sentences) => sentences.slice(0, getRandomInteger(1, 5)).join(``);
 const generateGenre = (genreTypes) => genreTypes.slice(0, getRandomInteger(1, genreTypes.length - 1));
 
@@ -57,8 +56,8 @@ const generateStatus = () => ({
 
 export const generateFilm = () => {
   return {
-    image: generateImage(IMAGES),
-    title: TITLES[getRandomInteger(0, TITLES.length - 1)],
+    image: getRandomValueFromArray(IMAGES),
+    title: getRandomValueFromArray(TITLES),
     rating: getRandomDouble(1, 9),
     director: `Anthony Mann`,
     writers: `Anne Wigton, Heinz Herald, Richard Weil`,

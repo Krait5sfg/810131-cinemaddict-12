@@ -1,4 +1,4 @@
-import {createUserProfileTemplate} from './view/user-profile.js';
+import UserProfileView from './view/user-profile.js';
 import {createMenuTemplate} from './view/menu.js';
 import {createSortingTemplate} from './view/sorting.js';
 import {createFilmsContainerTemplate} from './view/films-container.js';
@@ -11,7 +11,8 @@ import {createStatisticsTemplate} from './view/statistics.js';
 import {generateFilm} from './mock/film.js'; // функция создает мок для фильма
 import {generateUser} from './mock/user.js'; // мок для пользователя
 import {generateFilmsMenu} from './mock/menu.js'; // счет фильмов для меню
-import {renderTemplate} from './utils.js';
+import {renderTemplate, renderElement} from './utils.js';
+import {RenderPosition} from './const.js';
 
 const CountType = {
   COMMON_FILMS_COUNT: 20,
@@ -33,20 +34,20 @@ const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 
-renderTemplate(headerElement, createUserProfileTemplate(user), `beforeend`);
-renderTemplate(mainElement, createMenuTemplate(filmsStatusCount), `beforeend`);
-renderTemplate(mainElement, createSortingTemplate(), `beforeend`);
-renderTemplate(mainElement, createFilmsContainerTemplate(), `beforeend`);
+renderElement(headerElement, new UserProfileView(user).getElement(), RenderPosition.BEFOREEND);
+renderTemplate(mainElement, createMenuTemplate(filmsStatusCount), RenderPosition.BEFOREEND);
+renderTemplate(mainElement, createSortingTemplate(), RenderPosition.BEFOREEND);
+renderTemplate(mainElement, createFilmsContainerTemplate(), RenderPosition.BEFOREEND);
 
 const filmsElement = mainElement.querySelector(`.films`);
-renderTemplate(filmsElement, createFilmsListTemplate(), `beforeend`);
-renderTemplate(filmsElement, createFilmsListTopRatedTemplate(), `beforeend`);
-renderTemplate(filmsElement, createFilmsListMostCommentedTemplate(), `beforeend`);
+renderTemplate(filmsElement, createFilmsListTemplate(), RenderPosition.BEFOREEND);
+renderTemplate(filmsElement, createFilmsListTopRatedTemplate(), RenderPosition.BEFOREEND);
+renderTemplate(filmsElement, createFilmsListMostCommentedTemplate(), RenderPosition.BEFOREEND);
 
 const filmsListContainerElement = filmsElement.querySelector(`.films-list__container`);
 // render(bodyElement, createFilmDetailsTemplate(commonFilms[0]), `beforeend`); // попап карточки фильма
 for (let x = 0; x < CountType.RENDER_FOR_STEP; x++) {
-  renderTemplate(filmsListContainerElement, createFilmCardTemplate(commonFilms[x]), `beforeend`);
+  renderTemplate(filmsListContainerElement, createFilmCardTemplate(commonFilms[x]), RenderPosition.BEFOREEND);
 }
 
 const filmsListExtraElements = filmsElement.querySelectorAll(`.films-list--extra`);
@@ -57,11 +58,11 @@ filmsListExtraElements.forEach((element) => {
   const filmsForRendering = filmsListTitleElement.textContent === `Top rated` ? topRatedFilms : topCommentedFilms;
 
   for (let i = 0; i < CountType.EXTRA_FILMS_COUNT; i++) {
-    renderTemplate(filmsListExtraContainerElement, createFilmCardTemplate(filmsForRendering[i]), `beforeend`);
+    renderTemplate(filmsListExtraContainerElement, createFilmCardTemplate(filmsForRendering[i]), RenderPosition.BEFOREEND);
   }
 });
 
-renderTemplate(footerStatisticsElement, createStatisticsTemplate(filmsCount), `beforeend`);
+renderTemplate(footerStatisticsElement, createStatisticsTemplate(filmsCount), RenderPosition.BEFOREEND);
 
 // рендеринг фильмов при нажатии кнопки
 if (commonFilms.length > CountType.RENDER_FOR_STEP) {
@@ -72,7 +73,7 @@ if (commonFilms.length > CountType.RENDER_FOR_STEP) {
     evt.preventDefault();
     commonFilms
       .slice(renderFilmCount, renderFilmCount + CountType.RENDER_FOR_STEP)
-      .forEach((film) => renderTemplate(filmsListContainerElement, createFilmCardTemplate(film), `beforeend`));
+      .forEach((film) => renderTemplate(filmsListContainerElement, createFilmCardTemplate(film), RenderPosition.BEFOREEND));
 
     renderFilmCount += CountType.RENDER_FOR_STEP;
     if (renderFilmCount >= commonFilms.length) {

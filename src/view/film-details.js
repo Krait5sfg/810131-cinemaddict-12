@@ -1,4 +1,4 @@
-import {getHumanizeViewFromDuration} from '../utils.js';
+import {getHumanizeViewFromDuration, createElement} from '../utils.js';
 
 const generateGenres = (genres) => {
   let result = ``;
@@ -11,9 +11,7 @@ const generateGenres = (genres) => {
 const generateComments = (comments) => {
   let result = ``;
   for (let i = 0; i < comments.length; i++) {
-    result +=
-      `
-      <li class="film-details__comment">
+    result += `<li class="film-details__comment">
         <span class="film-details__comment-emoji">
           <img src="${comments[i].emoji}" width="55" height="55" alt="emoji-smile">
         </span>
@@ -25,29 +23,22 @@ const generateComments = (comments) => {
             <button class="film-details__comment-delete">Delete</button>
           </p>
         </div>
-      </li>
-    `;
+      </li>`;
   }
   return result;
 };
 const generateControls = ({favorite, watched, watchlist}) => {
-  return (
-    `
-    <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlist ? `checked` : ``}>
+  return `<input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlist ? `checked` : ``}>
     <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
     <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${watched ? `checked` : ``}>
     <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
     <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${favorite ? `checked` : ``}>
-    <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
-    `
-  );
+    <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>`;
 };
 
-export const bodyElement = document.querySelector(`body`);
-
-export const createFilmDetailsTemplate = (film) => {
+const createFilmDetailsTemplate = (film, bodyElement) => {
 
   const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status} = film;
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
@@ -56,8 +47,7 @@ export const createFilmDetailsTemplate = (film) => {
 
   bodyElement.classList.add(`hide-overflow`);
 
-  return (`
-    <section class="film-details">
+  return `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
         <div class="form-details__top-container">
           <div class="film-details__close">
@@ -165,7 +155,28 @@ export const createFilmDetailsTemplate = (film) => {
           </section>
         </div>
     </form>
-    </section>
-  `);
+    </section>`;
 };
 
+export default class FilmDetail {
+  constructor(film, bodyElement) {
+    this._bodyElement = bodyElement;
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._film, this._bodyElement);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

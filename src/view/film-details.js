@@ -1,4 +1,5 @@
 import {getHumanizeViewFromDuration, createElement} from '../utils.js';
+import {Number} from '../const.js';
 
 const generateGenres = (genres) => {
   let result = ``;
@@ -38,14 +39,12 @@ const generateControls = ({favorite, watched, watchlist}) => {
     <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>`;
 };
 
-const createFilmDetailsTemplate = (film, bodyElement) => {
+const createFilmDetailsTemplate = (film) => {
 
   const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status} = film;
-  const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
+  const genreFieldName = genres.length > Number.ONE ? `Genres` : `Genre`;
   const commentsCount = comments.length;
   const humanizeDuration = getHumanizeViewFromDuration(duration);
-
-  bodyElement.classList.add(`hide-overflow`);
 
   return `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
@@ -159,14 +158,13 @@ const createFilmDetailsTemplate = (film, bodyElement) => {
 };
 
 export default class FilmDetail {
-  constructor(film, bodyElement) {
-    this._bodyElement = bodyElement;
+  constructor(film) {
     this._film = film;
     this._element = null;
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._film, this._bodyElement);
+    return createFilmDetailsTemplate(this._film);
   }
 
   getElement() {

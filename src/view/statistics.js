@@ -1,7 +1,5 @@
 import {createElement} from "../utils.js";
 
-const createStatisticsTemplate = (count) => `<p>${count} movies inside</p>`;
-
 export default class Statistics {
   constructor(count) {
     this._count = count;
@@ -9,7 +7,7 @@ export default class Statistics {
   }
 
   getTemplate() {
-    return createStatisticsTemplate(this._count);
+    return `<p>${this._count} movies inside</p>`;
   }
 
   getElement() {

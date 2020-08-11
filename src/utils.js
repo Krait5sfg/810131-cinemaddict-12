@@ -1,4 +1,4 @@
-import {RenderPosition} from './const.js';
+import {BEFOREEND} from './const.js';
 
 export const getRandomInteger = (min = 0, max = 1) => {
   const lower = Math.ceil(Math.min(min, max));
@@ -35,13 +35,10 @@ export const getRandomValueFromArray = (values) => values[getRandomInteger(0, va
 // export const renderTemplate = (container, template, place) => container.insertAdjacentHTML(place, template);
 
 export const render = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(element);
-      break;
+  if (place === BEFOREEND) {
+    container.append(element);
+  } else {
+    throw new Error(`Передано некорректное place в функцию render`);
   }
 };
 

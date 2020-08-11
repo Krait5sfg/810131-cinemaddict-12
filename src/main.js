@@ -11,6 +11,7 @@ import {createStatisticsTemplate} from './view/statistics.js';
 import {generateFilm} from './mock/film.js'; // функция создает мок для фильма
 import {generateUser} from './mock/user.js'; // мок для пользователя
 import {generateFilmsMenu} from './mock/menu.js'; // счет фильмов для меню
+import {renderTemplate} from './utils.js';
 
 const CountType = {
   COMMON_FILMS_COUNT: 20,
@@ -32,24 +33,20 @@ const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-render(headerElement, createUserProfileTemplate(user), `beforeend`);
-render(mainElement, createMenuTemplate(filmsStatusCount), `beforeend`);
-render(mainElement, createSortingTemplate(), `beforeend`);
-render(mainElement, createFilmsContainerTemplate(), `beforeend`);
+renderTemplate(headerElement, createUserProfileTemplate(user), `beforeend`);
+renderTemplate(mainElement, createMenuTemplate(filmsStatusCount), `beforeend`);
+renderTemplate(mainElement, createSortingTemplate(), `beforeend`);
+renderTemplate(mainElement, createFilmsContainerTemplate(), `beforeend`);
 
 const filmsElement = mainElement.querySelector(`.films`);
-render(filmsElement, createFilmsListTemplate(), `beforeend`);
-render(filmsElement, createFilmsListTopRatedTemplate(), `beforeend`);
-render(filmsElement, createFilmsListMostCommentedTemplate(), `beforeend`);
+renderTemplate(filmsElement, createFilmsListTemplate(), `beforeend`);
+renderTemplate(filmsElement, createFilmsListTopRatedTemplate(), `beforeend`);
+renderTemplate(filmsElement, createFilmsListMostCommentedTemplate(), `beforeend`);
 
 const filmsListContainerElement = filmsElement.querySelector(`.films-list__container`);
 // render(bodyElement, createFilmDetailsTemplate(commonFilms[0]), `beforeend`); // попап карточки фильма
 for (let x = 0; x < CountType.RENDER_FOR_STEP; x++) {
-  render(filmsListContainerElement, createFilmCardTemplate(commonFilms[x]), `beforeend`);
+  renderTemplate(filmsListContainerElement, createFilmCardTemplate(commonFilms[x]), `beforeend`);
 }
 
 const filmsListExtraElements = filmsElement.querySelectorAll(`.films-list--extra`);
@@ -60,11 +57,11 @@ filmsListExtraElements.forEach((element) => {
   const filmsForRendering = filmsListTitleElement.textContent === `Top rated` ? topRatedFilms : topCommentedFilms;
 
   for (let i = 0; i < CountType.EXTRA_FILMS_COUNT; i++) {
-    render(filmsListExtraContainerElement, createFilmCardTemplate(filmsForRendering[i]), `beforeend`);
+    renderTemplate(filmsListExtraContainerElement, createFilmCardTemplate(filmsForRendering[i]), `beforeend`);
   }
 });
 
-render(footerStatisticsElement, createStatisticsTemplate(filmsCount), `beforeend`);
+renderTemplate(footerStatisticsElement, createStatisticsTemplate(filmsCount), `beforeend`);
 
 // рендеринг фильмов при нажатии кнопки
 if (commonFilms.length > CountType.RENDER_FOR_STEP) {
@@ -75,7 +72,7 @@ if (commonFilms.length > CountType.RENDER_FOR_STEP) {
     evt.preventDefault();
     commonFilms
       .slice(renderFilmCount, renderFilmCount + CountType.RENDER_FOR_STEP)
-      .forEach((film) => render(filmsListContainerElement, createFilmCardTemplate(film), `beforeend`));
+      .forEach((film) => renderTemplate(filmsListContainerElement, createFilmCardTemplate(film), `beforeend`));
 
     renderFilmCount += CountType.RENDER_FOR_STEP;
     if (renderFilmCount >= commonFilms.length) {

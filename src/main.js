@@ -34,6 +34,15 @@ const renderFilm = (filmsListContainerElement, film) => {
   const showFilmDetail = () => {
     bodyElement.appendChild(filmDetailElement.getElement());
     bodyElement.classList.add(`hide-overflow`);
+    document.addEventListener(`keydown`, onEscKeyDown);
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
+      hideFilmDetail();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
   };
 
   filmCardElement.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, () => showFilmDetail());
@@ -43,8 +52,8 @@ const renderFilm = (filmsListContainerElement, film) => {
   filmDetailElement.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, (evt) => {
     evt.preventDefault();
     hideFilmDetail();
+    document.removeEventListener(`keydown`, onEscKeyDown);
   });
-
 
   render(filmsListContainerElement, filmCardElement.getElement(), BEFOREEND);
 };

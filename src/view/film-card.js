@@ -1,15 +1,15 @@
-import {getHumanizeViewFromDuration, getRandomValueFromArray} from '../utils.js';
+import {getHumanizeViewFromDuration, getRandomValueFromArray, createElement} from '../utils.js';
+import {Number} from '../const.js';
 
 export const createFilmCardTemplate = (film) => {
 
   const {title, rating, releaseDate, duration, genres, image, description, comments, status} = film;
   const {favorite, watched, watchlist} = status;
   const genre = getRandomValueFromArray(genres);
-  const year = releaseDate.slice(releaseDate.length - 4, releaseDate.length);
+  const year = releaseDate.slice(releaseDate.length - Number.FOUR, releaseDate.length);
   const humanizeDuration = getHumanizeViewFromDuration(duration);
 
-  return (`
-    <article class="film-card">
+  return `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
@@ -25,6 +25,27 @@ export const createFilmCardTemplate = (film) => {
         <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${watched ? `film-card__controls-item--active` : ``}">Mark as watched</button>
         <button class="film-card__controls-item button film-card__controls-item--favorite ${favorite ? `film-card__controls-item--active` : ``}">Mark as favorite</button>
       </form>
-    </article>
-  `);
+    </article>`;
 };
+
+export default class FilmCard {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

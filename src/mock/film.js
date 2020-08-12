@@ -1,5 +1,6 @@
 import {generateComment} from './comment.js';
 import {getRandomInteger, getRandomDouble, getRandomDate, getRandomValueFromArray} from '../utils.js';
+import {Number} from '../const.js';
 
 const GENRE_TYPES = [
   `Musical`,
@@ -38,15 +39,15 @@ const SENTENCES = [
   `Nunc fermentum tortor ac porta dapibus.`,
   `In rutrum ac purus sit amet tempus.`];
 
-const generateDesciption = (sentences) => sentences.slice(0, getRandomInteger(1, 5)).join(``);
-const generateGenre = (genreTypes) => genreTypes.slice(0, getRandomInteger(1, genreTypes.length - 1));
+const generateDesciption = (sentences) => sentences.slice(Number.ZERO, getRandomInteger(Number.ONE, Number.FIVE)).join(``);
+const generateGenre = (genreTypes) => genreTypes.slice(Number.ZERO, getRandomInteger(Number.ONE, genreTypes.length - Number.ONE));
 
 const generateDuration = () => ({
-  hours: getRandomInteger(0, 1),
-  minutes: getRandomInteger(1, 60),
+  hours: getRandomInteger(Number.ZERO, Number.ONE),
+  minutes: getRandomInteger(Number.ONE, Number.SIXTY),
 });
 
-const getRandomBooleanValue = () => Boolean(getRandomInteger(0, 1));
+const getRandomBooleanValue = () => Boolean(getRandomInteger(Number.ZERO, Number.ONE));
 
 const generateStatus = () => ({
   favorite: getRandomBooleanValue(),
@@ -58,7 +59,7 @@ export const generateFilm = () => {
   return {
     image: getRandomValueFromArray(IMAGES),
     title: getRandomValueFromArray(TITLES),
-    rating: getRandomDouble(1, 9),
+    rating: getRandomDouble(Number.ONE, Number.NINE),
     director: `Anthony Mann`,
     writers: `Anne Wigton, Heinz Herald, Richard Weil`,
     actors: `Erich von Stroheim, Mary Beth Hughes, Dan Duryea`,
@@ -67,7 +68,7 @@ export const generateFilm = () => {
     country: `USA`,
     genres: generateGenre(GENRE_TYPES),
     description: generateDesciption(SENTENCES),
-    comments: new Array(getRandomInteger(0, 5)).fill(``).map(generateComment),
+    comments: new Array(getRandomInteger(Number.ZERO, Number.FIVE)).fill(``).map(generateComment),
     ageRating: `18+`,
     status: generateStatus(),
   };

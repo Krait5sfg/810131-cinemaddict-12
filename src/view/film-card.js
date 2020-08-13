@@ -1,12 +1,11 @@
 import {getHumanizeViewFromDuration, getRandomValueFromArray, createElement} from '../utils.js';
-import {Number} from '../const.js';
 
 export const createFilmCardTemplate = (film) => {
 
   const {title, rating, releaseDate, duration, genres, image, description, comments, status} = film;
   const {favorite, watched, watchlist} = status;
   const genre = getRandomValueFromArray(genres);
-  const year = releaseDate.slice(releaseDate.length - Number.FOUR, releaseDate.length);
+  const year = releaseDate.slice(releaseDate.length - 4, releaseDate.length);
   const humanizeDuration = getHumanizeViewFromDuration(duration);
 
   return `<article class="film-card">

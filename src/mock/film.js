@@ -1,6 +1,5 @@
 import {generateComment} from './comment.js';
 import {getRandomInteger, getRandomDouble, getRandomDate, getRandomValueFromArray} from '../utils.js';
-import {Number} from '../const.js';
 
 const GENRE_TYPES = [
   `Musical`,
@@ -39,15 +38,47 @@ const SENTENCES = [
   `Nunc fermentum tortor ac porta dapibus.`,
   `In rutrum ac purus sit amet tempus.`];
 
-const generateDesciption = (sentences) => sentences.slice(Number.ZERO, getRandomInteger(Number.ONE, Number.FIVE)).join(``);
-const generateGenre = (genreTypes) => genreTypes.slice(Number.ZERO, getRandomInteger(Number.ONE, genreTypes.length - Number.ONE));
+const MIN_GENRE_BOUND = 1;
+
+const DescriptionSentences = {
+  MIN: 1,
+  MAX: 5,
+};
+
+const HourDuration = {
+  MIN: 0,
+  MAX: 1
+};
+
+const MinutesDuration = {
+  MIN: 1,
+  MAX: 60
+};
+
+const BooleanValue = {
+  FALSE: 0,
+  TRUE: 1
+};
+
+const RatingBound = {
+  MIN: 1,
+  MAX: 9
+};
+
+const CommentBound = {
+  MIN: 0,
+  MAX: 5
+};
+
+const generateDescription = (sentences) => sentences.slice(0, getRandomInteger(DescriptionSentences.MIN, DescriptionSentences.MAX)).join(``);
+const generateGenre = (genreTypes) => genreTypes.slice(0, getRandomInteger(MIN_GENRE_BOUND, genreTypes.length - 1));
 
 const generateDuration = () => ({
-  hours: getRandomInteger(Number.ZERO, Number.ONE),
-  minutes: getRandomInteger(Number.ONE, Number.SIXTY),
+  hours: getRandomInteger(HourDuration.MIN, HourDuration.MAX),
+  minutes: getRandomInteger(MinutesDuration.MIN, MinutesDuration.MAX),
 });
 
-const getRandomBooleanValue = () => Boolean(getRandomInteger(Number.ZERO, Number.ONE));
+const getRandomBooleanValue = () => Boolean(getRandomInteger(BooleanValue.FALSE, BooleanValue.TRUE));
 
 const generateStatus = () => ({
   favorite: getRandomBooleanValue(),
@@ -59,7 +90,7 @@ export const generateFilm = () => {
   return {
     image: getRandomValueFromArray(IMAGES),
     title: getRandomValueFromArray(TITLES),
-    rating: getRandomDouble(Number.ONE, Number.NINE),
+    rating: getRandomDouble(RatingBound.MIN, RatingBound.MAX),
     director: `Anthony Mann`,
     writers: `Anne Wigton, Heinz Herald, Richard Weil`,
     actors: `Erich von Stroheim, Mary Beth Hughes, Dan Duryea`,
@@ -67,8 +98,8 @@ export const generateFilm = () => {
     duration: generateDuration(),
     country: `USA`,
     genres: generateGenre(GENRE_TYPES),
-    description: generateDesciption(SENTENCES),
-    comments: new Array(getRandomInteger(Number.ZERO, Number.FIVE)).fill(``).map(generateComment),
+    description: generateDescription(SENTENCES),
+    comments: new Array(getRandomInteger(CommentBound.MIN, CommentBound.MAX)).fill(``).map(generateComment),
     ageRating: `18+`,
     status: generateStatus(),
   };

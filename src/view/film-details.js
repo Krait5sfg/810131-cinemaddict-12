@@ -1,5 +1,4 @@
 import {getHumanizeViewFromDuration, createElement} from '../utils.js';
-import {Number} from '../const.js';
 
 const generateGenres = (genres) => {
   let result = ``;
@@ -10,24 +9,21 @@ const generateGenres = (genres) => {
 };
 
 const generateComments = (comments) => {
-  let result = ``;
-  for (let i = 0; i < comments.length; i++) {
-    result += `<li class="film-details__comment">
-        <span class="film-details__comment-emoji">
-          <img src="${comments[i].emoji}" width="55" height="55" alt="emoji-smile">
-        </span>
-        <div>
-          <p class="film-details__comment-text">${comments[i].text}</p>
-          <p class="film-details__comment-info">
-            <span class="film-details__comment-author">${comments[i].author}</span>
-            <span class="film-details__comment-day">${comments[i].time}</span>
-            <button class="film-details__comment-delete">Delete</button>
-          </p>
-        </div>
-      </li>`;
-  }
-  return result;
+  return comments.map((element) => `<li class="film-details__comment">
+  <span class="film-details__comment-emoji">
+    <img src="${element.emoji}" width="55" height="55" alt="emoji-smile">
+  </span>
+  <div>
+    <p class="film-details__comment-text">${element.text}</p>
+    <p class="film-details__comment-info">
+      <span class="film-details__comment-author">${element.author}</span>
+      <span class="film-details__comment-day">${element.time}</span>
+      <button class="film-details__comment-delete">Delete</button>
+    </p>
+  </div>
+</li>`).join(``);
 };
+
 const generateControls = ({favorite, watched, watchlist}) => {
   return `<input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlist ? `checked` : ``}>
     <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
@@ -42,7 +38,7 @@ const generateControls = ({favorite, watched, watchlist}) => {
 const createFilmDetailsTemplate = (film) => {
 
   const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status} = film;
-  const genreFieldName = genres.length > Number.ONE ? `Genres` : `Genre`;
+  const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
   const commentsCount = comments.length;
   const humanizeDuration = getHumanizeViewFromDuration(duration);
 

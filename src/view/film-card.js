@@ -38,4 +38,8 @@ export default class FilmCard extends AbstractView {
   getTemplate() {
     return createFilmCardTemplate(this._film);
   }
+
+  _clickHandler() {
+
+  }
 }

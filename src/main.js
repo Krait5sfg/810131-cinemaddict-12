@@ -89,7 +89,7 @@ const filmsListElement = new FilmListView();
 render(filmsContainerElement, filmsListElement, BEFOREEND);
 
 if (!commonFilms.length) {
-  render(filmsListElement.getElement(), new NoFilmView().getElement(), BEFOREEND);
+  render(filmsListElement, new NoFilmView(), BEFOREEND);
 } else {
   const filmListTopRatedElement = new FilmListTopRatedView();
   const filmListMostCommented = new FilmListMostCommentedView();
@@ -125,8 +125,7 @@ if (!commonFilms.length) {
     const showMoreButtonElement = new ShowMoreButtonView();
     render(filmsListElement, showMoreButtonElement, BEFOREEND);
 
-    showMoreButtonElement.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
+    showMoreButtonElement.setClickHandler(() => {
       commonFilms
         .slice(renderFilmCount, renderFilmCount + CountType.RENDER_FOR_STEP)
         .forEach((film) => renderFilm(filmsListContainerElement, film));

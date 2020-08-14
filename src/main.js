@@ -60,7 +60,7 @@ const renderFilm = (filmsListContainerElement, film) => {
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
-  render(filmsListContainerElement, filmCardElement.getElement(), BEFOREEND);
+  render(filmsListContainerElement, filmCardElement, BEFOREEND);
 };
 
 // создание моков для фильма
@@ -78,44 +78,44 @@ const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 
-render(headerElement, new UserProfileView(user).getElement(), BEFOREEND);
-render(mainElement, new MenuView(filmsStatusCount).getElement(), BEFOREEND);
-render(mainElement, new SortView().getElement(), BEFOREEND);
+render(headerElement, new UserProfileView(user), BEFOREEND);
+render(mainElement, new MenuView(filmsStatusCount), BEFOREEND);
+render(mainElement, new SortView(), BEFOREEND);
 
 const filmsContainerElement = new FilmContainerView();
-render(mainElement, filmsContainerElement.getElement(), BEFOREEND);
+render(mainElement, filmsContainerElement, BEFOREEND);
 
 const filmsListElement = new FilmListView();
-render(filmsContainerElement.getElement(), filmsListElement.getElement(), BEFOREEND);
+render(filmsContainerElement, filmsListElement, BEFOREEND);
 
 if (!commonFilms.length) {
   render(filmsListElement.getElement(), new NoFilmView().getElement(), BEFOREEND);
 } else {
   const filmListTopRatedElement = new FilmListTopRatedView();
   const filmListMostCommented = new FilmListMostCommentedView();
-  render(filmsContainerElement.getElement(), filmListTopRatedElement.getElement(), BEFOREEND);
-  render(filmsContainerElement.getElement(), filmListMostCommented.getElement(), BEFOREEND);
+  render(filmsContainerElement, filmListTopRatedElement, BEFOREEND);
+  render(filmsContainerElement, filmListMostCommented, BEFOREEND);
 
   const filmsListContainerElement = new FilmsListContainerView();
-  render(filmsListElement.getElement(), filmsListContainerElement.getElement(), BEFOREEND);
+  render(filmsListElement, filmsListContainerElement, BEFOREEND);
 
   for (let i = 0; i < CountType.RENDER_FOR_STEP; i++) {
-    renderFilm(filmsListContainerElement.getElement(), commonFilms[i]);
+    renderFilm(filmsListContainerElement, commonFilms[i]);
   }
 
   const filmsListExtraElements = [
-    filmListTopRatedElement.getElement(),
-    filmListMostCommented.getElement()
+    filmListTopRatedElement,
+    filmListMostCommented
   ];
   filmsListExtraElements.forEach((element) => {
     const filmsListContainer = new FilmsListContainerView();
-    render(element, filmsListContainer.getElement(), BEFOREEND);
-    const filmsListTitleElement = element.querySelector(`.films-list__title`);
+    render(element, filmsListContainer, BEFOREEND);
+    const filmsListTitleElement = element.getElement().querySelector(`.films-list__title`);
 
     const filmsForRendering = filmsListTitleElement.textContent === `Top rated` ? topRatedFilms : topCommentedFilms;
 
     for (let i = 0; i < CountType.EXTRA_FILMS; i++) {
-      renderFilm(filmsListContainer.getElement(), filmsForRendering[i]);
+      renderFilm(filmsListContainer, filmsForRendering[i]);
     }
   });
 
@@ -123,13 +123,13 @@ if (!commonFilms.length) {
   if (commonFilms.length > CountType.RENDER_FOR_STEP) {
     let renderFilmCount = CountType.RENDER_FOR_STEP;
     const showMoreButtonElement = new ShowMoreButtonView();
-    render(filmsListElement.getElement(), showMoreButtonElement.getElement(), BEFOREEND);
+    render(filmsListElement, showMoreButtonElement, BEFOREEND);
 
     showMoreButtonElement.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
       commonFilms
         .slice(renderFilmCount, renderFilmCount + CountType.RENDER_FOR_STEP)
-        .forEach((film) => renderFilm(filmsListContainerElement.getElement(), film));
+        .forEach((film) => renderFilm(filmsListContainerElement, film));
 
       renderFilmCount += CountType.RENDER_FOR_STEP;
       if (renderFilmCount >= commonFilms.length) {
@@ -140,4 +140,4 @@ if (!commonFilms.length) {
   }
 }
 
-render(footerStatisticsElement, new StatisticsView(filmsCount).getElement(), BEFOREEND);
+render(footerStatisticsElement, new StatisticsView(filmsCount), BEFOREEND);

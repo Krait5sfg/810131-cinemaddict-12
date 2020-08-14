@@ -50,9 +50,7 @@ const renderFilm = (filmsListContainerElement, film) => {
     }
   };
 
-  filmCardElement.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, () => showFilmDetail());
-  filmCardElement.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, () => showFilmDetail());
-  filmCardElement.getElement().querySelector(`.film-card__title`).addEventListener(`click`, () => showFilmDetail());
+  filmCardElement.setClickHandler(showFilmDetail);
 
   filmDetailElement.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, (evt) => {
     evt.preventDefault();

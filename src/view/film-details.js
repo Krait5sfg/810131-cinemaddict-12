@@ -1,4 +1,4 @@
-import {getHumanizeViewFromDuration} from '../utils.js';
+import {getHumanizeViewFromDuration} from '../utils/film.js';
 import AbstractView from './abstract.js';
 
 const generateGenres = (genres) => {

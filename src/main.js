@@ -14,8 +14,7 @@ import FilmDetailView from './view/film-details.js';
 import {generateFilm} from './mock/film.js'; // функция создает мок для фильма
 import {generateUser} from './mock/user.js'; // мок для пользователя
 import {generateFilmsMenu} from './mock/menu.js'; // счет фильмов для меню
-import {render} from './utils.js';
-import {BEFOREEND} from './const.js';
+import {render, BEFOREEND} from './utils/render.js';
 
 const CountType = {
   COMMON_FILMS: 20,

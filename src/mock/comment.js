@@ -1,4 +1,4 @@
-import {getRandomValueFromArray} from '../utils.js';
+import {getRandomValueFromArray} from '../utils/common.js';
 
 const EMOJIS = [
   `./images/emoji/smile.png`,

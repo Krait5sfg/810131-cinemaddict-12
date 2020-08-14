@@ -1,4 +1,5 @@
-import {getHumanizeViewFromDuration, getRandomValueFromArray} from '../utils.js';
+import {getHumanizeViewFromDuration} from '../utils/film.js';
+import {getRandomValueFromArray} from '../utils/common.js';
 import AbstractView from './abstract.js';
 
 export const createFilmCardTemplate = (film) => {

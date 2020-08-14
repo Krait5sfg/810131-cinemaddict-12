@@ -52,8 +52,7 @@ const renderFilm = (filmsListContainerElement, film) => {
 
   filmCardElement.setClickHandler(showFilmDetail);
 
-  filmDetailElement.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, (evt) => {
-    evt.preventDefault();
+  filmDetailElement.setClickHandler(() => {
     hideFilmDetail();
     document.removeEventListener(`keydown`, onEscKeyDown);
   });

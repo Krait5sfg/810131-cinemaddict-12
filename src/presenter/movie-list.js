@@ -38,6 +38,8 @@ export default class MovieList {
     this._handleShomMoreButtonElementClick = this._handleShomMoreButtonElementClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._currenSortType = SortType.DEFAULT;
+    this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
+    this._showFilmDetail = this._showFilmDetail.bind(this);
   }
 
   init(films) {
@@ -116,37 +118,40 @@ export default class MovieList {
       .forEach((film) => this._renderFilm(this._filmsListContainerElement, film));
   }
 
+  // --- методы для _renderFilm
+  _handleEscKeyDown(evt) {
+    if (evt.key === Key.ESCAPE || evt.key === Key.ESC) {
+      evt.preventDefault();
+      this._hideFilmDetail();
+      document.removeEventListener(`keydown`, this._handleEscKeyDown);
+    }
+  }
+
+  _hideFilmDetail() {
+    this._bodyElement.removeChild(this._filmDetailElement.getElement());
+    this._bodyElement.classList.remove(`hide-overflow`);
+  }
+
+  _showFilmDetail() {
+    this._bodyElement.appendChild(this._filmDetailElement.getElement());
+    this._bodyElement.classList.add(`hide-overflow`);
+    document.addEventListener(`keydown`, this._handleEscKeyDown);
+  }
+  // --------
+
+  // отрисовка карточки с фильмом и добавление событий
   _renderFilm(container, film) {
-    const filmCardElement = new FilmCardView(film);
-    const filmDetailElement = new FilmDetailView(film);
+    this._filmCardElement = new FilmCardView(film);
+    this._filmDetailElement = new FilmDetailView(film);
 
-    const hideFilmDetail = () => {
-      this._bodyElement.removeChild(filmDetailElement.getElement());
-      this._bodyElement.classList.remove(`hide-overflow`);
-    };
+    this._filmCardElement.setClickHandler(this._showFilmDetail);
 
-    const showFilmDetail = () => {
-      this._bodyElement.appendChild(filmDetailElement.getElement());
-      this._bodyElement.classList.add(`hide-overflow`);
-      document.addEventListener(`keydown`, onEscKeyDown);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === Key.ESCAPE || evt.key === Key.ESC) {
-        evt.preventDefault();
-        hideFilmDetail();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    filmCardElement.setClickHandler(showFilmDetail);
-
-    filmDetailElement.setClickHandler(() => {
-      hideFilmDetail();
-      document.removeEventListener(`keydown`, onEscKeyDown);
+    this._filmDetailElement.setClickHandler(() => {
+      this._hideFilmDetail();
+      document.removeEventListener(`keydown`, this._handleEscKeyDown);
     });
 
-    render(container, filmCardElement, BEFOREEND);
+    render(container, this._filmCardElement, BEFOREEND);
   }
 
   _renderNoFilmElement() {

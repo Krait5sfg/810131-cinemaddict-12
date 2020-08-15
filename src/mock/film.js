@@ -1,5 +1,6 @@
 import {generateComment} from './comment.js';
-import {getRandomInteger, getRandomDouble, getRandomDate, getRandomValueFromArray} from '../utils.js';
+import {getRandomInteger, getRandomDouble, getRandomValueFromArray} from '../utils/common.js';
+import {getRandomDate} from '../utils/film.js';
 
 const GENRE_TYPES = [
   `Musical`,

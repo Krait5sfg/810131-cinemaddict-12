@@ -20,11 +20,12 @@ const user = generateUser(filmsStatusCount);
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
+const bodyElement = document.querySelector(`body`);
 
 render(headerElement, new UserProfileView(user), BEFOREEND);
 render(mainElement, new MenuView(filmsStatusCount), BEFOREEND);
 render(footerStatisticsElement, new StatisticsView(filmsCount), BEFOREEND);
 
 // презентер
-const moviePresenter = new MovieListPresenter(mainElement);
+const moviePresenter = new MovieListPresenter(mainElement, bodyElement);
 moviePresenter.init(commonFilms);

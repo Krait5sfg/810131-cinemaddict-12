@@ -23,8 +23,9 @@ const Key = {
 };
 
 export default class MovieList {
-  constructor(mainElement) {
-    this._mainElement = mainElement; // родитель для всех элементов
+  constructor(mainElement, bodyElement) {
+    this._bodyElement = bodyElement; // body страницы
+    this._mainElement = mainElement; // родитель для всех элементов ниже
     this._sortElement = new SortView();
     this._filmsContainerElement = new FilmContainerView(); // главный контейнер для фильмов
     this._filmsListElement = new FilmListView(); // первый внут. контейнер для всех фильмов
@@ -55,8 +56,9 @@ export default class MovieList {
     render(this._filmsListElement, this._filmsListContainerElement, BEFOREEND);
     this._renderFilmsList();
 
-    this._renderExtraBoard(this._filmListTopRatedElement, this._topRatedFilms);
-    this._renderExtraBoard(this._filmListMostCommentedElement, this._mostCommentedFilms);
+    // отрисовка Top rated и Most commented компонентов с фильмами
+    this._renderExtraBoard(this._filmListTopRatedElement, this._topRatedFilms.slice(0, CountType.EXTRA_FILMS));
+    this._renderExtraBoard(this._filmListMostCommentedElement, this._mostCommentedFilms.slice(0, CountType.EXTRA_FILMS));
   }
 
   // -------сортировка
@@ -98,7 +100,7 @@ export default class MovieList {
     const filmListContainerElement = new FilmsListContainerView();
     render(this._filmsContainerElement, extraBoardContainer, BEFOREEND);
     render(extraBoardContainer, filmListContainerElement, BEFOREEND);
-    films.slice(0, CountType.EXTRA_FILMS).forEach((film) => this._renderFilm(filmListContainerElement, film));
+    films.forEach((film) => this._renderFilm(filmListContainerElement, film));
   }
 
   _renderFilmsList() {
@@ -117,16 +119,15 @@ export default class MovieList {
   _renderFilm(container, film) {
     const filmCardElement = new FilmCardView(film);
     const filmDetailElement = new FilmDetailView(film);
-    const bodyElement = document.querySelector(`body`);
 
     const hideFilmDetail = () => {
-      bodyElement.removeChild(filmDetailElement.getElement());
-      bodyElement.classList.remove(`hide-overflow`);
+      this._bodyElement.removeChild(filmDetailElement.getElement());
+      this._bodyElement.classList.remove(`hide-overflow`);
     };
 
     const showFilmDetail = () => {
-      bodyElement.appendChild(filmDetailElement.getElement());
-      bodyElement.classList.add(`hide-overflow`);
+      this._bodyElement.appendChild(filmDetailElement.getElement());
+      this._bodyElement.classList.add(`hide-overflow`);
       document.addEventListener(`keydown`, onEscKeyDown);
     };
 

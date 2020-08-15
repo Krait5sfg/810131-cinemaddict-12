@@ -1,3 +1,4 @@
+import SortView, {SortType} from '../view/sort.js';
 import FilmContainerView from '../view/films-container.js';
 import FilmListView from '../view/films-list.js';
 import FilmsListContainerView from '../view/films-list-container.js';
@@ -8,6 +9,7 @@ import NoFilmView from '../view/no-film.js';
 import FilmCardView from '../view/film-card.js';
 import FilmDetailView from '../view/film-details.js';
 import {render, BEFOREEND, remove} from '../utils/render.js';
+import {sortByDate, sortByRating} from '../utils/film.js';
 
 const CountType = {
   COMMON_FILMS: 20,
@@ -21,8 +23,10 @@ const Key = {
 };
 
 export default class MovieList {
-  constructor(mainElement) {
-    this._mainElement = mainElement; // родитель для всех элементов
+  constructor(mainElement, bodyElement) {
+    this._bodyElement = bodyElement; // body страницы
+    this._mainElement = mainElement; // родитель для всех элементов ниже
+    this._sortElement = new SortView();
     this._filmsContainerElement = new FilmContainerView(); // главный контейнер для фильмов
     this._filmsListElement = new FilmListView(); // первый внут. контейнер для всех фильмов
     this._filmsListContainerElement = new FilmsListContainerView(); // второй внут. контейнер для фильмов, в нем распорожены фильмы
@@ -32,15 +36,21 @@ export default class MovieList {
     this._noFilmElement = new NoFilmView();
     this._renderFilmCount = CountType.RENDER_FOR_STEP;
     this._handleShomMoreButtonElementClick = this._handleShomMoreButtonElementClick.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._currenSortType = SortType.DEFAULT;
+    this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
+    this._showFilmDetail = this._showFilmDetail.bind(this);
   }
 
   init(films) {
+    this._renderSort();
     render(this._mainElement, this._filmsContainerElement, BEFOREEND);
     render(this._filmsContainerElement, this._filmsListElement, BEFOREEND);
     if (!films.length) {
       this._renderNoFilmElement();
       return;
     }
+    this._sourceFilms = films.slice(); // сохраняем исходный массив для сортировки
     this._films = films.slice();
     this._topRatedFilms = films.slice().sort((firstFilm, secondFilm) => secondFilm.rating - firstFilm.rating);
     this._mostCommentedFilms = films.slice().sort((firstFilm, secondFilm) => secondFilm.comments.length - firstFilm.comments.length);
@@ -48,15 +58,51 @@ export default class MovieList {
     render(this._filmsListElement, this._filmsListContainerElement, BEFOREEND);
     this._renderFilmsList();
 
-    this._renderExtraBoard(this._filmListTopRatedElement, this._topRatedFilms);
-    this._renderExtraBoard(this._filmListMostCommentedElement, this._mostCommentedFilms);
+    // отрисовка Top rated и Most commented компонентов с фильмами
+    this._renderExtraBoard(this._filmListTopRatedElement, this._topRatedFilms.slice(0, CountType.EXTRA_FILMS));
+    this._renderExtraBoard(this._filmListMostCommentedElement, this._mostCommentedFilms.slice(0, CountType.EXTRA_FILMS));
   }
+
+  // -------сортировка
+  _renderSort() {
+    render(this._mainElement, this._sortElement, BEFOREEND);
+    this._sortElement.setSortTypeChangeHandler(this._handleSortTypeChange);
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._currenSortType === sortType) {
+      return;
+    }
+    this._sortFilms(sortType);
+    this._clearFilmList();
+    this._renderFilmsList();
+  }
+
+  _sortFilms(sortType) {
+    switch (sortType) {
+      case SortType.DATE:
+        this._films.sort(sortByDate);
+        break;
+      case SortType.RATING:
+        this._films.sort(sortByRating);
+        break;
+      default:
+        this._films = this._sourceFilms.slice();
+    }
+    this._currenSortType = sortType;
+  }
+
+  _clearFilmList() {
+    this._filmsListContainerElement.getElement().innerHTML = ``;
+    this._renderFilmCount = CountType.RENDER_FOR_STEP;
+  }
+  // -----конец сортировки
 
   _renderExtraBoard(extraBoardContainer, films) {
     const filmListContainerElement = new FilmsListContainerView();
     render(this._filmsContainerElement, extraBoardContainer, BEFOREEND);
     render(extraBoardContainer, filmListContainerElement, BEFOREEND);
-    films.slice(0, CountType.EXTRA_FILMS).forEach((film) => this._renderFilm(filmListContainerElement, film));
+    films.forEach((film) => this._renderFilm(filmListContainerElement, film));
   }
 
   _renderFilmsList() {
@@ -72,38 +118,40 @@ export default class MovieList {
       .forEach((film) => this._renderFilm(this._filmsListContainerElement, film));
   }
 
+  // --- методы для _renderFilm
+  _handleEscKeyDown(evt) {
+    if (evt.key === Key.ESCAPE || evt.key === Key.ESC) {
+      evt.preventDefault();
+      this._hideFilmDetail();
+      document.removeEventListener(`keydown`, this._handleEscKeyDown);
+    }
+  }
+
+  _hideFilmDetail() {
+    this._bodyElement.removeChild(this._filmDetailElement.getElement());
+    this._bodyElement.classList.remove(`hide-overflow`);
+  }
+
+  _showFilmDetail() {
+    this._bodyElement.appendChild(this._filmDetailElement.getElement());
+    this._bodyElement.classList.add(`hide-overflow`);
+    document.addEventListener(`keydown`, this._handleEscKeyDown);
+  }
+  // --------
+
+  // отрисовка карточки с фильмом и добавление событий
   _renderFilm(container, film) {
-    const filmCardElement = new FilmCardView(film);
-    const filmDetailElement = new FilmDetailView(film);
-    const bodyElement = document.querySelector(`body`);
+    this._filmCardElement = new FilmCardView(film);
+    this._filmDetailElement = new FilmDetailView(film);
 
-    const hideFilmDetail = () => {
-      bodyElement.removeChild(filmDetailElement.getElement());
-      bodyElement.classList.remove(`hide-overflow`);
-    };
+    this._filmCardElement.setClickHandler(this._showFilmDetail);
 
-    const showFilmDetail = () => {
-      bodyElement.appendChild(filmDetailElement.getElement());
-      bodyElement.classList.add(`hide-overflow`);
-      document.addEventListener(`keydown`, onEscKeyDown);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === Key.ESCAPE || evt.key === Key.ESC) {
-        evt.preventDefault();
-        hideFilmDetail();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    filmCardElement.setClickHandler(showFilmDetail);
-
-    filmDetailElement.setClickHandler(() => {
-      hideFilmDetail();
-      document.removeEventListener(`keydown`, onEscKeyDown);
+    this._filmDetailElement.setClickHandler(() => {
+      this._hideFilmDetail();
+      document.removeEventListener(`keydown`, this._handleEscKeyDown);
     });
 
-    render(container, filmCardElement, BEFOREEND);
+    render(container, this._filmCardElement, BEFOREEND);
   }
 
   _renderNoFilmElement() {

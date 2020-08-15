@@ -1,6 +1,5 @@
 import UserProfileView from './view/user-profile.js';
 import MenuView from './view/menu.js';
-import SortView from './view/sort.js';
 import MovieListPresenter from './presenter/movie-list.js';
 import StatisticsView from './view/statistics.js';
 import {generateFilm} from './mock/film.js'; // функция создает мок для фильма
@@ -21,12 +20,12 @@ const user = generateUser(filmsStatusCount);
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
+const bodyElement = document.querySelector(`body`);
 
 render(headerElement, new UserProfileView(user), BEFOREEND);
 render(mainElement, new MenuView(filmsStatusCount), BEFOREEND);
-render(mainElement, new SortView(), BEFOREEND);
 render(footerStatisticsElement, new StatisticsView(filmsCount), BEFOREEND);
 
 // презентер
-const moviePresenter = new MovieListPresenter(mainElement);
+const moviePresenter = new MovieListPresenter(mainElement, bodyElement);
 moviePresenter.init(commonFilms);

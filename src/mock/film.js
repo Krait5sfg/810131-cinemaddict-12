@@ -87,8 +87,11 @@ const generateStatus = () => ({
   watchlist: getRandomBooleanValue(),
 });
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 export const generateFilm = () => {
   return {
+    id: generateId(),
     image: getRandomValueFromArray(IMAGES),
     title: getRandomValueFromArray(TITLES),
     rating: getRandomDouble(RatingBound.MIN, RatingBound.MAX),

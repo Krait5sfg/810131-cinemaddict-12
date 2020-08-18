@@ -9,6 +9,7 @@ import NoFilmView from '../view/no-film.js';
 import {render, BEFOREEND, remove} from '../utils/render.js';
 import {sortByDate, sortByRating} from '../utils/film.js';
 import FilmPresenter from './film.js';
+import {updateItem} from '../utils/common.js';
 
 const CountType = {
   COMMON_FILMS: 20,
@@ -32,6 +33,8 @@ export default class MovieList {
     this._handleShomMoreButtonElementClick = this._handleShomMoreButtonElementClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._currenSortType = SortType.DEFAULT;
+    this._filmPresenter = {};
+    this._handleFilmChange = this._handleFilmChange.bind(this);
   }
 
   init(films) {
@@ -83,12 +86,15 @@ export default class MovieList {
     }
     this._currenSortType = sortType;
   }
+  // -----конец сортировки
 
+  // удаляет каждый фильм
   _clearFilmList() {
-    this._filmsListContainerElement.getElement().innerHTML = ``;
+    Object.values(this._filmPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._filmPresenter = {};
     this._renderFilmCount = CountType.RENDER_FOR_STEP;
   }
-  // -----конец сортировки
 
   _renderExtraBoard(extraBoardContainer, films) {
     const filmListContainerElement = new FilmsListContainerView();
@@ -114,6 +120,7 @@ export default class MovieList {
   _renderFilm(container, film) {
     const filmPresenter = new FilmPresenter(container, this._bodyElement);
     filmPresenter.init(film);
+    this._filmPresenter[film.id] = filmPresenter;
   }
 
   _renderNoFilmElement() {
@@ -131,5 +138,12 @@ export default class MovieList {
     if (this._renderFilmCount >= this._films.length) {
       remove(this._showMoreButtonElement);
     }
+  }
+
+  // обработчик изменения данных
+  _handleFilmChange(updatedFilm) {
+    this._films = updateItem(this._films, updatedFilm);
+    this._sourceFilms = updateItem(this._sourceFilms, updatedFilm);
+    this._filmPresenter[updatedFilm.id].init(updatedFilm); // инициализация фильма с изм. данными
   }
 }

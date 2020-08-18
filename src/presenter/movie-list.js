@@ -6,20 +6,14 @@ import FilmListTopRatedView from '../view/films-list-top-rated.js';
 import FilmListMostCommentedView from '../view/films-list-most-commented.js';
 import ShowMoreButtonView from '../view/show-more-button.js';
 import NoFilmView from '../view/no-film.js';
-import FilmCardView from '../view/film-card.js';
-import FilmDetailView from '../view/film-details.js';
 import {render, BEFOREEND, remove} from '../utils/render.js';
 import {sortByDate, sortByRating} from '../utils/film.js';
+import FilmPresenter from './film.js';
 
 const CountType = {
   COMMON_FILMS: 20,
   EXTRA_FILMS: 2,
   RENDER_FOR_STEP: 5,
-};
-
-const Key = {
-  ESCAPE: `Escape`,
-  ESC: `Esc`,
 };
 
 export default class MovieList {
@@ -38,8 +32,6 @@ export default class MovieList {
     this._handleShomMoreButtonElementClick = this._handleShomMoreButtonElementClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._currenSortType = SortType.DEFAULT;
-    this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
-    this._showFilmDetail = this._showFilmDetail.bind(this);
   }
 
   init(films) {
@@ -118,40 +110,10 @@ export default class MovieList {
       .forEach((film) => this._renderFilm(this._filmsListContainerElement, film));
   }
 
-  // --- методы для _renderFilm
-  _handleEscKeyDown(evt) {
-    if (evt.key === Key.ESCAPE || evt.key === Key.ESC) {
-      evt.preventDefault();
-      this._hideFilmDetail();
-      document.removeEventListener(`keydown`, this._handleEscKeyDown);
-    }
-  }
-
-  _hideFilmDetail() {
-    this._bodyElement.removeChild(this._filmDetailElement.getElement());
-    this._bodyElement.classList.remove(`hide-overflow`);
-  }
-
-  _showFilmDetail() {
-    this._bodyElement.appendChild(this._filmDetailElement.getElement());
-    this._bodyElement.classList.add(`hide-overflow`);
-    document.addEventListener(`keydown`, this._handleEscKeyDown);
-  }
-  // --------
-
   // отрисовка карточки с фильмом и добавление событий
   _renderFilm(container, film) {
-    this._filmCardElement = new FilmCardView(film);
-    this._filmDetailElement = new FilmDetailView(film);
-
-    this._filmCardElement.setClickHandler(this._showFilmDetail);
-
-    this._filmDetailElement.setClickHandler(() => {
-      this._hideFilmDetail();
-      document.removeEventListener(`keydown`, this._handleEscKeyDown);
-    });
-
-    render(container, this._filmCardElement, BEFOREEND);
+    const filmPresenter = new FilmPresenter(container, this._bodyElement);
+    filmPresenter.init(film);
   }
 
   _renderNoFilmElement() {

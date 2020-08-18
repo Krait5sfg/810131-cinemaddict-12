@@ -8,12 +8,16 @@ const Key = {
 };
 
 export default class Film {
-  constructor(container, bodyElement) {
+  constructor(container, bodyElement, changeDate) {
     this._container = container;
     this._bodyElement = bodyElement;
+    this._changeData = changeDate;
 
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._showFilmDetail = this._showFilmDetail.bind(this);
+    this._handleWatchListClick = this._handleWatchListClick.bind(this);
+    this._handleWatchedClick = this._handleWatchedClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
 
     this._filmCardElement = null;
     this._filmDetailElement = null;
@@ -34,6 +38,13 @@ export default class Film {
       this._hideFilmDetail();
       document.removeEventListener(`keydown`, this._handleEscKeyDown);
     });
+    this._filmCardElement.setWatchListClickHandler(this._handleWatchListClick);
+    this._filmCardElement.setWatchedClickHandler(this._handleWatchedClick);
+    this._filmCardElement.setFavoriteClickHandler(this._handleFavoriteClick);
+
+    this._filmDetailElement.setWatchListClickHandler(this._handleWatchListClick);
+    this._filmDetailElement.setWatchedClickHandler(this._handleWatchedClick);
+    this._filmDetailElement.setFavoriteClickHandler(this._handleFavoriteClick);
 
     if (prevFilmCardElement === null || prevFilmDetailElement === null) {
       render(this._container, this._filmCardElement, BEFOREEND);
@@ -44,7 +55,7 @@ export default class Film {
       replace(this._filmCardElement, prevFilmCardElement);
     }
 
-    if (this._container.getElement().contains(prevFilmDetailElement.getElement())) {
+    if (this._bodyElement.contains(prevFilmDetailElement.getElement())) {
       replace(this._filmDetailElement, prevFilmDetailElement);
     }
 
@@ -74,5 +85,18 @@ export default class Film {
     this._bodyElement.appendChild(this._filmDetailElement.getElement());
     this._bodyElement.classList.add(`hide-overflow`);
     document.addEventListener(`keydown`, this._handleEscKeyDown);
+  }
+
+  // изменения данных
+  _handleWatchListClick() {
+    this._changeData(Object.assign({}, this._film, {status: {watchlist: !this._film.status.watchlist}}));
+  }
+
+  _handleWatchedClick() {
+    this._changeData(Object.assign({}, this._film, {status: {watched: !this._film.status.watched}}));
+  }
+
+  _handleFavoriteClick() {
+    this._changeData(Object.assign({}, this._film, {status: {favorite: !this._film.status.favorite}}));
   }
 }

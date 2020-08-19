@@ -27,7 +27,10 @@ const generateRandomDateForComment = () => {
   return `${randomDate.getFullYear()}/${randomDate.getMonth()}/${randomDate.getDate()} ${randomDate.getHours()}:${randomDate.getMinutes()}`;
 };
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 export const generateComment = () => ({
+  id: generateId(),
   emoji: getRandomValueFromArray(EMOJIS),
   text: getRandomValueFromArray(COMMENTS_TEXT),
   author: getRandomValueFromArray(AUTHORS),

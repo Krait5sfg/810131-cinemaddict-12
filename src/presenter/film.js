@@ -18,6 +18,7 @@ export default class Film {
     this._handleWatchListClick = this._handleWatchListClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleDeleteButtonClick = this._handleDeleteButtonClick.bind(this);
 
     this._filmCardElement = null;
     this._filmDetailElement = null;
@@ -45,6 +46,7 @@ export default class Film {
     this._filmDetailElement.setWatchListClickHandler(this._handleWatchListClick);
     this._filmDetailElement.setWatchedClickHandler(this._handleWatchedClick);
     this._filmDetailElement.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmDetailElement.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
 
     if (prevFilmCardElement === null || prevFilmDetailElement === null) {
       render(this._container, this._filmCardElement, BEFOREEND);
@@ -98,5 +100,10 @@ export default class Film {
 
   _handleFavoriteClick() {
     this._changeData(Object.assign({}, this._film, {status: {favorite: !this._film.status.favorite, watchlist: this._film.status.watchlist, watched: this._film.status.watched}}));
+  }
+
+  _handleDeleteButtonClick(commentId) {
+    const newComments = this._film.comments.filter((comment) => comment.id !== parseInt(commentId, 10));
+    this._changeData(Object.assign({}, this._film, {comments: newComments.slice(0)}));
   }
 }

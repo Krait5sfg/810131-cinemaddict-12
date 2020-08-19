@@ -163,7 +163,7 @@ export default class MovieList {
     }
   }
 
-  // обработчик изменения данных
+  // обработчик изменения данных - этот метод передается в presenter/film как changeData
   _handleFilmChange(updatedFilm) {
     this._films = updateItem(this._films, updatedFilm);
     this._sourceFilms = updateItem(this._sourceFilms, updatedFilm);

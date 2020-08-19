@@ -19,7 +19,7 @@ const generateComments = (comments) => {
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${element.author}</span>
       <span class="film-details__comment-day">${element.time}</span>
-      <button class="film-details__comment-delete">Delete</button>
+      <button class="film-details__comment-delete" data-comment-id ="${element.id}">Delete</button>
     </p>
   </div>
 </li>`).join(``);
@@ -38,7 +38,7 @@ const generateControls = ({favorite, watched, watchlist}) => {
 
 const createFilmDetailsTemplate = (film) => {
 
-  const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status} = film;
+  const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status, id} = film;
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
   const commentsCount = comments.length;
   const humanizeDuration = getHumanizeViewFromDuration(duration);
@@ -162,6 +162,7 @@ export default class FilmDetail extends AbstractView {
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._deleteButtonClickHandler = this._deleteButtonClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -206,5 +207,17 @@ export default class FilmDetail extends AbstractView {
   _favoriteClickHandler(evt) {
     evt.preventDefault();
     this._callback.favoriteClick();
+  }
+
+  setDeleteButtonClickHandler(callback) {
+    this._callback.deleteButtonClick = callback;
+    this.getElement()
+      .querySelectorAll(`.film-details__comment-delete`)
+      .forEach((element) => element.addEventListener(`click`, this._deleteButtonClickHandler));
+  }
+
+  _deleteButtonClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteButtonClick(evt.target.dataset.commentId);
   }
 }

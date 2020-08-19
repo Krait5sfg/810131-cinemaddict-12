@@ -1,10 +1,19 @@
 import FilmCardView from '../view/film-card.js';
 import FilmDetailView from '../view/film-details.js';
 import {render, BEFOREEND, replace, remove} from '../utils/render.js';
+import {generateId} from '../utils/common.js';
 
 const Key = {
   ESCAPE: `Escape`,
   ESC: `Esc`,
+  ENTER: `Enter`,
+};
+
+const EmojiType = {
+  [`smile`]: `./images/emoji/smile.png`,
+  [`sleeping`]: `./images/emoji/sleeping.png`,
+  [`puke`]: `./images/emoji/puke.png`,
+  [`angry`]: `./images/emoji/angry.png`,
 };
 
 export default class Film {
@@ -19,6 +28,7 @@ export default class Film {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleDeleteButtonClick = this._handleDeleteButtonClick.bind(this);
+    this._handleEnterKeyDown = this._handleEnterKeyDown.bind(this);
 
     this._filmCardElement = null;
     this._filmDetailElement = null;
@@ -38,6 +48,7 @@ export default class Film {
     this._filmDetailElement.setClickHandler(() => {
       this._hideFilmDetail();
       document.removeEventListener(`keydown`, this._handleEscKeyDown);
+      document.removeEventListener(`keydown`, this._handleEnterKeyDown);
     });
     this._filmCardElement.setWatchListClickHandler(this._handleWatchListClick);
     this._filmCardElement.setWatchedClickHandler(this._handleWatchedClick);
@@ -75,6 +86,7 @@ export default class Film {
       evt.preventDefault();
       this._hideFilmDetail();
       document.removeEventListener(`keydown`, this._handleEscKeyDown);
+      document.removeEventListener(`keydown`, this._handleEnterKeyDown);
     }
   }
 
@@ -87,6 +99,7 @@ export default class Film {
     this._bodyElement.appendChild(this._filmDetailElement.getElement());
     this._bodyElement.classList.add(`hide-overflow`);
     document.addEventListener(`keydown`, this._handleEscKeyDown);
+    document.addEventListener(`keydown`, this._handleEnterKeyDown);
   }
 
   // изменения данных
@@ -105,5 +118,24 @@ export default class Film {
   _handleDeleteButtonClick(commentId) {
     const newComments = this._film.comments.filter((comment) => comment.id !== parseInt(commentId, 10));
     this._changeData(Object.assign({}, this._film, {comments: newComments.slice(0)}));
+  }
+
+  _handleEnterKeyDown(evt) {
+    if (evt.key === Key.ENTER) {
+      let checkedValue = this._filmDetailElement.getElement().querySelector(`input[type ='radio']:checked`).value;
+      let textAreaValue = this._filmDetailElement.getElement().querySelector(`.film-details__comment-input`).value;
+      if (checkedValue && textAreaValue) {
+        const userComment = {
+          id: generateId(),
+          emoji: EmojiType[checkedValue],
+          text: textAreaValue,
+          author: `Anonim`,
+          time: new Date(),
+        };
+        const newComments = this._film.comments.slice(0);
+        newComments.push(userComment);
+        this._changeData(Object.assign({}, this._film, {comments: newComments.slice(0)}));
+      }
+    }
   }
 }

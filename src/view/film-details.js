@@ -18,7 +18,7 @@ const generateComments = (comments) => {
     <p class="film-details__comment-text">${element.text}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${element.author}</span>
-      <span class="film-details__comment-day">${element.time}</span>
+      <span class="film-details__comment-day">${convertDateToString(element.time)}</span>
       <button class="film-details__comment-delete" data-comment-id ="${element.id}">Delete</button>
     </p>
   </div>
@@ -36,9 +36,11 @@ const generateControls = ({favorite, watched, watchlist}) => {
     <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>`;
 };
 
+const convertDateToString = (date) => `${date.getFullYear()}/${date.getMonth()}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+
 const createFilmDetailsTemplate = (film) => {
 
-  const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status, id} = film;
+  const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status} = film;
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
   const commentsCount = comments.length;
   const humanizeDuration = getHumanizeViewFromDuration(duration);

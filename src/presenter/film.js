@@ -89,14 +89,14 @@ export default class Film {
 
   // изменения данных
   _handleWatchListClick() {
-    this._changeData(Object.assign({}, this._film, {status: {watchlist: !this._film.status.watchlist}}));
+    this._changeData(Object.assign({}, this._film, {status: {watchlist: !this._film.status.watchlist, favorite: this._film.status.favorite, watched: this._film.status.watched}}));
   }
 
   _handleWatchedClick() {
-    this._changeData(Object.assign({}, this._film, {status: {watched: !this._film.status.watched}}));
+    this._changeData(Object.assign({}, this._film, {status: {watched: !this._film.status.watched, favorite: this._film.status.favorite, watchlist: this._film.status.watchlist}}));
   }
 
   _handleFavoriteClick() {
-    this._changeData(Object.assign({}, this._film, {status: {favorite: !this._film.status.favorite}}));
+    this._changeData(Object.assign({}, this._film, {status: {favorite: !this._film.status.favorite, watchlist: this._film.status.watchlist, watched: this._film.status.watched}}));
   }
 }

@@ -6,9 +6,9 @@ export default class Smart extends Abstract {
     this._data = {};
   }
 
-  // restoreHandlers() {
-  //   throw new Error(`Метод restoreHandlers надо переопределить`);
-  // }
+  restoreHandlers() {
+    throw new Error(`Метод restoreHandlers надо переопределить`);
+  }
 
   updateElement() {
     let prevElement = this.getElement();
@@ -20,7 +20,7 @@ export default class Smart extends Abstract {
     parent.replaceChild(newElement, prevElement);
     prevElement = null; // Чтобы окончательно "убить" ссылку на prevElement
 
-    // this.restoreHandlers();
+    this.restoreHandlers();
   }
 
   updateData(update) {

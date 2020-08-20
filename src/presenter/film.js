@@ -58,7 +58,6 @@ export default class Film {
     this._filmDetailElement.setWatchedClickHandler(this._handleWatchedClick);
     this._filmDetailElement.setFavoriteClickHandler(this._handleFavoriteClick);
     this._filmDetailElement.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
-    this._filmDetailElement.setEmojiClickHandler();
 
     if (prevFilmCardElement === null || prevFilmDetailElement === null) {
       render(this._container, this._filmCardElement, BEFOREEND);

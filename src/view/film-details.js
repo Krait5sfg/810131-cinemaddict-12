@@ -185,6 +185,22 @@ export default class FilmDetail extends SmartView {
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._deleteButtonClickHandler = this._deleteButtonClickHandler.bind(this);
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
+    this._setInnerHandler();
+  }
+
+  _setInnerHandler() {
+    // emoji
+    this.getElement()
+      .querySelectorAll(`.film-details__emoji-label`)
+      .forEach((element) => element.addEventListener(`click`, this._emojiClickHandler));
+  }
+
+  restoreHandlers() {
+    this._setInnerHandler();
+    this.setWatchListClickHandler(this._callback.watchListClick);
+    this.setWatchedClickHandler(this._callback.watchedClick);
+    this.setFavoriteClickHandler(this._callback.favoriteClick);
+    this.setDeleteButtonClickHandler(this._callback.deleteButtonClick);
   }
 
   static parseFilmToData(film) {
@@ -247,12 +263,6 @@ export default class FilmDetail extends SmartView {
     this._callback.deleteButtonClick(evt.target.dataset.commentId);
   }
 
-  setEmojiClickHandler() {
-    this.getElement()
-      .querySelectorAll(`.film-details__emoji-label`)
-      .forEach((element) => element.addEventListener(`click`, this._emojiClickHandler));
-  }
-
   _emojiClickHandler(evt) {
     this._updateEmoji(evt.target.dataset.emojiType);
   }
@@ -260,16 +270,16 @@ export default class FilmDetail extends SmartView {
   _updateEmoji(emojiType) {
     switch (emojiType) {
       case EmojiType.SMILE:
-        this.updateData({isSmile: true});
+        this.updateData({isSmile: true, isAngry: false, isPuke: false, isSleeping: false});
         break;
       case EmojiType.SLEEPING:
-        this.updateData({isSleeping: true});
+        this.updateData({isSmile: false, isAngry: false, isPuke: false, isSleeping: true});
         break;
       case EmojiType.ANGRY:
-        this.updateData({isAngry: true});
+        this.updateData({isSmile: false, isAngry: true, isPuke: false, isSleeping: false});
         break;
       case EmojiType.PUKE:
-        this.updateData({isPuke: true});
+        this.updateData({isSmile: false, isAngry: false, isPuke: true, isSleeping: false});
         break;
     }
   }

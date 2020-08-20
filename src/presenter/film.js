@@ -9,6 +9,11 @@ const Key = {
   ENTER: `Enter`,
 };
 
+const Mode = {
+  DEFAULT: `DEFAULT`,
+  OPEN: `OPEN`
+};
+
 const EmojiType = {
   [`smile`]: `./images/emoji/smile.png`,
   [`sleeping`]: `./images/emoji/sleeping.png`,
@@ -17,10 +22,11 @@ const EmojiType = {
 };
 
 export default class Film {
-  constructor(container, bodyElement, changeDate) {
+  constructor(container, bodyElement, changeDate, changeMode) {
     this._container = container;
     this._bodyElement = bodyElement;
     this._changeData = changeDate;
+    this._changeMode = changeMode;
 
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._showFilmDetail = this._showFilmDetail.bind(this);
@@ -32,6 +38,7 @@ export default class Film {
 
     this._filmCardElement = null;
     this._filmDetailElement = null;
+    this._mode = Mode.DEFAULT;
   }
 
   init(film) {
@@ -92,15 +99,26 @@ export default class Film {
   }
 
   _hideFilmDetail() {
-    this._bodyElement.removeChild(this._filmDetailElement.getElement());
+    const popup = this._filmDetailElement.getElement();
+    const card = this._filmCardElement.getElement();
+    document.querySelector(`.films-list__container`).appendChild(popup);
+    popup.replaceWith(card);
+
     this._bodyElement.classList.remove(`hide-overflow`);
+    this._mode = Mode.DEFAULT;
   }
 
   _showFilmDetail() {
-    this._bodyElement.appendChild(this._filmDetailElement.getElement());
+    const popup = this._filmDetailElement.getElement();
+    const card = this._filmCardElement.getElement();
+    this._bodyElement.appendChild(card);
+    card.replaceWith(popup);
+
     this._bodyElement.classList.add(`hide-overflow`);
     document.addEventListener(`keydown`, this._handleEscKeyDown);
     document.addEventListener(`keydown`, this._handleEnterKeyDown);
+    this._changeMode();
+    this._mode = Mode.OPEN;
   }
 
   // изменения данных
@@ -137,6 +155,13 @@ export default class Film {
         newComments.push(userComment);
         this._changeData(Object.assign({}, this._film, {comments: newComments.slice(0)}));
       }
+    }
+  }
+
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._hideFilmDetail();
+      this._bodyElement.classList.add(`hide-overflow`);
     }
   }
 }

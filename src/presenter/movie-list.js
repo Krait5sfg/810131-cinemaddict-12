@@ -34,6 +34,7 @@ export default class MovieList {
     this._handleShomMoreButtonElementClick = this._handleShomMoreButtonElementClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleFilmChange = this._handleFilmChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
 
     this._currenSortType = SortType.DEFAULT;
     this._filmPresenter = {};
@@ -60,6 +61,12 @@ export default class MovieList {
     // отрисовка Top rated и Most commented компонентов с фильмами
     this._renderTopRatedBoard(this._topRatedFilms.slice(0, CountType.EXTRA_FILMS));
     this._renderMostCommentedBoard(this._mostCommentedFilms.slice(0, CountType.EXTRA_FILMS));
+  }
+
+  _handleModeChange() {
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.resetView());
   }
 
   // -------сортировка
@@ -129,7 +136,7 @@ export default class MovieList {
 
   // отрисовка карточки с фильмом и добавление событий
   _renderFilm(container, film) {
-    const filmPresenter = new FilmPresenter(container, this._bodyElement, this._handleFilmChange);
+    const filmPresenter = new FilmPresenter(container, this._bodyElement, this._handleFilmChange, this._handleModeChange);
     filmPresenter.init(film);
     this._filmPresenter[film.id] = filmPresenter;
   }

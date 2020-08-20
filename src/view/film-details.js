@@ -202,6 +202,7 @@ export default class FilmDetail extends SmartView {
     this.setFavoriteClickHandler(this._callback.favoriteClick);
     this.setDeleteButtonClickHandler(this._callback.deleteButtonClick);
     this.setClickHandler(this._callback.click);
+    this.setEnterKeyDown(this._callback.enterKeyDown);
   }
 
   static parseFilmToData(film) {
@@ -215,6 +216,10 @@ export default class FilmDetail extends SmartView {
   _clickHandler(evt) {
     evt.preventDefault();
     this._callback.click();
+  }
+
+  setEnterKeyDown(callback) {
+    this._callback.enterKeyDown = callback;
   }
 
   setClickHandler(callback) {
@@ -283,5 +288,21 @@ export default class FilmDetail extends SmartView {
         this.updateData({isSmile: false, isAngry: false, isPuke: true, isSleeping: false});
         break;
     }
+  }
+
+  returnSelectedEmojiType() {
+    if (this._data.isAngry || this._data.isPuke || this._data.isSleeping || this._data.isSmile) {
+      switch (true) {
+        case this._data.isAngry:
+          return EmojiType.ANGRY;
+        case this._data.isPuke:
+          return EmojiType.PUKE;
+        case this._data.isSleeping:
+          return EmojiType.SLEEPING;
+        case this._data.isSmile:
+          return EmojiType.SMILE;
+      }
+    }
+    return false;
   }
 }

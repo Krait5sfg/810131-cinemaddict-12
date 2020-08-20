@@ -58,6 +58,7 @@ export default class Film {
     this._filmDetailElement.setWatchedClickHandler(this._handleWatchedClick);
     this._filmDetailElement.setFavoriteClickHandler(this._handleFavoriteClick);
     this._filmDetailElement.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
+    this._filmDetailElement.setEnterKeyDown(this._handleEnterKeyDown);
 
     if (prevFilmCardElement === null || prevFilmDetailElement === null) {
       render(this._container, this._filmCardElement, BEFOREEND);
@@ -122,13 +123,13 @@ export default class Film {
 
   _handleEnterKeyDown(evt) {
     if (evt.key === Key.ENTER) {
-      let checkedValue = this._filmDetailElement.getElement().querySelector(`input[type ='radio']:checked`).value;
-      let textAreaValue = this._filmDetailElement.getElement().querySelector(`.film-details__comment-input`).value;
-      if (checkedValue && textAreaValue) {
+      const userMessage = this._filmDetailElement.getElement().querySelector(`.film-details__comment-input`).value;
+      const selectedEmojiType = this._filmDetailElement.returnSelectedEmojiType();
+      if (userMessage && selectedEmojiType) {
         const userComment = {
           id: generateId(),
-          emoji: EmojiType[checkedValue],
-          text: textAreaValue,
+          emoji: EmojiType[selectedEmojiType],
+          text: userMessage,
           author: `Anonim`,
           time: new Date(),
         };

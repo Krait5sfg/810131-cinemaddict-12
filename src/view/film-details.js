@@ -1,5 +1,18 @@
 import {getHumanizeViewFromDuration} from '../utils/film.js';
-import AbstractView from './abstract.js';
+import SmartView from './smart.js';
+const EmojiImage = {
+  SMILE: `<img src="images/emoji/smile.png" width="55" height="55" alt="emoji">`,
+  SLEEPING: `<img src="images/emoji/sleeping.png" width="55" height="55" alt="emoji">`,
+  PUKE: `<img src="images/emoji/puke.png" width="55" height="55" alt="emoji"></img>`,
+  ANGRY: `<img src="images/emoji/angry.png" width="55" height="55" alt="emoji"></img>`
+};
+
+const EmojiType = {
+  SMILE: `smile`,
+  SLEEPING: `sleeping`,
+  PUKE: `puke`,
+  ANGRY: `angry`
+};
 
 const generateGenres = (genres) => {
   let result = ``;
@@ -40,7 +53,7 @@ const convertDateToString = (date) => `${date.getFullYear()}/${date.getMonth()}/
 
 const createFilmDetailsTemplate = (film) => {
 
-  const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status} = film;
+  const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status, isSmile, isAngry, isSleeping, isPuke} = film;
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
   const commentsCount = comments.length;
   const humanizeDuration = getHumanizeViewFromDuration(duration);
@@ -122,7 +135,12 @@ const createFilmDetailsTemplate = (film) => {
             </ul>
 
             <div class="film-details__new-comment">
-              <div for="add-emoji" class="film-details__add-emoji-label"></div>
+              <div for="add-emoji" class="film-details__add-emoji-label">
+              ${isSmile ? `${EmojiImage.SMILE}` : ``}
+              ${isAngry ? `${EmojiImage.ANGRY}` : ``}
+              ${isSleeping ? `${EmojiImage.SLEEPING}` : ``}
+              ${isPuke ? `${EmojiImage.PUKE}` : ``}
+              </div>
 
               <label class="film-details__comment-label">
                 <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
@@ -131,22 +149,22 @@ const createFilmDetailsTemplate = (film) => {
               <div class="film-details__emoji-list">
                 <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
                 <label class="film-details__emoji-label" for="emoji-smile">
-                  <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
+                  <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji" data-emoji-type="${EmojiType.SMILE}">
                 </label>
 
                 <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
                 <label class="film-details__emoji-label" for="emoji-sleeping">
-                  <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
+                  <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji" data-emoji-type="${EmojiType.SLEEPING}">
                 </label>
 
                 <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
                 <label class="film-details__emoji-label" for="emoji-puke">
-                  <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
+                  <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji" data-emoji-type="${EmojiType.PUKE}">
                 </label>
 
                 <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
                 <label class="film-details__emoji-label" for="emoji-angry">
-                  <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
+                  <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji" data-emoji-type="${EmojiType.ANGRY}">
                 </label>
               </div>
             </div>
@@ -156,19 +174,25 @@ const createFilmDetailsTemplate = (film) => {
     </section>`;
 };
 
-export default class FilmDetail extends AbstractView {
+export default class FilmDetail extends SmartView {
   constructor(film) {
     super();
-    this._film = film;
+    // this._film = film;
+    this._data = FilmDetail.parseFilmToData(film);
     this._clickHandler = this._clickHandler.bind(this);
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._deleteButtonClickHandler = this._deleteButtonClickHandler.bind(this);
+    this._emojiClickHandler = this._emojiClickHandler.bind(this);
+  }
+
+  static parseFilmToData(film) {
+    return Object.assign({}, film, {isSmile: false, isAngry: false, isPuke: false, isSleeping: false});
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._film);
+    return createFilmDetailsTemplate(this._data);
   }
 
   _clickHandler(evt) {
@@ -221,5 +245,32 @@ export default class FilmDetail extends AbstractView {
   _deleteButtonClickHandler(evt) {
     evt.preventDefault();
     this._callback.deleteButtonClick(evt.target.dataset.commentId);
+  }
+
+  setEmojiClickHandler() {
+    this.getElement()
+      .querySelectorAll(`.film-details__emoji-label`)
+      .forEach((element) => element.addEventListener(`click`, this._emojiClickHandler));
+  }
+
+  _emojiClickHandler(evt) {
+    this._updateEmoji(evt.target.dataset.emojiType);
+  }
+
+  _updateEmoji(emojiType) {
+    switch (emojiType) {
+      case EmojiType.SMILE:
+        this.updateData({isSmile: true});
+        break;
+      case EmojiType.SLEEPING:
+        this.updateData({isSleeping: true});
+        break;
+      case EmojiType.ANGRY:
+        this.updateData({isAngry: true});
+        break;
+      case EmojiType.PUKE:
+        this.updateData({isPuke: true});
+        break;
+    }
   }
 }

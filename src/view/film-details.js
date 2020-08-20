@@ -201,6 +201,7 @@ export default class FilmDetail extends SmartView {
     this.setWatchedClickHandler(this._callback.watchedClick);
     this.setFavoriteClickHandler(this._callback.favoriteClick);
     this.setDeleteButtonClickHandler(this._callback.deleteButtonClick);
+    this.setClickHandler(this._callback.click);
   }
 
   static parseFilmToData(film) {

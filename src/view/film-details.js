@@ -53,7 +53,7 @@ const convertDateToString = (date) => `${date.getFullYear()}/${date.getMonth()}/
 
 const createFilmDetailsTemplate = (film) => {
 
-  const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status, isSmile, isAngry, isSleeping, isPuke} = film;
+  const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status, isSmile, isAngry, isSleeping, isPuke, message} = film;
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
   const commentsCount = comments.length;
   const humanizeDuration = getHumanizeViewFromDuration(duration);
@@ -143,7 +143,7 @@ const createFilmDetailsTemplate = (film) => {
               </div>
 
               <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${message ? message : ``}</textarea>
               </label>
 
               <div class="film-details__emoji-list">
@@ -185,6 +185,7 @@ export default class FilmDetail extends SmartView {
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._deleteButtonClickHandler = this._deleteButtonClickHandler.bind(this);
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
+    this._commentInputHandler = this._commentInputHandler.bind(this);
     this._setInnerHandler();
   }
 
@@ -193,6 +194,10 @@ export default class FilmDetail extends SmartView {
     this.getElement()
       .querySelectorAll(`.film-details__emoji-label`)
       .forEach((element) => element.addEventListener(`click`, this._emojiClickHandler));
+
+    this.getElement()
+      .querySelector(`.film-details__comment-input`)
+      .addEventListener(`input`, this._commentInputHandler);
   }
 
   restoreHandlers() {
@@ -203,6 +208,11 @@ export default class FilmDetail extends SmartView {
     this.setDeleteButtonClickHandler(this._callback.deleteButtonClick);
     this.setClickHandler(this._callback.click);
     this.setEnterKeyDown(this._callback.enterKeyDown);
+  }
+
+  _commentInputHandler(evt) {
+    evt.preventDefault();
+    this.updateData({message: evt.target.value}, true);
   }
 
   static parseFilmToData(film) {
@@ -304,5 +314,9 @@ export default class FilmDetail extends SmartView {
       }
     }
     return false;
+  }
+
+  returnUserMessage() {
+    return this._data.message;
   }
 }

@@ -123,7 +123,7 @@ export default class Film {
 
   _handleEnterKeyDown(evt) {
     if (evt.key === Key.ENTER) {
-      const userMessage = this._filmDetailElement.getElement().querySelector(`.film-details__comment-input`).value;
+      const userMessage = this._filmDetailElement.returnUserMessage();
       const selectedEmojiType = this._filmDetailElement.returnSelectedEmojiType();
       if (userMessage && selectedEmojiType) {
         const userComment = {

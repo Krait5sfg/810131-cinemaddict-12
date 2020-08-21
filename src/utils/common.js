@@ -33,4 +33,6 @@ export const updateItem = (items, update) => {
 export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 // методы преобразуют даты с помощью moment
-export const getYearFromDate = (data) => moment(data).year();
+export const getYearFromDate = (date) => moment(date).year();
+
+export const getDayMonthYearFromDate = (date) => moment(date).format(`DD MMMM YYYY`);

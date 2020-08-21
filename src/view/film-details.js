@@ -1,5 +1,7 @@
 import {getHumanizeViewFromDuration} from '../utils/film.js';
+import {getDayMonthYearFromDate} from '../utils/common.js';
 import SmartView from './smart.js';
+
 const EmojiImage = {
   SMILE: `<img src="images/emoji/smile.png" width="55" height="55" alt="emoji">`,
   SLEEPING: `<img src="images/emoji/sleeping.png" width="55" height="55" alt="emoji">`,
@@ -57,6 +59,7 @@ const createFilmDetailsTemplate = (film) => {
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
   const commentsCount = comments.length;
   const humanizeDuration = getHumanizeViewFromDuration(duration);
+  const fullReleaseDateFilm = getDayMonthYearFromDate(releaseDate);
 
   return `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
@@ -97,7 +100,7 @@ const createFilmDetailsTemplate = (film) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${releaseDate.toLocaleString(`en-GB`, {day: `numeric`, month: `long`, year: `numeric`})}</td>
+                  <td class="film-details__cell">${fullReleaseDateFilm}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>

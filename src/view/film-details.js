@@ -177,7 +177,6 @@ const createFilmDetailsTemplate = (film) => {
 export default class FilmDetail extends SmartView {
   constructor(film) {
     super();
-    // this._film = film;
     this._data = FilmDetail.parseFilmToData(film);
     this._clickHandler = this._clickHandler.bind(this);
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
@@ -216,7 +215,7 @@ export default class FilmDetail extends SmartView {
   }
 
   static parseFilmToData(film) {
-    return Object.assign({}, film, {isSmile: false, isAngry: false, isPuke: false, isSleeping: false});
+    return Object.assign({}, film, {isSmile: false, isAngry: false, isPuke: false, isSleeping: false, message: null});
   }
 
   getTemplate() {
@@ -318,5 +317,9 @@ export default class FilmDetail extends SmartView {
 
   returnUserMessage() {
     return this._data.message;
+  }
+
+  reset(film) {
+    this.updateData(FilmDetail.parseFilmToData(film));
   }
 }

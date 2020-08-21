@@ -46,14 +46,9 @@ const DescriptionSentences = {
   MAX: 5,
 };
 
-const HourDuration = {
-  MIN: 0,
-  MAX: 1
-};
-
 const MinutesDuration = {
-  MIN: 1,
-  MAX: 60
+  MIN: 50,
+  MAX: 120
 };
 
 const BooleanValue = {
@@ -74,10 +69,7 @@ const CommentBound = {
 const generateDescription = (sentences) => sentences.slice(0, getRandomInteger(DescriptionSentences.MIN, DescriptionSentences.MAX)).join(``);
 const generateGenre = (genreTypes) => genreTypes.slice(0, getRandomInteger(MIN_GENRE_BOUND, genreTypes.length - 1));
 
-const generateDuration = () => ({
-  hours: getRandomInteger(HourDuration.MIN, HourDuration.MAX),
-  minutes: getRandomInteger(MinutesDuration.MIN, MinutesDuration.MAX),
-});
+const generateDuration = () => getRandomInteger(MinutesDuration.MIN, MinutesDuration.MAX);
 
 const getRandomBooleanValue = () => Boolean(getRandomInteger(BooleanValue.FALSE, BooleanValue.TRUE));
 

@@ -1,5 +1,4 @@
-import {getHumanizeViewFromDuration} from '../utils/film.js';
-import {getDayMonthYearFromDate} from '../utils/common.js';
+import {getDayMonthYearFromDate, getHumaniseTime} from '../utils/common.js';
 import SmartView from './smart.js';
 
 const EmojiImage = {
@@ -58,7 +57,7 @@ const createFilmDetailsTemplate = (film) => {
   const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status, isSmile, isAngry, isSleeping, isPuke, message} = film;
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
   const commentsCount = comments.length;
-  const humanizeDuration = getHumanizeViewFromDuration(duration);
+  const humanizeDuration = getHumaniseTime(duration);
   const fullReleaseDateFilm = getDayMonthYearFromDate(releaseDate);
 
   return `<section class="film-details">

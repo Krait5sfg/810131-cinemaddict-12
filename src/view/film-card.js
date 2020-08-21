@@ -1,5 +1,4 @@
-import {getHumanizeViewFromDuration} from '../utils/film.js';
-import {getRandomValueFromArray, getYearFromDate} from '../utils/common.js';
+import {getRandomValueFromArray, getYearFromDate, getHumaniseTime} from '../utils/common.js';
 import AbstractView from './abstract.js';
 
 export const createFilmCardTemplate = (film) => {
@@ -8,7 +7,7 @@ export const createFilmCardTemplate = (film) => {
   const {favorite, watched, watchlist} = status;
   const genre = getRandomValueFromArray(genres);
   const year = getYearFromDate(releaseDate);
-  const humanizeDuration = getHumanizeViewFromDuration(duration);
+  const humanizeDuration = getHumaniseTime(duration);
 
   return `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>

@@ -36,3 +36,9 @@ export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10)
 export const getYearFromDate = (date) => moment(date).year();
 
 export const getDayMonthYearFromDate = (date) => moment(date).format(`DD MMMM YYYY`);
+
+export const getHumaniseTime = (minutes) => {
+  const duration = moment.duration(minutes, `minutes`);
+  const format = minutes > 60 ? `H[h] mm[m]` : `mm[m]`;
+  return moment.utc(duration.as(`milliseconds`)).format(format).toString();
+};

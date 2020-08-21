@@ -33,12 +33,22 @@ export const updateItem = (items, update) => {
 export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 // методы преобразуют даты с помощью moment
-export const getYearFromDate = (date) => moment(date).year();
-
-export const getDayMonthYearFromDate = (date) => moment(date).format(`DD MMMM YYYY`);
-
-export const getHumaniseTime = (minutes) => {
+export const getHumaniseDuration = (minutes) => {
   const duration = moment.duration(minutes, `minutes`);
   const format = minutes > 60 ? `H[h] mm[m]` : `mm[m]`;
   return moment.utc(duration.as(`milliseconds`)).format(format).toString();
+};
+
+export const getConvertingDate = (date, key) => {
+  if (date instanceof Date && key) {
+    switch (key) {
+      case `film card`:
+        return moment(date).year();
+      case `film detail`:
+        return moment(date).format(`DD MMMM YYYY`);
+      case `comment`:
+        return moment(date).format(`YYYY/MM/DD HH:mm`);
+    }
+  }
+  throw new Error(`Некорректные данные в методе getConvertingDate`);
 };

@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const getRandomInteger = (min = 0, max = 1) => {
   const lower = Math.ceil(Math.min(min, max));
   const upper = Math.floor(Math.max(min, max));
@@ -29,3 +31,6 @@ export const updateItem = (items, update) => {
 };
 
 export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
+// методы преобразуют даты с помощью moment
+export const getYearFromDate = (data) => moment(data).year();

@@ -1,18 +1,13 @@
 import {getHumanizeViewFromDuration} from '../utils/film.js';
-import {getRandomValueFromArray} from '../utils/common.js';
+import {getRandomValueFromArray, getYearFromDate} from '../utils/common.js';
 import AbstractView from './abstract.js';
-
-const getStringYearFromDate = (releaseDate) => {
-  let date = releaseDate.toLocaleString(`en-GB`, {day: `numeric`, month: `long`, year: `numeric`});
-  return date.slice(date.length - 4, date.length);
-};
 
 export const createFilmCardTemplate = (film) => {
 
   const {title, rating, releaseDate, duration, genres, image, description, comments, status} = film;
   const {favorite, watched, watchlist} = status;
   const genre = getRandomValueFromArray(genres);
-  const year = getStringYearFromDate(releaseDate);
+  const year = getYearFromDate(releaseDate);
   const humanizeDuration = getHumanizeViewFromDuration(duration);
 
   return `<article class="film-card">

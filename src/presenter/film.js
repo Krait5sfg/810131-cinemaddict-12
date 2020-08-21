@@ -99,25 +99,20 @@ export default class Film {
   }
 
   _hideFilmDetail() {
-    const popup = this._filmDetailElement.getElement();
-    const card = this._filmCardElement.getElement();
-    document.querySelector(`.films-list__container`).appendChild(popup);
-    popup.replaceWith(card);
+    remove(this._filmDetailElement);
 
     this._bodyElement.classList.remove(`hide-overflow`);
     this._mode = Mode.DEFAULT;
   }
 
   _showFilmDetail() {
-    const popup = this._filmDetailElement.getElement();
-    const card = this._filmCardElement.getElement();
-    this._bodyElement.appendChild(card);
-    card.replaceWith(popup);
+    this._changeMode();
+    this._filmDetailElement.updateElement();
+    this._bodyElement.appendChild(this._filmDetailElement.getElement());
 
     this._bodyElement.classList.add(`hide-overflow`);
     document.addEventListener(`keydown`, this._handleEscKeyDown);
     document.addEventListener(`keydown`, this._handleEnterKeyDown);
-    this._changeMode();
     this._mode = Mode.OPEN;
   }
 

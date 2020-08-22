@@ -33,13 +33,7 @@ const getEmojiImageElement = (emoji) => {
   return `<img src="images/emoji/${image}" width="55" height="55" alt="emoji"></img>`;
 };
 
-const generateGenres = (genres) => {
-  let result = ``;
-  for (let i = 0; i < genres.length; i++) {
-    result += `<span class="film-details__genre">${genres[i]}</span>`;
-  }
-  return result;
-};
+const generateGenres = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(``);
 
 const generateComments = (comments) => {
   return comments.map((element) => `<li class="film-details__comment">

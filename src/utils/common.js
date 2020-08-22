@@ -1,5 +1,11 @@
 import moment from 'moment';
 
+export const Key = {
+  FILM_CARD: `film card`,
+  FILM_DETAIL: `film detail`,
+  COMMENT: `comment`
+};
+
 export const getRandomInteger = (min = 0, max = 1) => {
   const lower = Math.ceil(Math.min(min, max));
   const upper = Math.floor(Math.max(min, max));
@@ -42,11 +48,11 @@ export const getHumaniseDuration = (minutes) => {
 export const getConvertingDate = (date, key) => {
   if (date instanceof Date && key) {
     switch (key) {
-      case `film card`:
+      case Key.FILM_CARD:
         return moment(date).year();
-      case `film detail`:
+      case Key.FILM_DETAIL:
         return moment(date).format(`DD MMMM YYYY`);
-      case `comment`:
+      case Key.COMMENT:
         return moment(date).format(`YYYY/MM/DD HH:mm`);
     }
   }

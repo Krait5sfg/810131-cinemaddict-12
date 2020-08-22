@@ -2,10 +2,10 @@ import {getHumaniseDuration, getConvertingDate} from '../utils/common.js';
 import SmartView from './smart.js';
 
 const EmojiImage = {
-  SMILE: `<img src="images/emoji/smile.png" width="55" height="55" alt="emoji">`,
-  SLEEPING: `<img src="images/emoji/sleeping.png" width="55" height="55" alt="emoji">`,
-  PUKE: `<img src="images/emoji/puke.png" width="55" height="55" alt="emoji"></img>`,
-  ANGRY: `<img src="images/emoji/angry.png" width="55" height="55" alt="emoji"></img>`
+  SMILE: `smile.png`,
+  SLEEPING: `sleeping.png`,
+  PUKE: `puke.png`,
+  ANGRY: `angry.png`
 };
 
 const EmojiType = {
@@ -13,6 +13,24 @@ const EmojiType = {
   SLEEPING: `sleeping`,
   PUKE: `puke`,
   ANGRY: `angry`
+};
+
+const getEmojiImageElement = (emoji) => {
+  let image = null;
+  switch (emoji) {
+    case EmojiType.SMILE:
+      image = EmojiImage.SMILE;
+      break;
+    case EmojiType.ANGRY:
+      image = EmojiImage.ANGRY;
+      break;
+    case EmojiType.SLEEPING:
+      image = EmojiImage.SLEEPING;
+      break;
+    case EmojiType.PUKE:
+      image = EmojiImage.PUKE;
+  }
+  return `<img src="images/emoji/${image}" width="55" height="55" alt="emoji"></img>`;
 };
 
 const generateGenres = (genres) => {
@@ -50,9 +68,9 @@ const generateControls = ({favorite, watched, watchlist}) => {
     <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>`;
 };
 
-const createFilmDetailsTemplate = (film) => {
+const createFilmDetailsTemplate = (film, emoji, message) => {
 
-  const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status, isSmile, isAngry, isSleeping, isPuke, message} = film;
+  const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status} = film;
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
   const commentsCount = comments.length;
   const humanizeDuration = getHumaniseDuration(duration);
@@ -136,10 +154,7 @@ const createFilmDetailsTemplate = (film) => {
 
             <div class="film-details__new-comment">
               <div for="add-emoji" class="film-details__add-emoji-label">
-              ${isSmile ? `${EmojiImage.SMILE}` : ``}
-              ${isAngry ? `${EmojiImage.ANGRY}` : ``}
-              ${isSleeping ? `${EmojiImage.SLEEPING}` : ``}
-              ${isPuke ? `${EmojiImage.PUKE}` : ``}
+              ${emoji ? `${getEmojiImageElement(emoji)}` : ``}
               </div>
 
               <label class="film-details__comment-label">
@@ -147,22 +162,22 @@ const createFilmDetailsTemplate = (film) => {
               </label>
 
               <div class="film-details__emoji-list">
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${isSmile ? `checked` : ``}>
+                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${emoji === EmojiType.SMILE ? `checked` : ``}>
                 <label class="film-details__emoji-label" for="emoji-smile">
                   <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji" data-emoji-type="${EmojiType.SMILE}">
                 </label>
 
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${isSleeping ? `checked` : ``}>
+                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${emoji === EmojiType.SLEEPING ? `checked` : ``}>
                 <label class="film-details__emoji-label" for="emoji-sleeping">
                   <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji" data-emoji-type="${EmojiType.SLEEPING}">
                 </label>
 
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${isPuke ? `checked` : ``}>
+                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${emoji === EmojiType.PUKE ? `checked` : ``}>
                 <label class="film-details__emoji-label" for="emoji-puke">
                   <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji" data-emoji-type="${EmojiType.PUKE}">
                 </label>
 
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${isAngry ? `checked` : ``}>
+                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${emoji === EmojiType.ANGRY ? `checked` : ``}>
                 <label class="film-details__emoji-label" for="emoji-angry">
                   <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji" data-emoji-type="${EmojiType.ANGRY}">
                 </label>
@@ -177,7 +192,9 @@ const createFilmDetailsTemplate = (film) => {
 export default class FilmDetail extends SmartView {
   constructor(film) {
     super();
-    this._data = FilmDetail.parseFilmToData(film);
+    this._film = film;
+    this._emoji = null;
+    this._message = null;
     this._clickHandler = this._clickHandler.bind(this);
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
@@ -185,6 +202,7 @@ export default class FilmDetail extends SmartView {
     this._deleteButtonClickHandler = this._deleteButtonClickHandler.bind(this);
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._commentInputHandler = this._commentInputHandler.bind(this);
+    this.returnSelectedEmojiType = this.returnSelectedEmojiType.bind(this);
     this._setInnerHandler();
   }
 
@@ -211,15 +229,11 @@ export default class FilmDetail extends SmartView {
 
   _commentInputHandler(evt) {
     evt.preventDefault();
-    this.updateData({message: evt.target.value}, true);
-  }
-
-  static parseFilmToData(film) {
-    return Object.assign({}, film, {isSmile: false, isAngry: false, isPuke: false, isSleeping: false, message: null});
+    this._message = evt.target.value;
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._data);
+    return createFilmDetailsTemplate(this._film, this._emoji, this._message);
   }
 
   _clickHandler(evt) {
@@ -280,46 +294,36 @@ export default class FilmDetail extends SmartView {
 
   _emojiClickHandler(evt) {
     this._updateEmoji(evt.target.dataset.emojiType);
+    this.updateElement();
   }
 
   _updateEmoji(emojiType) {
     switch (emojiType) {
       case EmojiType.SMILE:
-        this.updateData({isSmile: true, isAngry: false, isPuke: false, isSleeping: false});
+        this._emoji = EmojiType.SMILE;
         break;
       case EmojiType.SLEEPING:
-        this.updateData({isSmile: false, isAngry: false, isPuke: false, isSleeping: true});
+        this._emoji = EmojiType.SLEEPING;
         break;
       case EmojiType.ANGRY:
-        this.updateData({isSmile: false, isAngry: true, isPuke: false, isSleeping: false});
+        this._emoji = EmojiType.ANGRY;
         break;
       case EmojiType.PUKE:
-        this.updateData({isSmile: false, isAngry: false, isPuke: true, isSleeping: false});
+        this._emoji = EmojiType.PUKE;
         break;
     }
   }
 
   returnSelectedEmojiType() {
-    if (this._data.isAngry || this._data.isPuke || this._data.isSleeping || this._data.isSmile) {
-      switch (true) {
-        case this._data.isAngry:
-          return EmojiType.ANGRY;
-        case this._data.isPuke:
-          return EmojiType.PUKE;
-        case this._data.isSleeping:
-          return EmojiType.SLEEPING;
-        case this._data.isSmile:
-          return EmojiType.SMILE;
-      }
-    }
-    return false;
+    return this._emoji ? this._emoji : false;
   }
 
   returnUserMessage() {
-    return this._data.message;
+    return this._message ? this._message : false;
   }
 
-  reset(film) {
-    this.updateData(FilmDetail.parseFilmToData(film));
+  reset() {
+    this._emoji = null;
+    this._message = null;
   }
 }

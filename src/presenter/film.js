@@ -148,7 +148,7 @@ export default class Film {
           author: `Anonim`,
           time: new Date(),
         };
-        const newComments = this._film.comments.slice(0);
+        const newComments = this._film.comments.slice();
         newComments.push(userComment);
         this._changeData(Object.assign({}, this._film, {comments: newComments.slice()}));
       }

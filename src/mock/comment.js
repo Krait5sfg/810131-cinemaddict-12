@@ -1,4 +1,4 @@
-import {getRandomValueFromArray} from '../utils/common.js';
+import {getRandomValueFromArray, generateId} from '../utils/common.js';
 
 const EMOJIS = [
   `./images/emoji/smile.png`,
@@ -22,12 +22,11 @@ const AUTHORS = [
 const generateRandomDateForComment = () => {
   const start = new Date(2019, 10, 30);
   const end = new Date();
-  const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-
-  return `${randomDate.getFullYear()}/${randomDate.getMonth()}/${randomDate.getDate()} ${randomDate.getHours()}:${randomDate.getMinutes()}`;
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
 export const generateComment = () => ({
+  id: generateId(),
   emoji: getRandomValueFromArray(EMOJIS),
   text: getRandomValueFromArray(COMMENTS_TEXT),
   author: getRandomValueFromArray(AUTHORS),

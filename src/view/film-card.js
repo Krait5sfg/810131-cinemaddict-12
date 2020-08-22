@@ -1,19 +1,13 @@
-import {getHumanizeViewFromDuration} from '../utils/film.js';
-import {getRandomValueFromArray} from '../utils/common.js';
+import {getRandomValueFromArray, getConvertingDate, getHumaniseDuration} from '../utils/common.js';
 import AbstractView from './abstract.js';
-
-const getStringYearFromDate = (releaseDate) => {
-  let date = releaseDate.toLocaleString(`en-GB`, {day: `numeric`, month: `long`, year: `numeric`});
-  return date.slice(date.length - 4, date.length);
-};
 
 export const createFilmCardTemplate = (film) => {
 
   const {title, rating, releaseDate, duration, genres, image, description, comments, status} = film;
   const {favorite, watched, watchlist} = status;
   const genre = getRandomValueFromArray(genres);
-  const year = getStringYearFromDate(releaseDate);
-  const humanizeDuration = getHumanizeViewFromDuration(duration);
+  const year = getConvertingDate(releaseDate, `film card`);
+  const humanizeDuration = getHumaniseDuration(duration);
 
   return `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>
@@ -39,6 +33,10 @@ export default class FilmCard extends AbstractView {
     super();
     this._film = film;
     this._clickHandler = this._clickHandler.bind(this);
+
+    this._watchListClickHandler = this._watchListClickHandler.bind(this);
+    this._watchedClickHandler = this._watchedClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -56,5 +54,35 @@ export default class FilmCard extends AbstractView {
       .forEach((element) => {
         element.addEventListener(`click`, this._clickHandler);
       });
+  }
+
+  setWatchListClickHandler(callback) {
+    this._callback.watchListClick = callback;
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, this._watchListClickHandler);
+  }
+
+  _watchListClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.watchListClick();
+  }
+
+  setWatchedClickHandler(callback) {
+    this._callback.watchedClick = callback;
+    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).addEventListener(`click`, this._watchedClickHandler);
+  }
+
+  _watchedClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.watchedClick();
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, this._favoriteClickHandler);
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
   }
 }

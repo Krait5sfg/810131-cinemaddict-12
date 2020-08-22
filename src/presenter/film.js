@@ -15,10 +15,10 @@ const Mode = {
 };
 
 const EmojiType = {
-  [`smile`]: `./images/emoji/smile.png`,
-  [`sleeping`]: `./images/emoji/sleeping.png`,
-  [`puke`]: `./images/emoji/puke.png`,
-  [`angry`]: `./images/emoji/angry.png`,
+  SMILE: `./images/emoji/smile.png`,
+  SLEEPING: `./images/emoji/sleeping.png`,
+  PUKE: `./images/emoji/puke.png`,
+  ANGRY: `./images/emoji/angry.png`,
 };
 
 export default class Film {
@@ -133,7 +133,7 @@ export default class Film {
 
   _handleDeleteButtonClick(commentId) {
     const newComments = this._film.comments.filter((comment) => comment.id !== parseInt(commentId, 10));
-    this._changeData(Object.assign({}, this._film, {comments: newComments.slice(0)}));
+    this._changeData(Object.assign({}, this._film, {comments: newComments.slice()}));
   }
 
   _handleEnterKeyDown(evt) {
@@ -143,14 +143,14 @@ export default class Film {
       if (userMessage && selectedEmojiType) {
         const userComment = {
           id: generateId(),
-          emoji: EmojiType[selectedEmojiType],
+          emoji: EmojiType[selectedEmojiType.toUpperCase()],
           text: userMessage,
           author: `Anonim`,
           time: new Date(),
         };
         const newComments = this._film.comments.slice(0);
         newComments.push(userComment);
-        this._changeData(Object.assign({}, this._film, {comments: newComments.slice(0)}));
+        this._changeData(Object.assign({}, this._film, {comments: newComments.slice()}));
       }
     }
   }

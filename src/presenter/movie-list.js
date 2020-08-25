@@ -1,13 +1,13 @@
-import SortView, { SortType } from '../view/sort.js';
+import SortView, {SortType} from '../view/sort.js';
 import FilmContainerView from '../view/films-container.js';
 import FilmListView from '../view/films-list.js';
 import FilmsListContainerView from '../view/films-list-container.js';
 import ShowMoreButtonView from '../view/show-more-button.js';
 import NoFilmView from '../view/no-film.js';
-import { render, BEFOREEND, remove } from '../utils/render.js';
-import { sortByDate, sortByRating } from '../utils/film.js';
+import {render, BEFOREEND, remove} from '../utils/render.js';
+import {sortByDate, sortByRating} from '../utils/film.js';
 import FilmPresenter from './film.js';
-import { UserAction, UpdateType } from '../const.js';
+import {UserAction, UpdateType} from '../const.js';
 
 const CountType = {
   COMMON_FILMS: 20,
@@ -78,18 +78,10 @@ export default class MovieList {
       return;
     }
     this._currentSortType = sortType;
-    this._clearBoard({ resetRenderedTaskCount: true });
+    this._clearBoard({resetRenderedTaskCount: true});
     this._renderBoard();
   }
   // -----конец сортировки
-
-  // удаляет каждый фильм
-  _clearFilmList() {
-    Object.values(this._filmPresenter)
-      .forEach((presenter) => presenter.destroy());
-    this._filmPresenter = {};
-    this._renderFilmCount = CountType.RENDER_FOR_STEP;
-  }
 
   _renderBoard() {
     const films = this._getFilms();
@@ -162,12 +154,12 @@ export default class MovieList {
         this._filmPresenter[data.id].init(data);
         break;
       case UpdateType.MAJOR:
-        this._clearBoard({ resetRenderedTaskCount: true, resetSortType: true })
+        this._clearBoard({resetRenderedTaskCount: true, resetSortType: true})
         this._renderBoard();
     }
   }
 
-  _clearBoard({ resetRenderedTaskCount = false, resetSortType = false } = {}) {
+  _clearBoard({resetRenderedTaskCount = false, resetSortType = false} = {}) {
     const filmCount = this._getFilms().length;
 
     Object

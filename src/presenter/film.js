@@ -1,6 +1,6 @@
 import FilmCardView from '../view/film-card.js';
 import FilmDetailView from '../view/film-details.js';
-import {render, BEFOREEND, replace, remove} from '../utils/render.js';
+import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {generateId} from '../utils/common.js';
 import {UserAction, UpdateType} from '../const.js';
 
@@ -70,7 +70,7 @@ export default class Film {
     this._filmDetailElement.setEnterKeyDown(this._handleEnterKeyDown);
 
     if (prevFilmCardElement === null || prevFilmDetailElement === null) {
-      render(this._container, this._filmCardElement, BEFOREEND);
+      render(this._container, this._filmCardElement, RenderPosition.BEFOREEND);
       return;
     }
 

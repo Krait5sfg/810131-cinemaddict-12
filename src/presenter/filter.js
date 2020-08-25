@@ -1,5 +1,5 @@
 import MenuView from '../view/menu.js';
-import {render, AFTERBEGIN, replace, remove} from '../utils/render.js';
+import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {UpdateType, FilterType} from '../const.js';
 import {filter} from '../utils/filter.js';
 
@@ -29,7 +29,7 @@ export default class Filter {
     this._filterElement.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterElement === null) {
-      render(this._filterContainer, this._filterElement, AFTERBEGIN);
+      render(this._filterContainer, this._filterElement, RenderPosition.AFTERBEGIN);
       return;
     }
     replace(this._filterElement, prevFilterElement);
@@ -52,11 +52,6 @@ export default class Filter {
     const films = this._filmsModel.getFilms();
 
     return [
-      // {
-      //   type: FilterType.ALL_MOVIES,
-      //   name: `All movies`,
-      //   count: filter[FilterType.ALL_MOVIES](films).length
-      // },
       {
         type: FilterType.WATCHLIST,
         name: `Watchlist`,
@@ -73,6 +68,5 @@ export default class Filter {
         count: filter[FilterType.FAVORITES](films).length
       }
     ];
-    // return {watchlist: 10, watched: 10, favorite: 10}
   }
 }

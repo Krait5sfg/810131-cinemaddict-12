@@ -4,10 +4,11 @@ import FilmListView from '../view/films-list.js';
 import FilmsListContainerView from '../view/films-list-container.js';
 import ShowMoreButtonView from '../view/show-more-button.js';
 import NoFilmView from '../view/no-film.js';
-import {render, BEFOREEND, remove} from '../utils/render.js';
+import {render, RenderPosition, remove} from '../utils/render.js';
 import {sortByDate, sortByRating} from '../utils/film.js';
 import FilmPresenter from './film.js';
 import {UserAction, UpdateType} from '../const.js';
+import {filter} from '../utils/filter.js';
 
 const CountType = {
   COMMON_FILMS: 20,
@@ -16,8 +17,9 @@ const CountType = {
 };
 
 export default class MovieList {
-  constructor(mainElement, bodyElement, moviesModel) {
+  constructor(mainElement, bodyElement, moviesModel, filterModel) {
     this._moviesModel = moviesModel;
+    this._filterModel = filterModel;
 
     this._bodyElement = bodyElement; // body страницы
     this._mainElement = mainElement; // родитель для всех элементов ниже
@@ -40,6 +42,7 @@ export default class MovieList {
     this._currentSortType = SortType.DEFAULT;
     this._filmPresenter = {};
     this._moviesModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -47,14 +50,18 @@ export default class MovieList {
   }
 
   _getFilms() {
+    const filterType = this._filterModel.getFilter();
+    const films = this._moviesModel.getFilms();
+    const filteredFilms = filter[filterType](films);
+
     switch (this._currentSortType) {
       case SortType.DATE:
-        return this._moviesModel.getFilms().slice().sort(sortByDate);
+        return filteredFilms.sort(sortByDate);
       case SortType.RATING:
-        return this._moviesModel.getFilms().slice().sort(sortByRating);
+        return filteredFilms.sort(sortByRating);
     }
 
-    return this._moviesModel.getFilms();
+    return filteredFilms;
   }
 
   _handleModeChange() {
@@ -70,7 +77,7 @@ export default class MovieList {
     }
     this._sortElement = new SortView(this._currentSortType);
     this._sortElement.setSortTypeChangeHandler(this._handleSortTypeChange);
-    render(this._mainElement, this._sortElement, BEFOREEND);
+    render(this._mainElement, this._sortElement, RenderPosition.BEFOREEND);
   }
 
   _handleSortTypeChange(sortType) {
@@ -93,9 +100,9 @@ export default class MovieList {
     }
 
     this._renderSort();
-    render(this._mainElement, this._filmsContainerElement, BEFOREEND);
-    render(this._filmsContainerElement, this._filmsListElement, BEFOREEND);
-    render(this._filmsListElement, this._filmsListContainerElement, BEFOREEND);
+    render(this._mainElement, this._filmsContainerElement, RenderPosition.BEFOREEND);
+    render(this._filmsContainerElement, this._filmsListElement, RenderPosition.BEFOREEND);
+    render(this._filmsListElement, this._filmsListContainerElement, RenderPosition.BEFOREEND);
 
     this._renderFilms(films.slice(0, Math.min(filmCount, this._renderFilmCount)));
 
@@ -116,7 +123,7 @@ export default class MovieList {
   }
 
   _renderNoFilmElement() {
-    render(this._filmsListElement, this._noFilmElement, BEFOREEND);
+    render(this._filmsListElement, this._noFilmElement, RenderPosition.BEFOREEND);
   }
 
   _renderShowMoreButton() {
@@ -125,7 +132,7 @@ export default class MovieList {
     }
     this._showMoreButtonElement = new ShowMoreButtonView();
     this._showMoreButtonElement.setClickHandler(this._handleShomMoreButtonElementClick);
-    render(this._filmsListElement, this._showMoreButtonElement, BEFOREEND);
+    render(this._filmsListElement, this._showMoreButtonElement, RenderPosition.BEFOREEND);
   }
 
   _handleShomMoreButtonElementClick() {

@@ -1,8 +1,8 @@
 import FilmCardView from '../view/film-card.js';
 import FilmDetailView from '../view/film-details.js';
-import { render, BEFOREEND, replace, remove } from '../utils/render.js';
-import { generateId } from '../utils/common.js';
-import { UserAction, UpdateType } from '../const.js';
+import {render, BEFOREEND, replace, remove} from '../utils/render.js';
+import {generateId} from '../utils/common.js';
+import {UserAction, UpdateType} from '../const.js';
 
 const Key = {
   ESCAPE: `Escape`,
@@ -121,20 +121,20 @@ export default class Film {
 
   // изменения данных
   _handleWatchListClick() {
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, { status: { watchlist: !this._film.status.watchlist, favorite: this._film.status.favorite, watched: this._film.status.watched } }));
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status: {watchlist: !this._film.status.watchlist, favorite: this._film.status.favorite, watched: this._film.status.watched}}));
   }
 
   _handleWatchedClick() {
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, { status: { watched: !this._film.status.watched, favorite: this._film.status.favorite, watchlist: this._film.status.watchlist } }));
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status: {watched: !this._film.status.watched, favorite: this._film.status.favorite, watchlist: this._film.status.watchlist}}));
   }
 
   _handleFavoriteClick() {
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, { status: { favorite: !this._film.status.favorite, watchlist: this._film.status.watchlist, watched: this._film.status.watched } }));
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status: {favorite: !this._film.status.favorite, watchlist: this._film.status.watchlist, watched: this._film.status.watched}}));
   }
 
   _handleDeleteButtonClick(commentId) {
     const newComments = this._film.comments.filter((comment) => comment.id !== parseInt(commentId, 10));
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, { comments: newComments.slice() }));
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}));
   }
 
   _handleEnterKeyDown(evt) {
@@ -151,7 +151,7 @@ export default class Film {
         };
         const newComments = this._film.comments.slice();
         newComments.push(userComment);
-        this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, { comments: newComments.slice() }));
+        this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}));
       }
     }
   }

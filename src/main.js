@@ -7,6 +7,7 @@ import {generateUser} from './mock/user.js'; // мок для пользоват
 import {generateFilmsMenu} from './mock/menu.js'; // счет фильмов для меню
 import {render, BEFOREEND} from './utils/render.js';
 import MoviesModel from './model/movies.js';
+import FilterModel from './model/filter.js';
 
 const COMMON_FILMS_COUNT = 20;
 
@@ -21,6 +22,7 @@ const user = generateUser(filmsStatusCount);
 // модель
 const moviesModel = new MoviesModel();
 moviesModel.setFilms(commonFilms);
+const filterModel = new FilterModel();
 
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);

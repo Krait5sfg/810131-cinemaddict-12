@@ -21,11 +21,13 @@ export default class MovieList {
 
     this._bodyElement = bodyElement; // body страницы
     this._mainElement = mainElement; // родитель для всех элементов ниже
-    this._sortElement = new SortView();
+    // this._sortElement = new SortView();
+    this._sortElement = null;
     this._filmsContainerElement = new FilmContainerView(); // главный контейнер для фильмов
     this._filmsListElement = new FilmListView(); // первый внут. контейнер для всех фильмов
     this._filmsListContainerElement = new FilmsListContainerView(); // второй внут. контейнер для фильмов, в нем распорожены фильмы
-    this._showMoreButtonElement = new ShowMoreButtonView();
+    // this._showMoreButtonElement = new ShowMoreButtonView();
+    this._showMoreButtonElement = null;
     this._noFilmElement = new NoFilmView();
     this._renderFilmCount = CountType.RENDER_FOR_STEP;
 
@@ -41,15 +43,7 @@ export default class MovieList {
   }
 
   init() {
-    this._renderSort();
-    render(this._mainElement, this._filmsContainerElement, BEFOREEND);
-    render(this._filmsContainerElement, this._filmsListElement, BEFOREEND);
-    if (!this._getFilms().length) {
-      this._renderNoFilmElement();
-      return;
-    }
-    render(this._filmsListElement, this._filmsListContainerElement, BEFOREEND);
-    this._renderFilmsList();
+    this._renderBoard();
   }
 
   _getFilms() {
@@ -71,8 +65,12 @@ export default class MovieList {
 
   // -------сортировка
   _renderSort() {
-    render(this._mainElement, this._sortElement, BEFOREEND);
+    if (this._sortElement !== null) {
+      this._sortElement = null;
+    }
+    this._sortElement = new SortView(this._currentSortType);
     this._sortElement.setSortTypeChangeHandler(this._handleSortTypeChange);
+    render(this._mainElement, this._sortElement, BEFOREEND);
   }
 
   _handleSortTypeChange(sortType) {
@@ -80,8 +78,8 @@ export default class MovieList {
       return;
     }
     this._currentSortType = sortType;
-    this._clearFilmList();
-    this._renderFilmsList();
+    this._clearBoard({ resetRenderedTaskCount: true });
+    this._renderBoard();
   }
   // -----конец сортировки
 
@@ -93,12 +91,23 @@ export default class MovieList {
     this._renderFilmCount = CountType.RENDER_FOR_STEP;
   }
 
-  _renderFilmsList() {
-    const filmCount = this._getFilms().length;
-    const films = this._getFilms().slice(0, Math.min(filmCount, CountType.RENDER_FOR_STEP));
-    this._renderFilms(films);
+  _renderBoard() {
+    const films = this._getFilms();
+    const filmCount = films.length;
 
-    if (filmCount > CountType.RENDER_FOR_STEP) {
+    if (filmCount === 0) {
+      this._renderNoFilmElement();
+      return;
+    }
+
+    this._renderSort();
+    render(this._mainElement, this._filmsContainerElement, BEFOREEND);
+    render(this._filmsContainerElement, this._filmsListElement, BEFOREEND);
+    render(this._filmsListElement, this._filmsListContainerElement, BEFOREEND);
+
+    this._renderFilms(films.slice(0, Math.min(filmCount, this._renderFilmCount)));
+
+    if (filmCount > this._renderFilmCount) {
       this._renderShowMoreButton();
     }
   }
@@ -119,8 +128,12 @@ export default class MovieList {
   }
 
   _renderShowMoreButton() {
-    render(this._filmsListElement, this._showMoreButtonElement, BEFOREEND);
+    if (this._showMoreButtonElement !== null) {
+      this._showMoreButtonElement = null;
+    }
+    this._showMoreButtonElement = new ShowMoreButtonView();
     this._showMoreButtonElement.setClickHandler(this._handleShomMoreButtonElementClick);
+    render(this._filmsListElement, this._showMoreButtonElement, BEFOREEND);
   }
 
   _handleShomMoreButtonElementClick() {
@@ -148,6 +161,31 @@ export default class MovieList {
       case UpdateType.MINOR:
         this._filmPresenter[data.id].init(data);
         break;
+      case UpdateType.MAJOR:
+        this._clearBoard({ resetRenderedTaskCount: true, resetSortType: true })
+        this._renderBoard();
+    }
+  }
+
+  _clearBoard({ resetRenderedTaskCount = false, resetSortType = false } = {}) {
+    const filmCount = this._getFilms().length;
+
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._filmPresenter = {};
+
+    remove(this._sortElement);
+    remove(this._noFilmElement);
+    remove(this._showMoreButtonElement);
+
+    if (resetRenderedTaskCount) {
+      this._renderFilmCount = CountType.RENDER_FOR_STEP;
+    } else {
+      this._renderFilmCount = Math.min(filmCount, this._renderFilmCount);
+    }
+    if (resetSortType) {
+      this._currentSortType = SortType.DEFAULT;
     }
   }
 }

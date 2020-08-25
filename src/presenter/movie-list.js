@@ -1,4 +1,4 @@
-import SortView, {SortType} from '../view/sort.js';
+import SortView, { SortType } from '../view/sort.js';
 import FilmContainerView from '../view/films-container.js';
 import FilmListView from '../view/films-list.js';
 import FilmsListContainerView from '../view/films-list-container.js';
@@ -6,10 +6,11 @@ import FilmListTopRatedView from '../view/films-list-top-rated.js';
 import FilmListMostCommentedView from '../view/films-list-most-commented.js';
 import ShowMoreButtonView from '../view/show-more-button.js';
 import NoFilmView from '../view/no-film.js';
-import {render, BEFOREEND, remove} from '../utils/render.js';
-import {sortByDate, sortByRating} from '../utils/film.js';
+import { render, BEFOREEND, remove } from '../utils/render.js';
+import { sortByDate, sortByRating } from '../utils/film.js';
 import FilmPresenter from './film.js';
-import {updateItem} from '../utils/common.js';
+// import { updateItem } from '../utils/common.js';
+import { UserAction, UpdateType } from '../const.js';
 
 const CountType = {
   COMMON_FILMS: 20,
@@ -27,21 +28,24 @@ export default class MovieList {
     this._filmsContainerElement = new FilmContainerView(); // главный контейнер для фильмов
     this._filmsListElement = new FilmListView(); // первый внут. контейнер для всех фильмов
     this._filmsListContainerElement = new FilmsListContainerView(); // второй внут. контейнер для фильмов, в нем распорожены фильмы
-    this._filmListTopRatedElement = new FilmListTopRatedView();
-    this._filmListMostCommentedElement = new FilmListMostCommentedView();
+    // this._filmListTopRatedElement = new FilmListTopRatedView();
+    // this._filmListMostCommentedElement = new FilmListMostCommentedView();
     this._showMoreButtonElement = new ShowMoreButtonView();
     this._noFilmElement = new NoFilmView();
     this._renderFilmCount = CountType.RENDER_FOR_STEP;
 
     this._handleShomMoreButtonElementClick = this._handleShomMoreButtonElementClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-    this._handleFilmChange = this._handleFilmChange.bind(this);
+    // this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleViewAction = this._handleViewAction.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
 
     this._currentSortType = SortType.DEFAULT;
     this._filmPresenter = {};
-    this._filmTopRatedPresenter = {};
-    this._filmMostCommentedPresenter = {};
+    // this._filmTopRatedPresenter = {};
+    // this._filmMostCommentedPresenter = {};
+    this._moviesModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -136,7 +140,7 @@ export default class MovieList {
 
   // отрисовка карточки с фильмом и добавление событий
   _renderFilm(container, film) {
-    const filmPresenter = new FilmPresenter(container, this._bodyElement, this._handleFilmChange, this._handleModeChange);
+    const filmPresenter = new FilmPresenter(container, this._bodyElement, this._handleViewAction, this._handleModeChange);
     filmPresenter.init(film);
     this._filmPresenter[film.id] = filmPresenter;
   }
@@ -175,8 +179,24 @@ export default class MovieList {
   }
 
   // обработчик изменения данных - этот метод передается в presenter/film как changeData
-  _handleFilmChange(updatedFilm) {
-    // Будем вызывать обновление модели
-    this._filmPresenter[updatedFilm.id].init(updatedFilm); // инициализация фильма с изм. данными
+  // _handleFilmChange(updatedFilm) {
+  // Будем вызывать обновление модели
+  //   this._filmPresenter[updatedFilm.id].init(updatedFilm); // инициализация фильма с изм. данными
+  // }
+
+  _handleViewAction(actionType, updateType, update) {
+    switch (actionType) {
+      case UserAction.UPDATE_FILM:
+        this._moviesModel.updateFilm(updateType, update);
+        break;
+    }
+  }
+
+  _handleModelEvent(updateType, data) {
+    switch (updateType) {
+      case UpdateType.MINOR:
+        this._filmPresenter[data.id].init(data);
+        break;
+    }
   }
 }

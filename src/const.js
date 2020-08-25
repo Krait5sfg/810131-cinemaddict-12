@@ -1,7 +1,5 @@
 export const UserAction = {
-  ADD_WATCHLIST: `ADD_WATCHLIST`,
-  ADD_WATCHED: `ADD_TASK`,
-  ADD_FAVORITE: `ADD_FAVORITE`
+  UPDATE_FILM: `UPDATE_FILM`,
 };
 
 export const UpdateType = {

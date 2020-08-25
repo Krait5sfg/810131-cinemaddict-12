@@ -1,7 +1,8 @@
 import FilmCardView from '../view/film-card.js';
 import FilmDetailView from '../view/film-details.js';
-import {render, BEFOREEND, replace, remove} from '../utils/render.js';
-import {generateId} from '../utils/common.js';
+import { render, BEFOREEND, replace, remove } from '../utils/render.js';
+import { generateId } from '../utils/common.js';
+import { UserAction, UpdateType } from '../const.js';
 
 const Key = {
   ESCAPE: `Escape`,
@@ -22,10 +23,10 @@ const EmojiType = {
 };
 
 export default class Film {
-  constructor(container, bodyElement, changeDate, changeMode) {
+  constructor(container, bodyElement, changeData, changeMode) {
     this._container = container;
     this._bodyElement = bodyElement;
-    this._changeData = changeDate;
+    this._changeData = changeData;
     this._changeMode = changeMode;
 
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
@@ -120,20 +121,20 @@ export default class Film {
 
   // изменения данных
   _handleWatchListClick() {
-    this._changeData(Object.assign({}, this._film, {status: {watchlist: !this._film.status.watchlist, favorite: this._film.status.favorite, watched: this._film.status.watched}}));
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, { status: { watchlist: !this._film.status.watchlist, favorite: this._film.status.favorite, watched: this._film.status.watched } }));
   }
 
   _handleWatchedClick() {
-    this._changeData(Object.assign({}, this._film, {status: {watched: !this._film.status.watched, favorite: this._film.status.favorite, watchlist: this._film.status.watchlist}}));
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, { status: { watched: !this._film.status.watched, favorite: this._film.status.favorite, watchlist: this._film.status.watchlist } }));
   }
 
   _handleFavoriteClick() {
-    this._changeData(Object.assign({}, this._film, {status: {favorite: !this._film.status.favorite, watchlist: this._film.status.watchlist, watched: this._film.status.watched}}));
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, { status: { favorite: !this._film.status.favorite, watchlist: this._film.status.watchlist, watched: this._film.status.watched } }));
   }
 
   _handleDeleteButtonClick(commentId) {
     const newComments = this._film.comments.filter((comment) => comment.id !== parseInt(commentId, 10));
-    this._changeData(Object.assign({}, this._film, {comments: newComments.slice()}));
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, { comments: newComments.slice() }));
   }
 
   _handleEnterKeyDown(evt) {
@@ -150,7 +151,7 @@ export default class Film {
         };
         const newComments = this._film.comments.slice();
         newComments.push(userComment);
-        this._changeData(Object.assign({}, this._film, {comments: newComments.slice()}));
+        this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, { comments: newComments.slice() }));
       }
     }
   }

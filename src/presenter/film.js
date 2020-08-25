@@ -134,7 +134,7 @@ export default class Film {
 
   _handleDeleteButtonClick(commentId) {
     const newComments = this._film.comments.filter((comment) => comment.id !== parseInt(commentId, 10));
-    this._changeData(UserAction.DELETE, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}));
+    this._changeData(UserAction.DELETE_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}));
   }
 
   _handleEnterKeyDown(evt) {

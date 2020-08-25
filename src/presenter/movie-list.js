@@ -23,7 +23,6 @@ export default class MovieList {
 
     this._bodyElement = bodyElement; // body страницы
     this._mainElement = mainElement; // родитель для всех элементов ниже
-    // this._sortElement = new SortView();
     this._sortElement = null;
     this._filmsContainerElement = new FilmContainerView(); // главный контейнер для фильмов
     this._filmsListElement = new FilmListView(); // первый внут. контейнер для всех фильмов

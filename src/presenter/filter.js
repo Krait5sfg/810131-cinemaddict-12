@@ -52,11 +52,11 @@ export default class Filter {
     const films = this._filmsModel.getFilms();
 
     return [
-      {
-        type: FilterType.ALL_MOVIES,
-        name: `All movies`,
-        count: filter[FilterType.ALL_MOVIES](films).length
-      },
+      // {
+      //   type: FilterType.ALL_MOVIES,
+      //   name: `All movies`,
+      //   count: filter[FilterType.ALL_MOVIES](films).length
+      // },
       {
         type: FilterType.WATCHLIST,
         name: `Watchlist`,

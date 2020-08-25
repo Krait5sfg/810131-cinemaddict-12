@@ -1,5 +1,7 @@
 export const UserAction = {
   UPDATE_FILM: `UPDATE_FILM`,
+  DELETE_COMMENT: `DELETE`,
+  ADD_COMMENT: `ADD_COMMENT`
 };
 
 export const UpdateType = {

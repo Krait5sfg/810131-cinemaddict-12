@@ -150,6 +150,11 @@ export default class MovieList {
       case UserAction.UPDATE_FILM:
         this._moviesModel.updateFilm(updateType, update);
         break;
+      case UserAction.DELETE_COMMENT:
+        this._moviesModel.updateFilm(updateType, update);
+        break;
+      case UserAction.ADD_COMMENT:
+        this._moviesModel.updateFilm(updateType, update);
     }
   }
 
@@ -159,7 +164,7 @@ export default class MovieList {
         this._filmPresenter[data.id].init(data);
         break;
       case UpdateType.MAJOR:
-        this._clearBoard({resetRenderedTaskCount: true, resetSortType: true})
+        this._clearBoard({resetRenderedTaskCount: true, resetSortType: true});
         this._renderBoard();
     }
   }

@@ -134,11 +134,11 @@ export default class Film {
 
   _handleDeleteButtonClick(commentId) {
     const newComments = this._film.comments.filter((comment) => comment.id !== parseInt(commentId, 10));
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}));
+    this._changeData(UserAction.DELETE, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}));
   }
 
   _handleEnterKeyDown(evt) {
-    if (evt.key === Key.ENTER) {
+    if ((evt.ctrlKey || evt.metaKey) && evt.key === Key.ENTER) {
       const userMessage = this._filmDetailElement.returnUserMessage();
       const selectedEmojiType = this._filmDetailElement.returnSelectedEmojiType();
       if (userMessage && selectedEmojiType) {
@@ -151,7 +151,7 @@ export default class Film {
         };
         const newComments = this._film.comments.slice();
         newComments.push(userComment);
-        this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}));
+        this._changeData(UserAction.ADD_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}));
       }
     }
   }

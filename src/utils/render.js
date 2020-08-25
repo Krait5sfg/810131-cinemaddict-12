@@ -1,6 +1,7 @@
 import AbstractView from '../view/abstract.js';
 
 export const BEFOREEND = `beforeend`;
+export const AFTERBEGIN = `afterbegin`;
 
 export const renderTemplate = (container, template, place) => {
   if (container instanceof AbstractView) {
@@ -17,10 +18,15 @@ export const render = (container, child, place) => {
     child = child.getElement();
   }
 
-  if (place === BEFOREEND) {
-    container.append(child);
-  } else {
-    throw new Error(`Передано некорректное place в функцию render`);
+  switch (place) {
+    case AFTERBEGIN:
+      container.prepend(child);
+      break;
+    case BEFOREEND:
+      container.append(child);
+      break;
+    default:
+      throw new Error(`Передено некорретное значение place в функцию render`);
   }
 };
 

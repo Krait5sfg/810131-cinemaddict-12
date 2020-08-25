@@ -48,7 +48,7 @@ export default class Film {
     const prevFilmDetailElement = this._filmDetailElement;
 
     this._filmCardElement = new FilmCardView(film);
-    this._filmDetailElement = new FilmDetailView(film, `test`);
+    this._filmDetailElement = new FilmDetailView(film);
 
     this._filmCardElement.setClickHandler(this._showFilmDetail);
 

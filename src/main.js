@@ -6,6 +6,7 @@ import {generateFilm} from './mock/film.js'; // функция создает м
 import {generateUser} from './mock/user.js'; // мок для пользователя
 import {generateFilmsMenu} from './mock/menu.js'; // счет фильмов для меню
 import {render, BEFOREEND} from './utils/render.js';
+import MoviesModel from './model/movies.js';
 
 const COMMON_FILMS_COUNT = 20;
 
@@ -17,6 +18,10 @@ const filmsStatusCount = generateFilmsMenu(commonFilms);
 // мок для пользователя
 const user = generateUser(filmsStatusCount);
 
+// модель
+const moviesModel = new MoviesModel();
+moviesModel.setFilms(commonFilms);
+
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
@@ -27,5 +32,5 @@ render(mainElement, new MenuView(filmsStatusCount), BEFOREEND);
 render(footerStatisticsElement, new StatisticsView(filmsCount), BEFOREEND);
 
 // презентер
-const moviePresenter = new MovieListPresenter(mainElement, bodyElement);
-moviePresenter.init(commonFilms);
+const moviePresenter = new MovieListPresenter(mainElement, bodyElement, moviesModel);
+moviePresenter.init();

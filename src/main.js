@@ -12,7 +12,6 @@ const COMMON_FILMS_COUNT = 20;
 // создание моков для фильма
 const commonFilms = new Array(COMMON_FILMS_COUNT).fill(``).map(generateFilm);
 const filmsCount = commonFilms.length;
-// счет фильмов для меню, для статуса пользователя
 
 // модель
 const moviesModel = new MoviesModel();

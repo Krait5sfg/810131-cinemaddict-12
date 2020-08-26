@@ -31,7 +31,7 @@ export default class MovieList {
     this._noFilmElement = new NoFilmView();
     this._renderFilmCount = CountType.RENDER_FOR_STEP;
 
-    this._handleShomMoreButtonElementClick = this._handleShomMoreButtonElementClick.bind(this);
+    this._handleShowMoreButtonElementClick = this._handleShowMoreButtonElementClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -79,7 +79,7 @@ export default class MovieList {
   }
 
   _handleSortTypeChange(sortType) {
-    if (this._currenSortType === sortType) {
+    if (this._currentSortType === sortType) {
       return;
     }
     this._currentSortType = sortType;
@@ -129,11 +129,11 @@ export default class MovieList {
       this._showMoreButtonElement = null;
     }
     this._showMoreButtonElement = new ShowMoreButtonView();
-    this._showMoreButtonElement.setClickHandler(this._handleShomMoreButtonElementClick);
+    this._showMoreButtonElement.setClickHandler(this._handleShowMoreButtonElementClick);
     render(this._filmsListElement, this._showMoreButtonElement, RenderPosition.BEFOREEND);
   }
 
-  _handleShomMoreButtonElementClick() {
+  _handleShowMoreButtonElementClick() {
     const filmCount = this._getFilms().length;
     const newRenderFilmCount = Math.min(filmCount, this._renderFilmCount + CountType.RENDER_FOR_STEP);
     const films = this._getFilms().slice(this._renderFilmCount, newRenderFilmCount);

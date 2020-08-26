@@ -33,7 +33,5 @@ render(headerElement, new UserProfileView(user), RenderPosition.BEFOREEND);
 render(footerStatisticsElement, new StatisticsView(filmsCount), RenderPosition.BEFOREEND);
 
 // презентер
-const moviePresenter = new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel);
-moviePresenter.init();
-const filterPresenter = new FilterPresenter(mainElement, filterModel, moviesModel);
-filterPresenter.init();
+new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel).init();
+new FilterPresenter(mainElement, filterModel, moviesModel).init();

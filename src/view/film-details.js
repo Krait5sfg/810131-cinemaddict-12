@@ -197,7 +197,7 @@ export default class FilmDetail extends SmartView {
     this._deleteButtonClickHandler = this._deleteButtonClickHandler.bind(this);
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._commentInputHandler = this._commentInputHandler.bind(this);
-    this.returnSelectedEmojiType = this.returnSelectedEmojiType.bind(this);
+    this.getSelectedEmojiType = this.getSelectedEmojiType.bind(this);
     this._setInnerHandler();
   }
 
@@ -309,11 +309,11 @@ export default class FilmDetail extends SmartView {
     }
   }
 
-  returnSelectedEmojiType() {
+  getSelectedEmojiType() {
     return this._emoji ? this._emoji : false;
   }
 
-  returnUserMessage() {
+  getUserMessage() {
     return this._message ? this._message : false;
   }
 

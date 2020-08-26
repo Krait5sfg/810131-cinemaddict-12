@@ -121,15 +121,18 @@ export default class Film {
 
   // изменения данных
   _handleWatchListClick() {
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status: {watchlist: !this._film.status.watchlist, favorite: this._film.status.favorite, watched: this._film.status.watched}}));
+    const status = Object.assign({}, this._film.status, {watchlist: !this._film.status.watchlist});
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status}));
   }
 
   _handleWatchedClick() {
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status: {watched: !this._film.status.watched, favorite: this._film.status.favorite, watchlist: this._film.status.watchlist}}));
+    const status = Object.assign({}, this._film.status, {watched: !this._film.status.watched});
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status}));
   }
 
   _handleFavoriteClick() {
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status: {favorite: !this._film.status.favorite, watchlist: this._film.status.watchlist, watched: this._film.status.watched}}));
+    const status = Object.assign({}, this._film.status, {favorite: !this._film.status.favorite});
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status}));
   }
 
   _handleDeleteButtonClick(commentId) {
@@ -139,8 +142,8 @@ export default class Film {
 
   _handleEnterKeyDown(evt) {
     if ((evt.ctrlKey || evt.metaKey) && evt.key === Key.ENTER) {
-      const userMessage = this._filmDetailElement.returnUserMessage();
-      const selectedEmojiType = this._filmDetailElement.returnSelectedEmojiType();
+      const userMessage = this._filmDetailElement.getUserMessage();
+      const selectedEmojiType = this._filmDetailElement.getSelectedEmojiType();
       if (userMessage && selectedEmojiType) {
         const userComment = {
           id: generateId(),
@@ -151,7 +154,7 @@ export default class Film {
         };
         const newComments = this._film.comments.slice();
         newComments.push(userComment);
-        this._changeData(UserAction.ADD_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}));
+        this._changeData(UserAction.ADD_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments}));
       }
     }
   }

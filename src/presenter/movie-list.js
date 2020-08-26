@@ -17,9 +17,11 @@ const CountType = {
 };
 
 export default class MovieList {
-  constructor(mainElement, bodyElement, moviesModel, filterModel) {
+  constructor(mainElement, bodyElement, moviesModel, filterModel, userProfile) {
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
+
+    this._userProfilte = userProfile; // профайл пользователя для вычисления статуса
 
     this._bodyElement = bodyElement; // body страницы
     this._mainElement = mainElement; // родитель для всех элементов ниже
@@ -159,6 +161,9 @@ export default class MovieList {
   }
 
   _handleModelEvent(updateType, data) {
+
+    this._userProfilte.setUserRaiting(); // устанавливает статус пользователя
+
     switch (updateType) {
       case UpdateType.MINOR:
         this._filmPresenter[data.id].init(data);

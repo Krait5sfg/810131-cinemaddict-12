@@ -4,6 +4,8 @@ export default class Movies extends Observer {
   constructor() {
     super();
     this._films = [];
+
+    this.getWatchedCount = this.getWatchedCount.bind(this);
   }
 
   setFilms(films) {
@@ -12,6 +14,10 @@ export default class Movies extends Observer {
 
   getFilms() {
     return this._films;
+  }
+
+  getWatchedCount() {
+    return this._films.filter((film) => film.status.watched).length;
   }
 
   updateFilm(updateType, update) {

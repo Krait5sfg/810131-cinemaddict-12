@@ -2,7 +2,6 @@ import UserProfileView from './view/user-profile.js';
 import MovieListPresenter from './presenter/movie-list.js';
 import StatisticsView from './view/statistics.js';
 import {generateFilm} from './mock/film.js'; // функция создает мок для фильма
-import {generateUser} from './mock/user.js'; // мок для пользователя
 import {render, RenderPosition} from './utils/render.js';
 import MoviesModel from './model/movies.js';
 import FilterModel from './model/filter.js';
@@ -15,10 +14,6 @@ const commonFilms = new Array(COMMON_FILMS_COUNT).fill(``).map(generateFilm);
 const filmsCount = commonFilms.length;
 // счет фильмов для меню, для статуса пользователя
 
-const filter = {watchlist: 10, watched: 10, favorite: 10};
-// мок для пользователя
-const user = generateUser(filter);
-
 // модель
 const moviesModel = new MoviesModel();
 moviesModel.setFilms(commonFilms);
@@ -29,9 +24,10 @@ const mainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 const bodyElement = document.querySelector(`body`);
 
-render(headerElement, new UserProfileView(user), RenderPosition.BEFOREEND);
 render(footerStatisticsElement, new StatisticsView(filmsCount), RenderPosition.BEFOREEND);
+const userProfileView = new UserProfileView(moviesModel.getWatchedCount);
+render(headerElement, userProfileView, RenderPosition.BEFOREEND);
 
 // презентер
-new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel).init();
+new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel, userProfileView).init();
 new FilterPresenter(mainElement, filterModel, moviesModel).init();

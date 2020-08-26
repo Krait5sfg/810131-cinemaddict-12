@@ -8,6 +8,25 @@ const WatchCount = {
   FAN_UPPER_BOUND: 20,
 };
 
+const getUserStatus = (watchedCount) => {
+  let profileRating = null;
+  switch (true) {
+    case watchedCount >= WatchCount.NOVICE_LOW_BOUND && watchedCount <= WatchCount.NOVICE_UPPER_BOUND:
+      profileRating = `Novice`;
+      break;
+    case watchedCount >= WatchCount.FAN_LOW_BOUND && watchedCount <= WatchCount.FAN_UPPER_BOUND:
+      profileRating = `Fan`;
+      break;
+    case watchedCount > WatchCount.FAN_UPPER_BOUND:
+      profileRating = `Movie Buff`;
+      break;
+    case watchedCount === WatchCount.NONE:
+      profileRating = ``;
+      break;
+  }
+  return profileRating;
+};
+
 const createUserProfileTemplate = (profileRating) => {
 
   return `<section class="header__profile profile">
@@ -23,30 +42,10 @@ export default class UserProfile extends AbstractView {
   }
 
   getTemplate() {
-    return createUserProfileTemplate(this._getUserStatus());
+    return createUserProfileTemplate(getUserStatus(this._userRaiting()));
   }
 
   setUserRaiting() {
-    document.querySelector(`.profile__rating`).textContent = this._getUserStatus();
-  }
-
-  _getUserStatus() {
-    const watchedCount = this._userRaiting();
-    let profileRating = null;
-    switch (true) {
-      case watchedCount >= WatchCount.NOVICE_LOW_BOUND && watchedCount <= WatchCount.NOVICE_UPPER_BOUND:
-        profileRating = `Novice`;
-        break;
-      case watchedCount >= WatchCount.FAN_LOW_BOUND && watchedCount <= WatchCount.FAN_UPPER_BOUND:
-        profileRating = `Fan`;
-        break;
-      case watchedCount > WatchCount.FAN_UPPER_BOUND:
-        profileRating = `Movie Buff`;
-        break;
-      case watchedCount === WatchCount.NONE:
-        profileRating = ``;
-        break;
-    }
-    return profileRating;
+    document.querySelector(`.profile__rating`).textContent = getUserStatus(this._userRaiting());
   }
 }

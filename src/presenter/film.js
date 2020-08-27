@@ -1,7 +1,8 @@
 import FilmCardView from '../view/film-card.js';
 import FilmDetailView from '../view/film-details.js';
-import {render, BEFOREEND, replace, remove} from '../utils/render.js';
+import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {generateId} from '../utils/common.js';
+import {UserAction, UpdateType} from '../const.js';
 
 const Key = {
   ESCAPE: `Escape`,
@@ -22,10 +23,10 @@ const EmojiType = {
 };
 
 export default class Film {
-  constructor(container, bodyElement, changeDate, changeMode) {
+  constructor(container, bodyElement, changeData, changeMode) {
     this._container = container;
     this._bodyElement = bodyElement;
-    this._changeData = changeDate;
+    this._changeData = changeData;
     this._changeMode = changeMode;
 
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
@@ -48,7 +49,7 @@ export default class Film {
     const prevFilmDetailElement = this._filmDetailElement;
 
     this._filmCardElement = new FilmCardView(film);
-    this._filmDetailElement = new FilmDetailView(film, `test`);
+    this._filmDetailElement = new FilmDetailView(film);
 
     this._filmCardElement.setClickHandler(this._showFilmDetail);
 
@@ -69,7 +70,7 @@ export default class Film {
     this._filmDetailElement.setEnterKeyDown(this._handleEnterKeyDown);
 
     if (prevFilmCardElement === null || prevFilmDetailElement === null) {
-      render(this._container, this._filmCardElement, BEFOREEND);
+      render(this._container, this._filmCardElement, RenderPosition.BEFOREEND);
       return;
     }
 
@@ -120,26 +121,29 @@ export default class Film {
 
   // изменения данных
   _handleWatchListClick() {
-    this._changeData(Object.assign({}, this._film, {status: {watchlist: !this._film.status.watchlist, favorite: this._film.status.favorite, watched: this._film.status.watched}}));
+    const status = Object.assign({}, this._film.status, {watchlist: !this._film.status.watchlist});
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status}));
   }
 
   _handleWatchedClick() {
-    this._changeData(Object.assign({}, this._film, {status: {watched: !this._film.status.watched, favorite: this._film.status.favorite, watchlist: this._film.status.watchlist}}));
+    const status = Object.assign({}, this._film.status, {watched: !this._film.status.watched});
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status}));
   }
 
   _handleFavoriteClick() {
-    this._changeData(Object.assign({}, this._film, {status: {favorite: !this._film.status.favorite, watchlist: this._film.status.watchlist, watched: this._film.status.watched}}));
+    const status = Object.assign({}, this._film.status, {favorite: !this._film.status.favorite});
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status}));
   }
 
   _handleDeleteButtonClick(commentId) {
     const newComments = this._film.comments.filter((comment) => comment.id !== parseInt(commentId, 10));
-    this._changeData(Object.assign({}, this._film, {comments: newComments.slice()}));
+    this._changeData(UserAction.DELETE_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}));
   }
 
   _handleEnterKeyDown(evt) {
-    if (evt.key === Key.ENTER) {
-      const userMessage = this._filmDetailElement.returnUserMessage();
-      const selectedEmojiType = this._filmDetailElement.returnSelectedEmojiType();
+    if ((evt.ctrlKey || evt.metaKey) && evt.key === Key.ENTER) {
+      const userMessage = this._filmDetailElement.getUserMessage();
+      const selectedEmojiType = this._filmDetailElement.getSelectedEmojiType();
       if (userMessage && selectedEmojiType) {
         const userComment = {
           id: generateId(),
@@ -150,7 +154,7 @@ export default class Film {
         };
         const newComments = this._film.comments.slice();
         newComments.push(userComment);
-        this._changeData(Object.assign({}, this._film, {comments: newComments.slice()}));
+        this._changeData(UserAction.ADD_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments}));
       }
     }
   }

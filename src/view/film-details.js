@@ -1,5 +1,6 @@
 import {getHumaniseDuration, getConvertingDate} from '../utils/common.js';
 import SmartView from './smart.js';
+import he from 'he';
 
 const EmojiImage = {
   SMILE: `smile.png`,
@@ -41,7 +42,7 @@ const generateComments = (comments) => {
     <img src="${element.emoji}" width="55" height="55" alt="emoji-smile">
   </span>
   <div>
-    <p class="film-details__comment-text">${element.text}</p>
+    <p class="film-details__comment-text">${he.encode(element.text)}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${element.author}</span>
       <span class="film-details__comment-day">${getConvertingDate(element.time, `comment`)}</span>
@@ -196,7 +197,7 @@ export default class FilmDetail extends SmartView {
     this._deleteButtonClickHandler = this._deleteButtonClickHandler.bind(this);
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._commentInputHandler = this._commentInputHandler.bind(this);
-    this.returnSelectedEmojiType = this.returnSelectedEmojiType.bind(this);
+    this.getSelectedEmojiType = this.getSelectedEmojiType.bind(this);
     this._setInnerHandler();
   }
 
@@ -308,11 +309,11 @@ export default class FilmDetail extends SmartView {
     }
   }
 
-  returnSelectedEmojiType() {
+  getSelectedEmojiType() {
     return this._emoji ? this._emoji : false;
   }
 
-  returnUserMessage() {
+  getUserMessage() {
     return this._message ? this._message : false;
   }
 

@@ -6,12 +6,27 @@ import {render, RenderPosition} from './utils/render.js';
 import MoviesModel from './model/movies.js';
 import FilterModel from './model/filter.js';
 import FilterPresenter from './presenter/filter.js';
+import {generateComment} from './mock/comment.js';
 
 const COMMON_FILMS_COUNT = 20;
 
-// создание моков для фильма
+const chunk = (input, size) => {
+  return input.reduce((arr, item, idx) => {
+    return idx % size === 0
+      ? [...arr, [item]]
+      : [...arr.slice(0, -1), [...arr.slice(-1)[0], item]];
+  }, []);
+};
+
+// создание моков
 const commonFilms = new Array(COMMON_FILMS_COUNT).fill(``).map(generateFilm);
 const filmsCount = commonFilms.length;
+const filmsComments = new Array(COMMON_FILMS_COUNT * 3).fill(``).map(generateComment);
+const filmsCommentsId = chunk(filmsComments.map((comment) => comment.id), 3);
+// связывает комментарии с фильмом
+for (let i = 0; i < commonFilms.length; i++) {
+  commonFilms[i].comments = filmsCommentsId[i].slice();
+}
 
 // модель
 const moviesModel = new MoviesModel();
@@ -27,5 +42,5 @@ render(footerStatisticsElement, new StatisticsView(filmsCount), RenderPosition.B
 render(headerElement, new UserProfileView(moviesModel), RenderPosition.BEFOREEND);
 
 // презентер
-new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel).init();
+new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel, filmsComments).init();
 new FilterPresenter(mainElement, filterModel, moviesModel).init();

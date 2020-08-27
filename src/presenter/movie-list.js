@@ -17,9 +17,10 @@ const CountType = {
 };
 
 export default class MovieList {
-  constructor(mainElement, bodyElement, moviesModel, filterModel) {
+  constructor(mainElement, bodyElement, moviesModel, filterModel, filmsComments) {
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
+    this._filmsComments = filmsComments;
 
     this._bodyElement = bodyElement; // body страницы
     this._mainElement = mainElement; // родитель для всех элементов ниже
@@ -115,7 +116,7 @@ export default class MovieList {
 
   // отрисовка карточки с фильмом и добавление событий
   _renderFilm(container, film) {
-    const filmPresenter = new FilmPresenter(container, this._bodyElement, this._handleViewAction, this._handleModeChange);
+    const filmPresenter = new FilmPresenter(container, this._bodyElement, this._handleViewAction, this._handleModeChange, this._filmsComments);
     filmPresenter.init(film);
     this._filmPresenter[film.id] = filmPresenter;
   }

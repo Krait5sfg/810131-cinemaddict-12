@@ -1,4 +1,3 @@
-import {generateComment} from './comment.js';
 import {getRandomInteger, getRandomDouble, getRandomValueFromArray} from '../utils/common.js';
 import {getRandomDate} from '../utils/film.js';
 
@@ -61,11 +60,6 @@ const RatingBound = {
   MAX: 9
 };
 
-const CommentBound = {
-  MIN: 0,
-  MAX: 5
-};
-
 const generateDescription = (sentences) => sentences.slice(0, getRandomInteger(DescriptionSentences.MIN, DescriptionSentences.MAX)).join(``);
 const generateGenre = (genreTypes) => genreTypes.slice(0, getRandomInteger(MIN_GENRE_BOUND, genreTypes.length - 1));
 
@@ -95,7 +89,7 @@ export const generateFilm = () => {
     country: `USA`,
     genres: generateGenre(GENRE_TYPES),
     description: generateDescription(SENTENCES),
-    comments: new Array(getRandomInteger(CommentBound.MIN, CommentBound.MAX)).fill(``).map(generateComment),
+    comments: [],
     ageRating: `18+`,
     status: generateStatus(),
   };

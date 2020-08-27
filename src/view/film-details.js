@@ -63,7 +63,18 @@ const generateControls = ({favorite, watched, watchlist}) => {
     <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>`;
 };
 
-const createFilmDetailsTemplate = (film, emoji, message) => {
+const createFilmDetailsTemplate = (film, emoji, message, filmsComments) => {
+
+  let commentsForFilm = [];
+
+  // находит какие комментарии относятся к фильму
+  film.comments.forEach((comment) => {
+    filmsComments.forEach((filmComment) => {
+      if (comment === filmComment.id) {
+        commentsForFilm.push(filmComment);
+      }
+    });
+  });
 
   const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status} = film;
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
@@ -144,7 +155,7 @@ const createFilmDetailsTemplate = (film, emoji, message) => {
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsCount}</span></h3>
 
             <ul class="film-details__comments-list">
-            ${generateComments(comments)}
+            ${generateComments(commentsForFilm)}
             </ul>
 
             <div class="film-details__new-comment">
@@ -185,9 +196,10 @@ const createFilmDetailsTemplate = (film, emoji, message) => {
 };
 
 export default class FilmDetail extends SmartView {
-  constructor(film) {
+  constructor(film, filmsComments) {
     super();
     this._film = film;
+    this._filmsComments = filmsComments;
     this._emoji = null;
     this._message = null;
     this._clickHandler = this._clickHandler.bind(this);
@@ -228,7 +240,7 @@ export default class FilmDetail extends SmartView {
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._film, this._emoji, this._message);
+    return createFilmDetailsTemplate(this._film, this._emoji, this._message, this._filmsComments);
   }
 
   _clickHandler(evt) {

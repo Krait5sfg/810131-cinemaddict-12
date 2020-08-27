@@ -24,9 +24,8 @@ const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 const bodyElement = document.querySelector(`body`);
 
 render(footerStatisticsElement, new StatisticsView(filmsCount), RenderPosition.BEFOREEND);
-const userProfileView = new UserProfileView(moviesModel.getWatchedCount);
-render(headerElement, userProfileView, RenderPosition.BEFOREEND);
+render(headerElement, new UserProfileView(moviesModel), RenderPosition.BEFOREEND);
 
 // презентер
-new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel, userProfileView).init();
+new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel).init();
 new FilterPresenter(mainElement, filterModel, moviesModel).init();

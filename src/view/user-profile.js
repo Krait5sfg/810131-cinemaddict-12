@@ -36,16 +36,18 @@ const createUserProfileTemplate = (profileRating) => {
 };
 
 export default class UserProfile extends AbstractView {
-  constructor(userRaiting) {
+  constructor(moviesModel) {
     super();
-    this._userRaiting = userRaiting;
+    this._moviesModel = moviesModel;
+    this.setUserRaiting = this.setUserRaiting.bind(this);
+    this._moviesModel.addObserver(this.setUserRaiting);
   }
 
   getTemplate() {
-    return createUserProfileTemplate(getUserStatus(this._userRaiting()));
+    return createUserProfileTemplate(getUserStatus(this._moviesModel.getWatchedCount()));
   }
 
   setUserRaiting() {
-    document.querySelector(`.profile__rating`).textContent = getUserStatus(this._userRaiting());
+    document.querySelector(`.profile__rating`).textContent = getUserStatus(this._moviesModel.getWatchedCount());
   }
 }

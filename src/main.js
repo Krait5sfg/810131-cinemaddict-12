@@ -25,7 +25,7 @@ const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict/`;
 // создание моков
 // const commonFilms = new Array(COMMON_FILMS_COUNT).fill(``).map(generateFilm);
 // const filmsCount = commonFilms.length;
-const filmsComments = new Array(COMMON_FILMS_COUNT * 3).fill(``).map(generateComment);
+// const filmsComments = new Array(COMMON_FILMS_COUNT * 3).fill(``).map(generateComment);
 // const filmsCommentsId = chunk(filmsComments.map((comment) => comment.id), 3);
 // // связывает комментарии с фильмом
 // for (let i = 0; i < commonFilms.length; i++) {
@@ -50,7 +50,7 @@ render(footerStatisticsElement, new StatisticsView(), RenderPosition.BEFOREEND);
 render(headerElement, new UserProfileView(moviesModel), RenderPosition.BEFOREEND);
 
 // презентер
-new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel, filmsComments).init();
+new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel).init();
 new FilterPresenter(mainElement, filterModel, moviesModel).init();
 
 api.getFilms()

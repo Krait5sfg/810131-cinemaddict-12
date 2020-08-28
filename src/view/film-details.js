@@ -16,6 +16,13 @@ const EmojiType = {
   ANGRY: `angry`
 };
 
+const EmotionImage = {
+  SMILE: `./images/emoji/smile.png`,
+  SLEEPING: `./images/emoji/sleeping.png`,
+  PUKE: `./images/emoji/puke.png`,
+  ANGRY: `./images/emoji/angry.png`,
+}
+
 const getEmojiImageElement = (emoji) => {
   let image = null;
   switch (emoji) {
@@ -37,19 +44,24 @@ const getEmojiImageElement = (emoji) => {
 const generateGenres = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(``);
 
 const generateComments = (comments) => {
-  return comments.map((element) => `<li class="film-details__comment">
+  if (comments) {
+    console.log(comments)
+    return comments.map((element) => `<li class="film-details__comment">
   <span class="film-details__comment-emoji">
-    <img src="${element.emoji}" width="55" height="55" alt="emoji-smile">
+    <img src="${EmotionImage[element.emotion.toUpperCase()]}" width="55" height="55" alt="emoji-smile">
   </span>
   <div>
-    <p class="film-details__comment-text">${he.encode(element.text)}</p>
+    <p class="film-details__comment-text">${he.encode(element.comment)}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${element.author}</span>
-      <span class="film-details__comment-day">${getConvertingDate(element.time, `comment`)}</span>
+      <span class="film-details__comment-day">${getConvertingDate(new Date(element.date), `comment`)}</span>
       <button class="film-details__comment-delete" data-comment-id ="${element.id}">Delete</button>
     </p>
   </div>
 </li>`).join(``);
+  }
+
+  return false;
 };
 
 const generateControls = ({favorite, watched, watchlist}) => {
@@ -65,25 +77,25 @@ const generateControls = ({favorite, watched, watchlist}) => {
 
 const createFilmDetailsTemplate = (film, emoji, message, filmsComments) => {
 
-  let commentsForFilm = [];
+  // let commentsForFilm = [];
 
   // находит какие комментарии относятся к фильму
-  film.comments.forEach((comment) => {
-    filmsComments.forEach((filmComment) => {
-      if (comment === filmComment.id) {
-        commentsForFilm.push(filmComment);
-      }
-    });
-  });
+  // film.comments.forEach((comment) => {
+  //   filmsComments.forEach((filmComment) => {
+  //     if (comment === filmComment.id) {
+  //       commentsForFilm.push(filmComment);
+  //     }
+  //   });
+  // });
 
-  const {image, alternativeTitle, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status} = film;
+  const {id, image, alternativeTitle, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status} = film;
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
   const commentsCount = comments.length;
   const humanizeDuration = getHumaniseDuration(duration);
   const fullReleaseDateFilm = getConvertingDate(releaseDate, `film detail`);
 
   return `<section class="film-details">
-      <form class="film-details__inner" action="" method="get">
+      <form class="film-details__inner" action="" method="get" data-film-id="${id}">
         <div class="form-details__top-container">
           <div class="film-details__close">
             <button class="film-details__close-btn" type="button">close</button>
@@ -155,7 +167,7 @@ const createFilmDetailsTemplate = (film, emoji, message, filmsComments) => {
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsCount}</span></h3>
 
             <ul class="film-details__comments-list">
-            ${generateComments(commentsForFilm)}
+            ${generateComments(filmsComments)}
             </ul>
 
             <div class="film-details__new-comment">

@@ -76,7 +76,7 @@ const createFilmDetailsTemplate = (film, emoji, message, filmsComments) => {
     });
   });
 
-  const {image, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status} = film;
+  const {image, alternativeTitle, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status} = film;
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
   const commentsCount = comments.length;
   const humanizeDuration = getHumaniseDuration(duration);
@@ -98,7 +98,7 @@ const createFilmDetailsTemplate = (film, emoji, message, filmsComments) => {
               <div class="film-details__info-head">
                 <div class="film-details__title-wrap">
                   <h3 class="film-details__title">${title}</h3>
-                  <p class="film-details__title-original">Original: ${title}</p>
+                  <p class="film-details__title-original">Original: ${alternativeTitle}</p>
                 </div>
 
                 <div class="film-details__rating">

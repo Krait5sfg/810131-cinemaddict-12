@@ -9,6 +9,7 @@ import {sortByDate, sortByRating} from '../utils/film.js';
 import FilmPresenter from './film.js';
 import {UserAction, UpdateType} from '../const.js';
 import {filter} from '../utils/filter.js';
+import LoadingView from '../view/loading.js';
 
 const CountType = {
   COMMON_FILMS: 20,
@@ -28,9 +29,11 @@ export default class MovieList {
     this._filmsContainerElement = new FilmContainerView(); // главный контейнер для фильмов
     this._filmsListElement = new FilmListView(); // первый внут. контейнер для всех фильмов
     this._filmsListContainerElement = new FilmsListContainerView(); // второй внут. контейнер для фильмов, в нем распорожены фильмы
+    this._loadingElement = new LoadingView();
     this._showMoreButtonElement = null;
     this._noFilmElement = new NoFilmView();
     this._renderFilmCount = CountType.RENDER_FOR_STEP;
+    this._isLoading = true;
 
     this._handleShowMoreButtonElementClick = this._handleShowMoreButtonElementClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
@@ -51,6 +54,7 @@ export default class MovieList {
   _getFilms() {
     const filterType = this._filterModel.getFilter();
     const films = this._moviesModel.getFilms();
+    console.log(`get`, films);
     const filteredFilms = filter[filterType](films);
 
     switch (this._currentSortType) {
@@ -90,7 +94,12 @@ export default class MovieList {
   // -----конец сортировки
 
   _renderBoard() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
     const films = this._getFilms();
+    console.log(`test`, films);
     const filmCount = films.length;
 
     if (filmCount === 0) {
@@ -134,6 +143,10 @@ export default class MovieList {
     render(this._filmsListElement, this._showMoreButtonElement, RenderPosition.BEFOREEND);
   }
 
+  _renderLoading() {
+    render(this._mainElement, this._loadingElement, RenderPosition.BEFOREEND);
+  }
+
   _handleShowMoreButtonElementClick() {
     const filmCount = this._getFilms().length;
     const newRenderFilmCount = Math.min(filmCount, this._renderFilmCount + CountType.RENDER_FOR_STEP);
@@ -167,6 +180,12 @@ export default class MovieList {
       case UpdateType.MAJOR:
         this._clearBoard({resetRenderedTaskCount: true, resetSortType: true});
         this._renderBoard();
+        break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingElement);
+        this._renderBoard();
+        break;
     }
   }
 
@@ -180,6 +199,7 @@ export default class MovieList {
 
     remove(this._sortElement);
     remove(this._noFilmElement);
+    remove(this._loadingElement);
     remove(this._showMoreButtonElement);
 
     if (resetRenderedTaskCount) {

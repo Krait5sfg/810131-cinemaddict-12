@@ -6,7 +6,8 @@ export const UserAction = {
 
 export const UpdateType = {
   MINOR: `MINOR`, // добавление - удаление фильма в различных категориях
-  MAJOR: `MAJOR` // при сортировке фильтре перерисовываем весь список
+  MAJOR: `MAJOR`, // при сортировке фильтре перерисовываем весь список
+  INIT: `INIT`
 };
 
 export const FilterType = {

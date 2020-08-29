@@ -14,7 +14,6 @@ export default class Movies extends Observer {
   }
 
   getFilms() {
-    // console.log(`get`);
     return this._films;
   }
 
@@ -51,34 +50,46 @@ export default class Movies extends Observer {
       duration: film.film_info.runtime,
       country: film.film_info.release.release_country,
       genres: film.film_info.genre,
-      description: film.film_info.description, ageRating: film.film_info.age_rating,
+      description: film.film_info.description,
+      ageRating: film.film_info.age_rating,
       status: {
         favorite: film.user_details.favorite,
         watched: film.user_details.already_watched,
         watchlist: film.user_details.watchlist,
-        watchingDate: film.user_details.watching_date,
+        watchingDate: film.user_details.watching_date !== null ? new Date(film.user_details.watching_date) : film.user_details.watching_date,
       }
     }
     );
 
-    delete film.film_info.poster;
-    delete film.film_info.title;
-    delete film.film_info.alternative_title;
-    delete film.film_info.total_rating;
-    delete film.film_info.director;
-    delete film.film_info.writers;
-    delete film.film_info.actors;
-    delete film.film_info.release.date;
-    delete film.film_info.runtime;
-    delete film.film_info.release.release_country;
-    delete film.film_info.genre;
-    delete film.film_info.description;
-    delete film.film_info.age_rating;
-    delete film.user_details.watchlist;
-    delete film.user_details.already_watched;
-    delete film.user_details.favorite;
-    delete film.user_details.watching_date;
+    return adaptedFilm;
+  }
 
+  static adaptToServer(film) {
+    const adaptedFilm = Object.assign({}, film, {
+      "film_info": {
+        "poster": film.image,
+        "title": film.title,
+        "alternative_title": film.alternativeTitle,
+        "total_rating": film.rating,
+        "director": film.director,
+        "writers": film.writers,
+        "actors": film.actors,
+        "release": {
+          "date": film.releaseDate instanceof Date ? film.releaseDate.toISOString() : null,
+          "release_country": film.country,
+        },
+        "runtime": film.duration,
+        "genre": film.genres,
+        "description": film.description,
+        "age_rating": film.ageRating,
+      },
+      "user_details": {
+        "already_watched": film.status.watched,
+        "watchlist": film.status.watchlist,
+        "favorite": film.status.favorite,
+        "watching_date": film.status.watchingDate instanceof Date ? film.status.watchingDate.toISOString() : null,
+      }
+    });
     return adaptedFilm;
   }
 

@@ -29,6 +29,7 @@ export default class Film {
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._filmComments = null;
+    this._filmId = null;
 
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._showFilmDetail = this._showFilmDetail.bind(this);
@@ -46,9 +47,9 @@ export default class Film {
 
   init(film) {
     this._film = film;
-    const filmId = film.id;
+    this._filmId = film.id;
 
-    fetch(`https://12.ecmascript.pages.academy/cinemaddict/comments/${filmId}`, {method: `GET`, body: null, headers: {'Authorization': 'Basic qwerty'}})
+    fetch(`https://12.ecmascript.pages.academy/cinemaddict/comments/${this._filmId}`, {method: `GET`, body: null, headers: {'Authorization': 'Basic qwerty'}})
       .then((response) => response.json())
       .then((data) => {
         this._filmComments = data.slice();

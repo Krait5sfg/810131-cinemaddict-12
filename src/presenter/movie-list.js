@@ -18,10 +18,11 @@ const CountType = {
 };
 
 export default class MovieList {
-  constructor(mainElement, bodyElement, moviesModel, filterModel, filmsComments) {
+  constructor(mainElement, bodyElement, moviesModel, filterModel, api) {
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
-    this._filmsComments = filmsComments;
+    this._filmsComments = null;
+    this._api = api;
 
     this._bodyElement = bodyElement; // body страницы
     this._mainElement = mainElement; // родитель для всех элементов ниже
@@ -162,7 +163,10 @@ export default class MovieList {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this._moviesModel.updateFilm(updateType, update);
+        // this._moviesModel.updateFilm(updateType, update);
+        this._api.updateFilm(update).then((response) => {
+          this._moviesModel.updateFilm(updateType, response);
+        });
         break;
       case UserAction.DELETE_COMMENT:
         this._moviesModel.updateFilm(updateType, update);

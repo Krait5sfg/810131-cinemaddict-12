@@ -50,7 +50,7 @@ render(footerStatisticsElement, new StatisticsView(), RenderPosition.BEFOREEND);
 render(headerElement, new UserProfileView(moviesModel), RenderPosition.BEFOREEND);
 
 // презентер
-new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel).init();
+new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel, api).init();
 new FilterPresenter(mainElement, filterModel, moviesModel).init();
 
 api.getFilms()

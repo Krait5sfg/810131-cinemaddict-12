@@ -22,14 +22,16 @@ const mainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 const bodyElement = document.querySelector(`body`);
 
-render(footerStatisticsElement, new StatisticsView(), RenderPosition.BEFOREEND);
 render(headerElement, new UserProfileView(moviesModel), RenderPosition.BEFOREEND);
 
 // презентер
 new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel, api).init();
 new FilterPresenter(mainElement, filterModel, moviesModel).init();
 
+let filmCount = null;
 api.getFilms()
   .then((films) => {
+    filmCount = films.length;
     moviesModel.setFilms(UpdateType.INIT, films);
+    render(footerStatisticsElement, new StatisticsView(filmCount), RenderPosition.BEFOREEND);
   });

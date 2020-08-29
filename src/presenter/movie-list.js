@@ -55,7 +55,6 @@ export default class MovieList {
   _getFilms() {
     const filterType = this._filterModel.getFilter();
     const films = this._moviesModel.getFilms();
-    console.log(`get`, films);
     const filteredFilms = filter[filterType](films);
 
     switch (this._currentSortType) {
@@ -100,7 +99,6 @@ export default class MovieList {
       return;
     }
     const films = this._getFilms();
-    console.log(`test`, films);
     const filmCount = films.length;
 
     if (filmCount === 0) {
@@ -163,7 +161,6 @@ export default class MovieList {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        // this._moviesModel.updateFilm(updateType, update);
         this._api.updateFilm(update).then((response) => {
           this._moviesModel.updateFilm(updateType, response);
         });

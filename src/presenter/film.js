@@ -49,13 +49,12 @@ export default class Film {
     this._film = film;
     this._filmId = film.id;
 
-    fetch(`https://12.ecmascript.pages.academy/cinemaddict/comments/${this._filmId}`, {method: `GET`, body: null, headers: {'Authorization': 'Basic qwerty'}})
+    fetch(`https://12.ecmascript.pages.academy/cinemaddict/comments/${this._filmId}`, {
+      method: `GET`, body: null, headers: {"Authorization": `Basic qwerty`}
+    })
       .then((response) => response.json())
       .then((data) => {
         this._filmComments = data.slice();
-        console.log(this._filmComments);
-        // this._filmDetailElement = new FilmDetailView(film, this._filmComments);
-        // this._setFilmDetailHandlers();
       });
 
     const prevFilmCardElement = this._filmCardElement;
@@ -122,7 +121,6 @@ export default class Film {
   }
 
   _showFilmDetail() {
-    console.log(`show`, this._filmComments)
     this._filmDetailElement.setFilmComments(this._filmComments);
     this._changeMode();
     this._filmDetailElement.updateElement();

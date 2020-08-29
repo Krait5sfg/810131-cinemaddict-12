@@ -21,7 +21,7 @@ const EmotionImage = {
   SLEEPING: `./images/emoji/sleeping.png`,
   PUKE: `./images/emoji/puke.png`,
   ANGRY: `./images/emoji/angry.png`,
-}
+};
 
 const getEmojiImageElement = (emoji) => {
   let image = null;
@@ -45,7 +45,6 @@ const generateGenres = (genres) => genres.map((genre) => `<span class="film-deta
 
 const generateComments = (comments) => {
   if (comments) {
-    console.log(comments)
     return comments.map((element) => `<li class="film-details__comment">
   <span class="film-details__comment-emoji">
     <img src="${EmotionImage[element.emotion.toUpperCase()]}" width="55" height="55" alt="emoji-smile">

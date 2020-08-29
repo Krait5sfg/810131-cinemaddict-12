@@ -23,13 +23,14 @@ const EmojiType = {
 };
 
 export default class Film {
-  constructor(container, bodyElement, changeData, changeMode) {
+  constructor(container, bodyElement, changeData, changeMode, api) {
     this._container = container;
     this._bodyElement = bodyElement;
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._filmComments = null;
     this._filmId = null;
+    this._api = api;
 
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._showFilmDetail = this._showFilmDetail.bind(this);
@@ -49,13 +50,11 @@ export default class Film {
     this._film = film;
     this._filmId = film.id;
 
-    fetch(`https://12.ecmascript.pages.academy/cinemaddict/comments/${this._filmId}`, {
-      method: `GET`, body: null, headers: {"Authorization": `Basic qwerty`}
-    })
-      .then((response) => response.json())
+    this._api.getComments(this._filmId)
       .then((data) => {
         this._filmComments = data.slice();
       });
+
 
     const prevFilmCardElement = this._filmCardElement;
     const prevFilmDetailElement = this._filmDetailElement;

@@ -345,4 +345,8 @@ export default class FilmDetail extends SmartView {
     this._emoji = null;
     this._message = null;
   }
+
+  setFilmComments(comments) {
+    this._filmsComments = comments;
+  }
 }

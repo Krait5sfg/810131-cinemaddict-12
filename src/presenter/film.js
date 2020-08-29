@@ -53,34 +53,33 @@ export default class Film {
       .then((data) => {
         this._filmComments = data.slice();
         console.log(this._filmComments);
-        this._filmDetailElement = new FilmDetailView(film, this._filmComments);
-        this._setFilmDetailHandlers();
+        // this._filmDetailElement = new FilmDetailView(film, this._filmComments);
+        // this._setFilmDetailHandlers();
       });
 
     const prevFilmCardElement = this._filmCardElement;
     const prevFilmDetailElement = this._filmDetailElement;
 
     this._filmCardElement = new FilmCardView(film);
-    // this._filmDetailElement = new FilmDetailView(film, this._filmComments = null);
+    this._filmDetailElement = new FilmDetailView(film, this._filmComments);
 
     this._filmCardElement.setClickHandler(this._showFilmDetail);
 
-    // this._filmDetailElement.setClickHandler(() => {
-    //   this._hideFilmDetail();
-    //   document.removeEventListener(`keydown`, this._handleEscKeyDown);
-    //   document.removeEventListener(`keydown`, this._handleEnterKeyDown);
-    //   this._filmDetailElement.reset(this._film);
-    // });
+    this._filmDetailElement.setClickHandler(() => {
+      this._hideFilmDetail();
+      document.removeEventListener(`keydown`, this._handleEscKeyDown);
+      document.removeEventListener(`keydown`, this._handleEnterKeyDown);
+      this._filmDetailElement.reset(this._film);
+    });
     this._filmCardElement.setWatchListClickHandler(this._handleWatchListClick);
     this._filmCardElement.setWatchedClickHandler(this._handleWatchedClick);
     this._filmCardElement.setFavoriteClickHandler(this._handleFavoriteClick);
 
-    // this._filmDetailElement.setWatchListClickHandler(this._handleWatchListClick);
-    // this._filmDetailElement.setWatchedClickHandler(this._handleWatchedClick);
-    // this._filmDetailElement.setFavoriteClickHandler(this._handleFavoriteClick);
-    // this._filmDetailElement.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
-    // this._filmDetailElement.setEnterKeyDown(this._handleEnterKeyDown);
-    // this._setFilmDetailHandlers();
+    this._filmDetailElement.setWatchListClickHandler(this._handleWatchListClick);
+    this._filmDetailElement.setWatchedClickHandler(this._handleWatchedClick);
+    this._filmDetailElement.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmDetailElement.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
+    this._filmDetailElement.setEnterKeyDown(this._handleEnterKeyDown);
 
     if (prevFilmCardElement === null || prevFilmDetailElement === null) {
       render(this._container, this._filmCardElement, RenderPosition.BEFOREEND);
@@ -97,21 +96,6 @@ export default class Film {
 
     remove(prevFilmCardElement);
     remove(prevFilmDetailElement);
-  }
-
-  _setFilmDetailHandlers() {
-    this._filmDetailElement.setClickHandler(() => {
-      this._hideFilmDetail();
-      document.removeEventListener(`keydown`, this._handleEscKeyDown);
-      document.removeEventListener(`keydown`, this._handleEnterKeyDown);
-      this._filmDetailElement.reset(this._film);
-    });
-
-    this._filmDetailElement.setWatchListClickHandler(this._handleWatchListClick);
-    this._filmDetailElement.setWatchedClickHandler(this._handleWatchedClick);
-    this._filmDetailElement.setFavoriteClickHandler(this._handleFavoriteClick);
-    this._filmDetailElement.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
-    this._filmDetailElement.setEnterKeyDown(this._handleEnterKeyDown);
   }
 
   destroy() {
@@ -137,6 +121,8 @@ export default class Film {
   }
 
   _showFilmDetail() {
+    console.log(`show`, this._filmComments)
+    this._filmDetailElement.setFilmComments(this._filmComments);
     this._changeMode();
     this._filmDetailElement.updateElement();
     this._bodyElement.appendChild(this._filmDetailElement.getElement());

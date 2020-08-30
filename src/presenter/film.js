@@ -149,8 +149,18 @@ export default class Film {
   }
 
   _handleDeleteButtonClick(commentId) {
-    const newComments = this._film.comments.filter((comment) => comment !== parseInt(commentId, 10));
-    this._changeData(UserAction.DELETE_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}));
+    // console.log(`current_comments`, this._filmComments);
+    // console.log(`com_id`, commentId);
+    const newComments = this._film.comments.filter((comment) => comment !== commentId);
+    // const currentComments = this._filmDetailElement.getFilmComments();
+    // console.log(currentComments);
+    // const testComments = currentComments.filter((comment) => comment.id !== commentId);
+    // console.log(testComments);
+
+    // this._filmDetailElement.setFilmComments(testComments);
+    // console.log(`current comment without del`, this._filmComment);
+    // console.log(`new comment array`, newComments);
+    this._changeData(UserAction.DELETE_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}, {deletedIdComment: commentId}));
   }
 
   _handleEnterKeyDown(evt) {

@@ -44,8 +44,9 @@ const getEmojiImageElement = (emoji) => {
 const generateGenres = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(``);
 
 const generateComments = (comments) => {
+  console.log(`createComments`, comments);
   if (comments) {
-    return comments.map((element) => `<li class="film-details__comment">
+    return comments.map((element) => `<li class="film-details__comment" data-comment-id="${element.id}">
   <span class="film-details__comment-emoji">
     <img src="${EmotionImage[element.emotion.toUpperCase()]}" width="55" height="55" alt="emoji-smile">
   </span>

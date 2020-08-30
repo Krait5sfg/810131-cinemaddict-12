@@ -30,8 +30,22 @@ export default class Api {
   }
 
   deleteComment(commentId) {
-    // console.log(film);
     return this._load({url: `comments/${commentId}`, method: Method.DELETE});
+  }
+
+  addComment(film) {
+    return this._load({
+      url: `comments/${film.id}`,
+      method: Method.POST,
+      body: JSON.stringify({
+        comment: film.newComment.comment,
+        date: film.newComment.date instanceof Date ? film.newComment.date.toISOString() : null,
+        emotion: film.newComment.emotion,
+        // author: film.newComment.author
+      }),
+      headers: new Headers({"Content-Type": `application/json`})
+    }).then(Api.toJSON)
+      .then((data) => MoviesModel.adaptToClient(data.movie));
   }
 
   updateFilm(film) {

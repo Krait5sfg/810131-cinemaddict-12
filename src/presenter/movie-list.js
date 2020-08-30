@@ -171,7 +171,9 @@ export default class MovieList {
         });
         break;
       case UserAction.ADD_COMMENT:
-        this._moviesModel.updateFilm(updateType, update);
+        this._api.addComment(update).then((response) => {
+          this._moviesModel.updateFilm(updateType, response);
+        });
     }
   }
 

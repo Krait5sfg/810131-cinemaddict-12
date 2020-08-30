@@ -208,10 +208,10 @@ const createFilmDetailsTemplate = (film, emoji, message, filmsComments) => {
 };
 
 export default class FilmDetail extends SmartView {
-  constructor(film, filmsComments) {
+  constructor(film, comments = null) {
     super();
     this._film = film;
-    this._filmsComments = filmsComments;
+    this._filmsComments = comments;
     this._emoji = null;
     this._message = null;
     this._clickHandler = this._clickHandler.bind(this);

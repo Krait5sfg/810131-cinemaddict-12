@@ -8,7 +8,7 @@ import FilterPresenter from './presenter/filter.js';
 import Api from './api.js';
 import {UpdateType} from './const.js';
 
-const AUTHORIZATION = `Basic qwertyuaq`;
+const AUTHORIZATION = `Basic qwertyuaqq`;
 const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
 
 // модель

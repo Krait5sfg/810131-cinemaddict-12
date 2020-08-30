@@ -152,12 +152,12 @@ export default class Film {
     // console.log(`current_comments`, this._filmComments);
     // console.log(`com_id`, commentId);
     const newComments = this._film.comments.filter((comment) => comment !== commentId);
+    // console.log(newComments);
     // const currentComments = this._filmDetailElement.getFilmComments();
     // console.log(currentComments);
     // const testComments = currentComments.filter((comment) => comment.id !== commentId);
-    // console.log(testComments);
-
-    // this._filmDetailElement.setFilmComments(testComments);
+    this._filmComments = this._filmComments.filter((comment) => comment.id !== commentId);
+    // console.log(`this`, this._filmComments);
     // console.log(`current comment without del`, this._filmComment);
     // console.log(`new comment array`, newComments);
     this._changeData(UserAction.DELETE_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}, {deletedIdComment: commentId}));

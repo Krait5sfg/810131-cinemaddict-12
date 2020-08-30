@@ -44,18 +44,17 @@ const getEmojiImageElement = (emoji) => {
 const generateGenres = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(``);
 
 const generateComments = (comments) => {
-  console.log(`createComments`, comments);
   if (comments) {
-    return comments.map((element) => `<li class="film-details__comment" data-comment-id="${element.id}">
+    return comments.map(({id, emotion, comment, author, date}) => `<li class="film-details__comment" data-comment-id="${id}">
   <span class="film-details__comment-emoji">
-    <img src="${EmotionImage[element.emotion.toUpperCase()]}" width="55" height="55" alt="emoji-smile">
+    <img src="${EmotionImage[emotion.toUpperCase()]}" width="55" height="55" alt="emoji-smile">
   </span>
   <div>
-    <p class="film-details__comment-text">${he.encode(element.comment)}</p>
+    <p class="film-details__comment-text">${he.encode(comment)}</p>
     <p class="film-details__comment-info">
-      <span class="film-details__comment-author">${element.author}</span>
-      <span class="film-details__comment-day">${getConvertingDate(new Date(element.date), `comment`)}</span>
-      <button class="film-details__comment-delete" data-comment-id ="${element.id}">Delete</button>
+      <span class="film-details__comment-author">${author}</span>
+      <span class="film-details__comment-day">${getConvertingDate(new Date(date), `comment`)}</span>
+      <button class="film-details__comment-delete" data-comment-id ="${id}">Delete</button>
     </p>
   </div>
 </li>`).join(``);
@@ -76,17 +75,6 @@ const generateControls = ({favorite, watched, watchlist}) => {
 };
 
 const createFilmDetailsTemplate = (film, emoji, message, filmsComments) => {
-
-  // let commentsForFilm = [];
-
-  // находит какие комментарии относятся к фильму
-  // film.comments.forEach((comment) => {
-  //   filmsComments.forEach((filmComment) => {
-  //     if (comment === filmComment.id) {
-  //       commentsForFilm.push(filmComment);
-  //     }
-  //   });
-  // });
 
   const {id, image, alternativeTitle, title, rating, director, writers, actors, releaseDate, duration, country, genres, description, comments, ageRating, status} = film;
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
@@ -208,7 +196,7 @@ const createFilmDetailsTemplate = (film, emoji, message, filmsComments) => {
 };
 
 export default class FilmDetail extends SmartView {
-  constructor(film, comments = null) {
+  constructor(film, comments) {
     super();
     this._film = film;
     this._filmsComments = comments;

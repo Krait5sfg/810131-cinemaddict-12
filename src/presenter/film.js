@@ -29,7 +29,6 @@ export default class Film {
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._filmComments = null;
-    this._filmId = null;
     this._api = api;
 
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
@@ -42,19 +41,16 @@ export default class Film {
 
     this._filmCardElement = null;
     this._filmDetailElement = null;
-    this._currentComments = null;
     this._mode = Mode.DEFAULT;
   }
 
   init(film) {
     this._film = film;
-    this._filmId = film.id;
 
-    this._api.getComments(this._filmId)
+    this._api.getComments(film.id)
       .then((data) => {
         this._filmComments = data.slice();
       });
-
 
     const prevFilmCardElement = this._filmCardElement;
     const prevFilmDetailElement = this._filmDetailElement;
@@ -149,17 +145,8 @@ export default class Film {
   }
 
   _handleDeleteButtonClick(commentId) {
-    // console.log(`current_comments`, this._filmComments);
-    // console.log(`com_id`, commentId);
     const newComments = this._film.comments.filter((comment) => comment !== commentId);
-    // console.log(newComments);
-    // const currentComments = this._filmDetailElement.getFilmComments();
-    // console.log(currentComments);
-    // const testComments = currentComments.filter((comment) => comment.id !== commentId);
     this._filmComments = this._filmComments.filter((comment) => comment.id !== commentId);
-    // console.log(`this`, this._filmComments);
-    // console.log(`current comment without del`, this._filmComment);
-    // console.log(`new comment array`, newComments);
     this._changeData(UserAction.DELETE_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}, {deletedIdComment: commentId}));
   }
 

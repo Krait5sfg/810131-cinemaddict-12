@@ -166,11 +166,9 @@ export default class MovieList {
         });
         break;
       case UserAction.DELETE_COMMENT:
-        console.log(update);
         this._api.deleteComment(update.deletedIdComment).then(() => {
           this._moviesModel.updateFilm(updateType, update);
         });
-        // this._moviesModel.updateFilm(updateType, update);
         break;
       case UserAction.ADD_COMMENT:
         this._moviesModel.updateFilm(updateType, update);

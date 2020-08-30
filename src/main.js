@@ -28,10 +28,8 @@ render(headerElement, new UserProfileView(moviesModel), RenderPosition.BEFOREEND
 new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel, api).init();
 new FilterPresenter(mainElement, filterModel, moviesModel).init();
 
-let filmCount = null;
 api.getFilms()
   .then((films) => {
-    filmCount = films.length;
     moviesModel.setFilms(UpdateType.INIT, films);
-    render(footerStatisticsElement, new StatisticsView(filmCount), RenderPosition.BEFOREEND);
+    render(footerStatisticsElement, new StatisticsView(films.length), RenderPosition.BEFOREEND);
   });

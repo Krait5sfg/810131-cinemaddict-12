@@ -38,7 +38,7 @@ export default class Movies extends Observer {
   }
 
   static adaptToClient(film) {
-    const adaptedFilm = Object.assign({}, film, {
+    return Object.assign({}, film, {
       image: film.film_info.poster,
       title: film.film_info.title,
       alternativeTitle: film.film_info.alternative_title,
@@ -60,12 +60,10 @@ export default class Movies extends Observer {
       }
     }
     );
-
-    return adaptedFilm;
   }
 
   static adaptToServer(film) {
-    const adaptedFilm = Object.assign({}, film, {
+    return Object.assign({}, film, {
       "film_info": {
         "poster": film.image,
         "title": film.title,
@@ -90,7 +88,6 @@ export default class Movies extends Observer {
         "watching_date": film.status.watchingDate instanceof Date ? film.status.watchingDate.toISOString() : null,
       }
     });
-    return adaptedFilm;
   }
 
 }

@@ -180,9 +180,17 @@ export default class MovieList {
           });
         break;
       case UserAction.ADD_COMMENT:
-        this._api.addComment(update).then((response) => {
-          this._moviesModel.updateFilm(updateType, response);
-        });
+        const commentInputElement = document.querySelector(`.film-details__comment-input`);
+        commentInputElement.setAttribute(`disabled`, true);
+        this._api.addComment(update)
+          .then((response) => {
+            this._moviesModel.updateFilm(updateType, response);
+          })
+          .catch(() => {
+            // при ошибке форма с полем ввода комментария трясется
+            commentInputElement.removeAttribute(`disabled`);
+            document.querySelector(`.film-details__new-comment`).classList.add(`shake`);
+          });
     }
   }
 

@@ -166,9 +166,18 @@ export default class MovieList {
         });
         break;
       case UserAction.DELETE_COMMENT:
-        this._api.deleteComment(update.deletedIdComment).then(() => {
-          this._moviesModel.updateFilm(updateType, update);
-        });
+        // при удалении меняется надпись на кнопке
+        const deletedCommentButtonElement = document.querySelector(`.film-details__comment-delete[data-comment-id="${update.deletedIdComment}"]`);
+        deletedCommentButtonElement.setAttribute(`disabled`, true);
+        deletedCommentButtonElement.textContent = `Deleting`;
+        this._api.deleteComment(update.deletedIdComment)
+          .then(() => {
+            this._moviesModel.updateFilm(updateType, update);
+          })
+          .catch(() => {
+            // при ошибке удаляемый коментарий трясется
+            document.querySelector(`.film-details__comment[data-comment-id="${update.deletedIdComment}"]`).classList.add(`shake`);
+          });
         break;
       case UserAction.ADD_COMMENT:
         this._api.addComment(update).then((response) => {

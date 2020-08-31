@@ -9,6 +9,7 @@ import {sortByDate, sortByRating} from '../utils/film.js';
 import FilmPresenter from './film.js';
 import {UserAction, UpdateType} from '../const.js';
 import {filter} from '../utils/filter.js';
+import LoadingView from '../view/loading.js';
 
 const CountType = {
   COMMON_FILMS: 20,
@@ -17,9 +18,11 @@ const CountType = {
 };
 
 export default class MovieList {
-  constructor(mainElement, bodyElement, moviesModel, filterModel) {
+  constructor(mainElement, bodyElement, moviesModel, filterModel, api) {
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
+    this._filmsComments = null;
+    this._api = api;
 
     this._bodyElement = bodyElement; // body страницы
     this._mainElement = mainElement; // родитель для всех элементов ниже
@@ -27,9 +30,11 @@ export default class MovieList {
     this._filmsContainerElement = new FilmContainerView(); // главный контейнер для фильмов
     this._filmsListElement = new FilmListView(); // первый внут. контейнер для всех фильмов
     this._filmsListContainerElement = new FilmsListContainerView(); // второй внут. контейнер для фильмов, в нем распорожены фильмы
+    this._loadingElement = new LoadingView();
     this._showMoreButtonElement = null;
     this._noFilmElement = new NoFilmView();
     this._renderFilmCount = CountType.RENDER_FOR_STEP;
+    this._isLoading = true;
 
     this._handleShowMoreButtonElementClick = this._handleShowMoreButtonElementClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
@@ -89,6 +94,10 @@ export default class MovieList {
   // -----конец сортировки
 
   _renderBoard() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
     const films = this._getFilms();
     const filmCount = films.length;
 
@@ -115,7 +124,7 @@ export default class MovieList {
 
   // отрисовка карточки с фильмом и добавление событий
   _renderFilm(container, film) {
-    const filmPresenter = new FilmPresenter(container, this._bodyElement, this._handleViewAction, this._handleModeChange);
+    const filmPresenter = new FilmPresenter(container, this._bodyElement, this._handleViewAction, this._handleModeChange, this._api);
     filmPresenter.init(film);
     this._filmPresenter[film.id] = filmPresenter;
   }
@@ -133,6 +142,10 @@ export default class MovieList {
     render(this._filmsListElement, this._showMoreButtonElement, RenderPosition.BEFOREEND);
   }
 
+  _renderLoading() {
+    render(this._mainElement, this._loadingElement, RenderPosition.BEFOREEND);
+  }
+
   _handleShowMoreButtonElementClick() {
     const filmCount = this._getFilms().length;
     const newRenderFilmCount = Math.min(filmCount, this._renderFilmCount + CountType.RENDER_FOR_STEP);
@@ -148,13 +161,19 @@ export default class MovieList {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this._moviesModel.updateFilm(updateType, update);
+        this._api.updateFilm(update).then((response) => {
+          this._moviesModel.updateFilm(updateType, response);
+        });
         break;
       case UserAction.DELETE_COMMENT:
-        this._moviesModel.updateFilm(updateType, update);
+        this._api.deleteComment(update.deletedIdComment).then(() => {
+          this._moviesModel.updateFilm(updateType, update);
+        });
         break;
       case UserAction.ADD_COMMENT:
-        this._moviesModel.updateFilm(updateType, update);
+        this._api.addComment(update).then((response) => {
+          this._moviesModel.updateFilm(updateType, response);
+        });
     }
   }
 
@@ -166,6 +185,12 @@ export default class MovieList {
       case UpdateType.MAJOR:
         this._clearBoard({resetRenderedTaskCount: true, resetSortType: true});
         this._renderBoard();
+        break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingElement);
+        this._renderBoard();
+        break;
     }
   }
 
@@ -179,6 +204,7 @@ export default class MovieList {
 
     remove(this._sortElement);
     remove(this._noFilmElement);
+    remove(this._loadingElement);
     remove(this._showMoreButtonElement);
 
     if (resetRenderedTaskCount) {

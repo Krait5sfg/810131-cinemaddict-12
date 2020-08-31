@@ -15,19 +15,28 @@ const Mode = {
   OPEN: `OPEN`
 };
 
+// const EmojiType = {
+//   SMILE: `./images/emoji/smile.png`,
+//   SLEEPING: `./images/emoji/sleeping.png`,
+//   PUKE: `./images/emoji/puke.png`,
+//   ANGRY: `./images/emoji/angry.png`,
+// };
+
 const EmojiType = {
-  SMILE: `./images/emoji/smile.png`,
-  SLEEPING: `./images/emoji/sleeping.png`,
-  PUKE: `./images/emoji/puke.png`,
-  ANGRY: `./images/emoji/angry.png`,
+  SMILE: `smile`,
+  SLEEPING: `sleeping`,
+  PUKE: `puke`,
+  ANGRY: `angry`,
 };
 
 export default class Film {
-  constructor(container, bodyElement, changeData, changeMode) {
+  constructor(container, bodyElement, changeData, changeMode, api) {
     this._container = container;
     this._bodyElement = bodyElement;
     this._changeData = changeData;
     this._changeMode = changeMode;
+    this._filmComments = null;
+    this._api = api;
 
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
     this._showFilmDetail = this._showFilmDetail.bind(this);
@@ -45,11 +54,16 @@ export default class Film {
   init(film) {
     this._film = film;
 
+    this._api.getComments(film.id)
+      .then((data) => {
+        this._filmComments = data.slice();
+      });
+
     const prevFilmCardElement = this._filmCardElement;
     const prevFilmDetailElement = this._filmDetailElement;
 
     this._filmCardElement = new FilmCardView(film);
-    this._filmDetailElement = new FilmDetailView(film);
+    this._filmDetailElement = new FilmDetailView(film, this._filmComments);
 
     this._filmCardElement.setClickHandler(this._showFilmDetail);
 
@@ -109,6 +123,7 @@ export default class Film {
   }
 
   _showFilmDetail() {
+    this._filmDetailElement.setFilmComments(this._filmComments);
     this._changeMode();
     this._filmDetailElement.updateElement();
     this._bodyElement.appendChild(this._filmDetailElement.getElement());
@@ -116,6 +131,7 @@ export default class Film {
     this._bodyElement.classList.add(`hide-overflow`);
     document.addEventListener(`keydown`, this._handleEscKeyDown);
     document.addEventListener(`keydown`, this._handleEnterKeyDown);
+
     this._mode = Mode.OPEN;
   }
 
@@ -136,8 +152,9 @@ export default class Film {
   }
 
   _handleDeleteButtonClick(commentId) {
-    const newComments = this._film.comments.filter((comment) => comment.id !== parseInt(commentId, 10));
-    this._changeData(UserAction.DELETE_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}));
+    const newComments = this._film.comments.filter((comment) => comment !== commentId);
+    this._filmComments = this._filmComments.filter((comment) => comment.id !== commentId);
+    this._changeData(UserAction.DELETE_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}, {deletedIdComment: commentId}));
   }
 
   _handleEnterKeyDown(evt) {
@@ -147,14 +164,13 @@ export default class Film {
       if (userMessage && selectedEmojiType) {
         const userComment = {
           id: generateId(),
-          emoji: EmojiType[selectedEmojiType.toUpperCase()],
-          text: userMessage,
-          author: `Anonim`,
-          time: new Date(),
+          emotion: EmojiType[selectedEmojiType.toUpperCase()],
+          comment: userMessage,
+          // author: `Anonim`,
+          date: new Date(),
         };
-        const newComments = this._film.comments.slice();
-        newComments.push(userComment);
-        this._changeData(UserAction.ADD_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments}));
+        this._filmComments.push(userComment);
+        this._changeData(UserAction.ADD_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {newComment: userComment}));
       }
     }
   }

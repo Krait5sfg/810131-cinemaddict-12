@@ -231,7 +231,6 @@ export default class FilmDetail extends SmartView {
     this.setFavoriteClickHandler(this._callback.favoriteClick);
     this.setDeleteButtonClickHandler(this._callback.deleteButtonClick);
     this.setClickHandler(this._callback.click);
-    this.setEnterKeyDown(this._callback.enterKeyDown);
   }
 
   _commentInputHandler(evt) {
@@ -246,10 +245,6 @@ export default class FilmDetail extends SmartView {
   _clickHandler(evt) {
     evt.preventDefault();
     this._callback.click();
-  }
-
-  setEnterKeyDown(callback) {
-    this._callback.enterKeyDown = callback;
   }
 
   setClickHandler(callback) {
@@ -295,13 +290,22 @@ export default class FilmDetail extends SmartView {
   }
 
   _deleteButtonClickHandler(evt) {
+    const commentElement = evt.target.closest(`.film-details__comment`);
     evt.preventDefault();
-    this._callback.deleteButtonClick(evt.target.dataset.commentId);
+    if (commentElement.classList.contains(`shake`)) {
+      commentElement.classList.remove(`shake`);
+    }
+    evt.target.textContent = `Deleting`;
+    evt.target.disabled = true;
+    this._callback.deleteButtonClick(evt.target.dataset.commentId, () => {
+      commentElement.classList.add(`shake`);
+      evt.target.textContent = `Delete`;
+      evt.target.disabled = false;
+    });
   }
 
   _emojiClickHandler(evt) {
     this._updateEmoji(evt.target.dataset.emojiType);
-    this.updateElement();
   }
 
   _updateEmoji(emojiType) {
@@ -319,6 +323,7 @@ export default class FilmDetail extends SmartView {
         this._emoji = EmojiType.PUKE;
         break;
     }
+    this.getElement().querySelector(`.film-details__add-emoji-label`).innerHTML = getEmojiImageElement(this._emoji);
   }
 
   getSelectedEmojiType() {
@@ -337,4 +342,18 @@ export default class FilmDetail extends SmartView {
   setFilmComments(comments) {
     this._filmsComments = comments;
   }
+
+  disableForm() {
+    this.getElement()
+      .querySelector(`.film-details__comment-input`)
+      .disabled = true;
+    this.getElement()
+      .querySelectorAll(`.film-details__emoji-label`)
+      .forEach((element) => element.removeEventListener(`click`, this._emojiClickHandler));
+  }
+
+  addShake() {
+    this.getElement().querySelector(`.film-details__new-comment`).classList.add(`shake`);
+  }
+
 }

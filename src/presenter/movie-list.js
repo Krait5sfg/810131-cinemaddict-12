@@ -158,7 +158,7 @@ export default class MovieList {
     }
   }
 
-  _handleViewAction(actionType, updateType, update) {
+  _handleViewAction(actionType, updateType, update, callback) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         this._api.updateFilm(update).then((response) => {
@@ -166,30 +166,23 @@ export default class MovieList {
         });
         break;
       case UserAction.DELETE_COMMENT:
-        // при удалении меняется надпись на кнопке
-        const deletedCommentButtonElement = document.querySelector(`.film-details__comment-delete[data-comment-id="${update.deletedIdComment}"]`);
-        deletedCommentButtonElement.setAttribute(`disabled`, true);
-        deletedCommentButtonElement.textContent = `Deleting`;
         this._api.deleteComment(update.deletedIdComment)
           .then(() => {
             this._moviesModel.updateFilm(updateType, update);
           })
           .catch(() => {
             // при ошибке удаляемый коментарий трясется
-            document.querySelector(`.film-details__comment[data-comment-id="${update.deletedIdComment}"]`).classList.add(`shake`);
+            callback();
           });
         break;
       case UserAction.ADD_COMMENT:
-        const commentInputElement = document.querySelector(`.film-details__comment-input`);
-        commentInputElement.setAttribute(`disabled`, true);
         this._api.addComment(update)
           .then((response) => {
             this._moviesModel.updateFilm(updateType, response);
           })
           .catch(() => {
             // при ошибке форма с полем ввода комментария трясется
-            commentInputElement.removeAttribute(`disabled`);
-            document.querySelector(`.film-details__new-comment`).classList.add(`shake`);
+            callback();
           });
     }
   }

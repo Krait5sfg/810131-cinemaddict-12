@@ -158,7 +158,7 @@ export default class MovieList {
     }
   }
 
-  _handleViewAction(actionType, updateType, update) {
+  _handleViewAction(actionType, updateType, update, callback) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         this._api.updateFilm(update).then((response) => {
@@ -166,14 +166,24 @@ export default class MovieList {
         });
         break;
       case UserAction.DELETE_COMMENT:
-        this._api.deleteComment(update.deletedIdComment).then(() => {
-          this._moviesModel.updateFilm(updateType, update);
-        });
+        this._api.deleteComment(update.deletedIdComment)
+          .then(() => {
+            this._moviesModel.updateFilm(updateType, update);
+          })
+          .catch(() => {
+            // при ошибке удаляемый коментарий трясется
+            callback();
+          });
         break;
       case UserAction.ADD_COMMENT:
-        this._api.addComment(update).then((response) => {
-          this._moviesModel.updateFilm(updateType, response);
-        });
+        this._api.addComment(update)
+          .then((response) => {
+            this._moviesModel.updateFilm(updateType, response);
+          })
+          .catch(() => {
+            // при ошибке форма с полем ввода комментария трясется
+            callback();
+          });
     }
   }
 

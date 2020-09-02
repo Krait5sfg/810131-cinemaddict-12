@@ -48,7 +48,24 @@ const createStatisticTemplate = () => `<section class="statistic">
 </section>`;
 
 export default class Statistic extends SmartView {
+  constructor() {
+    super();
+    this._statisticInputHandler = this._statisticInputHandler.bind(this);
+  }
+
   getTemplate() {
     return createStatisticTemplate();
+  }
+
+  setStatisticInputHandler(callback) {
+    this._callback.statisticInput = callback;
+    this.getElement()
+      .querySelectorAll(`.statistic__filters-input`)
+      .forEach((element) => element.addEventListener(`input`, this._statisticInputHandler));
+  }
+
+  _statisticInputHandler(evt) {
+    evt.preventDefault();
+    this._callback.statisticInput(evt.target.value);
   }
 }

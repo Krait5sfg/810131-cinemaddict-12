@@ -10,9 +10,14 @@ export default class Statisitc {
   init() {
     this._statisticElement = new StatisticView();
     render(this._container, this._statisticElement, RenderPosition.BEFOREEND);
+    this._statisticElement.setStatisticInputHandler(this._statisticInputHandler);
   }
 
   removeStatisticElement() {
     remove(this._statisticElement);
+  }
+
+  _statisticInputHandler(value) {
+    console.log(value);
   }
 }

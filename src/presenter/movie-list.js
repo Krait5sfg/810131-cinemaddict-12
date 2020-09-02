@@ -60,6 +60,7 @@ export default class MovieList {
   showFilmsContainer() {
     this._filmsContainerElement.getElement().classList.remove(`visually-hidden`);
     this._sortElement.getElement().classList.remove(`visually-hidden`);
+    this._handleSortTypeChange(SortType.DEFAULT);
   }
 
   _getFilms() {

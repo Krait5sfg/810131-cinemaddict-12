@@ -26,9 +26,10 @@ const bodyElement = document.querySelector(`body`);
 render(headerElement, new UserProfileView(moviesModel), RenderPosition.BEFOREEND);
 
 // презентер
-new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel, api).init();
-new FilterPresenter(mainElement, filterModel, moviesModel).init();
-new StatisticPresenter(mainElement).init();
+const statisticPresenter = new StatisticPresenter(mainElement);
+const movieListPresenter = new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel, api);
+movieListPresenter.init();
+new FilterPresenter(mainElement, filterModel, moviesModel, statisticPresenter, movieListPresenter).init();
 
 api.getFilms()
   .then((films) => {

@@ -52,6 +52,16 @@ export default class MovieList {
     this._renderBoard();
   }
 
+  hiddenFilmsContainer() {
+    this._filmsContainerElement.getElement().classList.add(`visually-hidden`);
+    this._sortElement.getElement().classList.add(`visually-hidden`);
+  }
+
+  showFilmsContainer() {
+    this._filmsContainerElement.getElement().classList.remove(`visually-hidden`);
+    this._sortElement.getElement().classList.remove(`visually-hidden`);
+  }
+
   _getFilms() {
     const filterType = this._filterModel.getFilter();
     const films = this._moviesModel.getFilms();

@@ -24,6 +24,7 @@ export default class Menu extends AbstractView {
     this._currentFilter = currentFilterType;
 
     this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
+    this._statsElementClickHandler = this._statsElementClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -40,5 +41,15 @@ export default class Menu extends AbstractView {
     this.getElement()
       .querySelectorAll(`.main-navigation__item`)
       .forEach((element) => element.addEventListener(`click`, this._filterTypeChangeHandler));
+  }
+
+  _statsElementClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.statsElementClick();
+  }
+
+  setStatsElementClickHandler(callback) {
+    this._callback.statsElementClick = callback;
+    this.getElement().querySelector(`.main-navigation__additional`).addEventListener(`click`, this._statsElementClickHandler);
   }
 }

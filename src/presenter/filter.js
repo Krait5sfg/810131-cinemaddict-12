@@ -3,20 +3,30 @@ import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {UpdateType, FilterType} from '../const.js';
 import {filter} from '../utils/filter.js';
 
+const StatisticMode = {
+  DEFAULT: `DEFAULT`,
+  OPEN: `OPEN`
+};
+
 export default class Filter {
-  constructor(filterContainer, filterModel, filmsModel) {
+  constructor(filterContainer, filterModel, filmsModel, statisticPresenter, movieListPresenter) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
     this._filterElement = null;
+    this._statisticPresenter = statisticPresenter;
+    this._movieListPresenter = movieListPresenter;
 
     this._currentFilter = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    this._changeStatisticMode = this._changeStatisticMode.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+
+    this._statisticMode = StatisticMode.DEFAULT;
   }
 
   init() {
@@ -27,6 +37,7 @@ export default class Filter {
 
     this._filterElement = new MenuView(filters, this._currentFilter);
     this._filterElement.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._filterElement.setStatsElementClickHandler(this._changeStatisticMode);
 
     if (prevFilterElement === null) {
       render(this._filterContainer, this._filterElement, RenderPosition.AFTERBEGIN);
@@ -34,6 +45,18 @@ export default class Filter {
     }
     replace(this._filterElement, prevFilterElement);
     remove(prevFilterElement);
+  }
+
+  _changeStatisticMode() {
+    if (this._statisticMode === StatisticMode.DEFAULT) {
+      this._statisticMode = StatisticMode.OPEN;
+      this._statisticPresenter.init();
+      this._movieListPresenter.hiddenFilmsContainer();
+    } else {
+      this._statisticMode = StatisticMode.DEFAULT;
+      this._statisticPresenter.removeStatisticElement();
+      this._movieListPresenter.showFilmsContainer();
+    }
   }
 
   _handleModelEvent() {

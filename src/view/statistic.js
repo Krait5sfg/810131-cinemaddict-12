@@ -1,4 +1,4 @@
-import AbstractView from './abstract.js';
+import SmartView from './smart.js';
 
 const createStatisticTemplate = () => `<section class="statistic">
 <p class="statistic__rank">
@@ -47,7 +47,7 @@ const createStatisticTemplate = () => `<section class="statistic">
 
 </section>`;
 
-export default class Statistic extends AbstractView {
+export default class Statistic extends SmartView {
   getTemplate() {
     return createStatisticTemplate();
   }

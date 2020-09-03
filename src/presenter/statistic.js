@@ -35,7 +35,10 @@ export default class Statistic {
   }
 
   _getStatisticDataFromFilms(films, statisticFilter) {
-    films.forEach((film) => console.log(film.status.watchingDate, film.title, film.alternativeTitle));
+    let test1 = `2020-09-04`;
+    let test2 = moment();
+    console.log(moment().isSame(test1, `day`));
+    // films.forEach((film) => console.log(film.status.watchingDate, film.title, film.alternativeTitle));
 
     const data = {
       watchedCount: null,
@@ -54,7 +57,7 @@ export default class Statistic {
         break;
       case StatisticFilter.TODAY:
         watchedFilms = films.filter((film) => {
-          if (film.status.watched && moment(film.status.watchingDate).isSame(currentDate)) {
+          if (film.status.watched && moment(film.status.watchingDate).isSame(currentDate, `day`)) {
             return film;
           }
           return false;

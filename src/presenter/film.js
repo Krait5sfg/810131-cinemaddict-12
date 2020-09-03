@@ -141,7 +141,8 @@ export default class Film {
   }
 
   _handleWatchedClick() {
-    const status = Object.assign({}, this._film.status, {watched: !this._film.status.watched});
+    // если поле watched true - значит при клике будет false поэтому надо удалить дату когда фильм был просмотрен
+    const status = Object.assign({}, this._film.status, {watched: !this._film.status.watched, watchingDate: this._film.status.watched ? null : new Date()});
     this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status}));
   }
 

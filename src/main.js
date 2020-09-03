@@ -9,7 +9,7 @@ import Api from './api.js';
 import {UpdateType} from './const.js';
 import StatisticPresenter from './presenter/statistic.js';
 
-const AUTHORIZATION = `Basic qwertyuaqq`;
+const AUTHORIZATION = `Basic qwertuioy`;
 const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
 
 // модель

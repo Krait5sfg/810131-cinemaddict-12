@@ -2,6 +2,70 @@ import SmartView from './smart.js';
 import moment from 'moment';
 import {StatisticFilter} from '../const.js';
 import {getUserStatus} from '../utils/user-profile.js';
+import Chart from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+
+const BAR_HEIGHT = 50;
+
+const renderChart = (statisticCtx, genres, counts) => {
+
+  return new Chart(statisticCtx, {
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      labels: genres,
+      datasets: [{
+        data: counts,
+        backgroundColor: `#ffe800`,
+        hoverBackgroundColor: `#ffe800`,
+        anchor: `start`,
+        barThickness: 24
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 20
+          },
+          color: `#ffffff`,
+          anchor: `start`,
+          align: `start`,
+          offset: 40,
+        }
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#ffffff`,
+            padding: 100,
+            fontSize: 20
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false
+      }
+    }
+  });
+};
 
 // методы преобразуют даты с помощью moment
 const getDurationForStatistic = (minutes) => {
@@ -70,6 +134,7 @@ export default class Statistic extends SmartView {
     this._statisticData = statisticData;
     this._moviesModel = moviesModel;
     this._statisticInputHandler = this._statisticInputHandler.bind(this);
+    this._setChart();
   }
 
   getTemplate() {
@@ -86,5 +151,16 @@ export default class Statistic extends SmartView {
   _statisticInputHandler(evt) {
     evt.preventDefault();
     this._callback.statisticInput(evt.target.value);
+  }
+
+  _setChart() {
+    const genres = Object.keys(this._statisticData.countGenre);
+    const counts = Object.values(this._statisticData.countGenre);
+    const countLine = genres.length;
+    if (genres.length) {
+      const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
+      statisticCtx.height = BAR_HEIGHT * countLine;
+      this._chart = renderChart(statisticCtx, genres, counts);
+    }
   }
 }

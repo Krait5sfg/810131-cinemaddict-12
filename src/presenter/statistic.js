@@ -29,10 +29,10 @@ export default class Statistic {
   }
 
   _statisticInputHandler(statisticValue) {
-    console.log(statisticValue);
     remove(this._statisticElement);
     this._statisticFilter = statisticValue;
     this._renderStatistic();
+
   }
 
   _renderStatistic() {
@@ -46,6 +46,7 @@ export default class Statistic {
       watchedCount: null,
       totalDuration: null,
       allGenres: [],
+      countGenre: null,
       topGenre: null,
       filter: statisticFilter,
     };
@@ -106,7 +107,7 @@ export default class Statistic {
     });
 
     if (data.allGenres.length > 0) {
-      data.topGenre = data.allGenres.reduce((object, element) => {
+      data.countGenre = data.allGenres.reduce((object, element) => {
         if (!object[element]) {
           object[element] = 0;
         }
@@ -114,7 +115,7 @@ export default class Statistic {
         return object;
       }, {});
 
-      data.topGenre = Object.keys(data.topGenre).reduce((currentElement, nextElement) => data.topGenre[currentElement] > data.topGenre[nextElement] ? currentElement : nextElement);
+      data.topGenre = Object.keys(data.countGenre).reduce((currentElement, nextElement) => data.countGenre[currentElement] > data.countGenre[nextElement] ? currentElement : nextElement);
     }
 
     return data;

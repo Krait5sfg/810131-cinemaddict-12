@@ -5,9 +5,13 @@ import {getUserStatus} from '../utils/user-profile.js';
 
 // методы преобразуют даты с помощью moment
 const getDurationForStatistic = (minutes) => {
-  const duration = moment.duration(minutes, `minutes`);
-  const format = minutes > 60 ? `H[<span class="statistic__item-description">h</span>] mm[<span class="statistic__item-description">m</span>]` : `mm[m]`;
-  return moment.utc(duration.as(`milliseconds`)).format(format).toString();
+  if (minutes > 0) {
+    const duration = moment.duration(minutes, `minutes`);
+    const times = duration.asHours().toFixed(2).split(`.`);
+    return `${times[0]}<span class="statistic__item-description">h</span> ${times[1]}<span class="statistic__item-description">m</span>`;
+  } else {
+    return `0`;
+  }
 };
 
 const createStatisticTemplate = ({filter, watchedCount, totalDuration, topGenre}, userStatus) => {

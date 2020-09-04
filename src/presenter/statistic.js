@@ -36,7 +36,7 @@ export default class Statistic {
   }
 
   _renderStatistic() {
-    this._statisticElement = new StatisticView(this._getStatisticDataFromFilms(this._films, this._statisticFilter));
+    this._statisticElement = new StatisticView(this._getStatisticDataFromFilms(this._films, this._statisticFilter), this._moviesModel);
     render(this._container, this._statisticElement, RenderPosition.BEFOREEND);
     this._statisticElement.setStatisticInputHandler(this._statisticInputHandler);
   }

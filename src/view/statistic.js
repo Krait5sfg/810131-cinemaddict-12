@@ -1,6 +1,7 @@
 import SmartView from './smart.js';
 import moment from 'moment';
 import {StatisticFilter} from '../const.js';
+import {getUserStatus} from '../utils/user-profile.js';
 
 // методы преобразуют даты с помощью moment
 const getDurationForStatistic = (minutes) => {
@@ -9,13 +10,13 @@ const getDurationForStatistic = (minutes) => {
   return moment.utc(duration.as(`milliseconds`)).format(format).toString();
 };
 
-const createStatisticTemplate = ({filter, watchedCount, totalDuration, topGenre}) => {
+const createStatisticTemplate = ({filter, watchedCount, totalDuration, topGenre}, userStatus) => {
 
   return `<section class="statistic">
   <p class="statistic__rank">
     Your rank
     <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-    <span class="statistic__rank-label">Sci-Fighter</span>
+    <span class="statistic__rank-label">${userStatus}</span>
   </p>
 
   <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -60,14 +61,15 @@ const createStatisticTemplate = ({filter, watchedCount, totalDuration, topGenre}
 };
 
 export default class Statistic extends SmartView {
-  constructor(statisticData) {
+  constructor(statisticData, moviesModel) {
     super();
-    this._statisticInputHandler = this._statisticInputHandler.bind(this);
     this._statisticData = statisticData;
+    this._moviesModel = moviesModel;
+    this._statisticInputHandler = this._statisticInputHandler.bind(this);
   }
 
   getTemplate() {
-    return createStatisticTemplate(this._statisticData);
+    return createStatisticTemplate(this._statisticData, getUserStatus(this._moviesModel.getWatchedCount()));
   }
 
   setStatisticInputHandler(callback) {

@@ -56,6 +56,7 @@ export default class Filter {
       this._statisticMode = StatisticMode.DEFAULT;
       this._statisticPresenter.removeStatisticElement();
       this._movieListPresenter.showFilmsContainer();
+      this._movieListPresenter.resetBoard();
     }
   }
 

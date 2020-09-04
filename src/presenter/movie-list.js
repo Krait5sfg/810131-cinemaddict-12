@@ -237,4 +237,9 @@ export default class MovieList {
       this._currentSortType = SortType.DEFAULT;
     }
   }
+
+  resetBoard() {
+    this._clearBoard({resetRenderedTaskCount: true});
+    this._renderBoard();
+  }
 }

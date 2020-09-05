@@ -46,26 +46,25 @@ export default class Statistic {
     const data = {
       watchedCount: null,
       totalDuration: null,
-      allGenres: [],
       countGenre: null,
       topGenre: null,
       filter: statisticFilter,
     };
 
+    const allGenres = [];
+
     data.watchedCount = watchedFilms.length;
 
-    data.totalDuration = watchedFilms.reduce((count, film) => {
-      return count + film.duration;
-    }, 0);
+    data.totalDuration = watchedFilms.reduce((count, {duration}) => count + duration, 0);
 
-    watchedFilms.forEach((film) => {
-      if (film.genres.length > 0) {
-        film.genres.forEach((genre) => data.allGenres.push(genre));
+    watchedFilms.forEach(({genres}) => {
+      if (genres.length > 0) {
+        genres.forEach((genre) => allGenres.push(genre));
       }
     });
 
-    if (data.allGenres.length > 0) {
-      data.countGenre = data.allGenres.reduce((object, element) => {
+    if (allGenres.length > 0) {
+      data.countGenre = allGenres.reduce((object, element) => {
         if (!object[element]) {
           object[element] = 0;
         }

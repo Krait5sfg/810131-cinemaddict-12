@@ -17,6 +17,7 @@ export default class Statistic {
     this._moviesModel = moviesModel;
     this._statisticFilter = StatisticFilter.ALL_TIME;
     this._statisticInputHandler = this._statisticInputHandler.bind(this);
+    this._watchedFilms = null;
   }
 
   init() {
@@ -35,12 +36,13 @@ export default class Statistic {
   }
 
   _renderStatistic() {
-    this._statisticElement = new StatisticView(this._getStatisticDataFromFilms(this._moviesModel.getFilms(), this._statisticFilter), this._moviesModel);
+    this._setWatchedFilmsForStatistic(this._moviesModel.getFilms(), this._statisticFilter);
+    this._statisticElement = new StatisticView(this._getStatisticDataFromWatchedFilms(this._watchedFilms, this._statisticFilter), this._moviesModel);
     render(this._container, this._statisticElement, RenderPosition.BEFOREEND);
     this._statisticElement.setStatisticInputHandler(this._statisticInputHandler);
   }
 
-  _getStatisticDataFromFilms(films, statisticFilter) {
+  _getStatisticDataFromWatchedFilms(watchedFilms, statisticFilter) {
     const data = {
       watchedCount: null,
       totalDuration: null,
@@ -49,29 +51,6 @@ export default class Statistic {
       topGenre: null,
       filter: statisticFilter,
     };
-
-    let watchedFilms = null;
-    const currentDate = moment();
-    const dateAWeekAgo = moment().subtract(7, MomentSetting.DAYS);
-    const dateAMonthAgo = moment().subtract(1, MomentSetting.MONTH);
-    const dateAYearAgo = moment().subtract(1, MomentSetting.YEAR);
-    switch (statisticFilter) {
-      case StatisticFilter.ALL_TIME:
-        watchedFilms = films.filter(({status}) => status.watched && status.watchingDate !== null);
-        break;
-      case StatisticFilter.TODAY:
-        watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isSame(currentDate, MomentSetting.DAY));
-        break;
-      case StatisticFilter.WEEK:
-        watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isBetween(dateAWeekAgo, currentDate));
-        break;
-      case StatisticFilter.MONTH:
-        watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isBetween(dateAMonthAgo, currentDate));
-        break;
-      case StatisticFilter.YEAR:
-        watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isBetween(dateAYearAgo, currentDate));
-        break;
-    }
 
     data.watchedCount = watchedFilms.length;
 
@@ -98,5 +77,30 @@ export default class Statistic {
     }
 
     return data;
+  }
+
+  _setWatchedFilmsForStatistic(films, statisticFilter) {
+    const currentDate = moment();
+    const dateAWeekAgo = moment().subtract(7, MomentSetting.DAYS);
+    const dateAMonthAgo = moment().subtract(1, MomentSetting.MONTH);
+    const dateAYearAgo = moment().subtract(1, MomentSetting.YEAR);
+
+    switch (statisticFilter) {
+      case StatisticFilter.ALL_TIME:
+        this._watchedFilms = films.filter(({status}) => status.watched && status.watchingDate !== null);
+        break;
+      case StatisticFilter.TODAY:
+        this._watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isSame(currentDate, MomentSetting.DAY));
+        break;
+      case StatisticFilter.WEEK:
+        this._watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isBetween(dateAWeekAgo, currentDate));
+        break;
+      case StatisticFilter.MONTH:
+        this._watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isBetween(dateAMonthAgo, currentDate));
+        break;
+      case StatisticFilter.YEAR:
+        this._watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isBetween(dateAYearAgo, currentDate));
+        break;
+    }
   }
 }

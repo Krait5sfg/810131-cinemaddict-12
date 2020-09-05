@@ -59,7 +59,7 @@ export default class Statistic {
 
     watchedFilms.forEach(({genres}) => {
       if (genres.length > 0) {
-        genres.forEach((genre) => allGenres.push(genre));
+        allGenres.push(...genres);
       }
     });
 

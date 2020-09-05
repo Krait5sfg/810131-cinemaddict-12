@@ -353,7 +353,17 @@ export default class FilmDetail extends SmartView {
   }
 
   addShake() {
-    this.getElement().querySelector(`.film-details__new-comment`).classList.add(`shake`);
+    const newCommentElement = this.getElement().querySelector(`.film-details__new-comment`);
+    newCommentElement.classList.add(`shake`);
+
+
+    this.getElement()
+      .querySelector(`.film-details__comment-input`)
+      .disabled = false;
+
+    this.getElement()
+      .querySelectorAll(`.film-details__emoji-label`)
+      .forEach((element) => element.addEventListener(`click`, this._emojiClickHandler));
   }
 
 }

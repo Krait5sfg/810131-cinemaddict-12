@@ -60,36 +60,16 @@ export default class Statistic {
         watchedFilms = films.filter((film) => film.status.watched && film.status.watchingDate !== null);
         break;
       case StatisticFilter.TODAY:
-        watchedFilms = films.filter((film) => {
-          if (film.status.watched && moment(film.status.watchingDate).isSame(currentDate, MomentSetting.DAY)) {
-            return film;
-          }
-          return false;
-        });
+        watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isSame(currentDate, MomentSetting.DAY));
         break;
       case StatisticFilter.WEEK:
-        watchedFilms = films.filter((film) => {
-          if (film.status.watched && moment(film.status.watchingDate).isBetween(dateAWeekAgo, currentDate)) {
-            return film;
-          }
-          return false;
-        });
+        watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isBetween(dateAWeekAgo, currentDate));
         break;
       case StatisticFilter.MONTH:
-        watchedFilms = films.filter((film) => {
-          if (film.status.watched && moment(film.status.watchingDate).isBetween(dateAMonthAgo, currentDate)) {
-            return film;
-          }
-          return false;
-        });
+        watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isBetween(dateAMonthAgo, currentDate));
         break;
       case StatisticFilter.YEAR:
-        watchedFilms = films.filter((film) => {
-          if (film.status.watched && moment(film.status.watchingDate).isBetween(dateAYearAgo, currentDate)) {
-            return film;
-          }
-          return false;
-        });
+        watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isBetween(dateAYearAgo, currentDate));
         break;
     }
 

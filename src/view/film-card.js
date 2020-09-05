@@ -1,6 +1,12 @@
 import {getRandomValueFromArray, getConvertingDate, getHumaniseDuration} from '../utils/common.js';
 import AbstractView from './abstract.js';
 
+const LetterLimit = {
+  CUSTOM: 140,
+  MIN: 0,
+  MAX: 139,
+};
+
 export const createFilmCardTemplate = (film) => {
 
   const {title, rating, releaseDate, duration, genres, image, description, comments, status} = film;
@@ -8,7 +14,6 @@ export const createFilmCardTemplate = (film) => {
   const genre = getRandomValueFromArray(genres);
   const year = getConvertingDate(releaseDate, `film card`);
   const humanizeDuration = getHumaniseDuration(duration);
-
   return `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>
       <p class="film-card__rating">${rating}</p>
@@ -18,7 +23,7 @@ export const createFilmCardTemplate = (film) => {
         <span class="film-card__genre">${genre}</span>
       </p>
       <img src="${image}" alt="" class="film-card__poster">
-      <p class="film-card__description">${description}</p>
+      <p class="film-card__description">${description.length > LetterLimit.CUSTOM ? description.slice(LetterLimit.MIN, LetterLimit.MAX) + `...` : description}</p>
       <a class="film-card__comments">${comments.length} comments</a>
       <form class="film-card__controls">
         <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchlist ? `film-card__controls-item--active` : ``}">Add to watchlist</button>

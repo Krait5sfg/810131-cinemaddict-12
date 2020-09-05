@@ -1,8 +1,10 @@
 import AbstractView from './abstract.js';
 import {FilterType} from '../const.js';
 
+const COUNT_LIMIT = 5;
+
 const createMenuItemTemplate = ({type, name, count}, currentFilter) => {
-  return `<a href="#watchlist" class="main-navigation__item ${type === currentFilter ? `main-navigation__item--active` : ``}" data-filter-type="${type}">${name} <span class="main-navigation__item-count">${count}</span></a>`;
+  return `<a href="#watchlist" class="main-navigation__item ${type === currentFilter ? `main-navigation__item--active` : ``}" data-filter-type="${type}">${name} ${count > COUNT_LIMIT ? `` : `<span class="main-navigation__item-count">${count}</span>`}</a>`;
 };
 
 const createMenuTemplate = (filterItems, currentFilter) => {

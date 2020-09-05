@@ -69,13 +69,15 @@ const renderChart = (statisticCtx, genres, counts) => {
 
 // методы преобразуют даты с помощью moment
 const getDurationForStatistic = (minutes) => {
+  let hour = 0;
+  let minute = 0;
   if (minutes > 0) {
     const duration = moment.duration(minutes, `minutes`);
     const times = duration.asHours().toFixed(2).split(`.`);
-    return `${times[0]}<span class="statistic__item-description">h</span> ${times[1]}<span class="statistic__item-description">m</span>`;
-  } else {
-    return `0`;
+    hour = times[0];
+    minute = times[1];
   }
+  return `${hour}<span class="statistic__item-description">h</span> ${minute}<span class="statistic__item-description">m</span>`;
 };
 
 const createStatisticTemplate = ({filter, watchedCount, totalDuration, topGenre}, userStatus) => {
@@ -154,10 +156,10 @@ export default class Statistic extends SmartView {
   }
 
   _setChart() {
-    const genres = Object.keys(this._statisticData.countGenre);
-    const counts = Object.values(this._statisticData.countGenre);
-    const countLine = genres.length;
-    if (genres.length) {
+    if (this._statisticData.countGenre !== null) {
+      const genres = Object.keys(this._statisticData.countGenre);
+      const counts = Object.values(this._statisticData.countGenre);
+      const countLine = genres.length;
       const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
       statisticCtx.height = BAR_HEIGHT * countLine;
       this._chart = renderChart(statisticCtx, genres, counts);

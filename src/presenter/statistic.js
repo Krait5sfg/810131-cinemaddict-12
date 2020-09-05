@@ -101,6 +101,8 @@ export default class Statistic {
       case StatisticFilter.YEAR:
         this._watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isBetween(dateAYearAgo, currentDate));
         break;
+      default:
+        throw new Error(`Error statistic filter`);
     }
   }
 }

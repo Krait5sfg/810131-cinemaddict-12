@@ -57,7 +57,7 @@ export default class Statistic {
     const dateAYearAgo = moment().subtract(1, MomentSetting.YEAR);
     switch (statisticFilter) {
       case StatisticFilter.ALL_TIME:
-        watchedFilms = films.filter((film) => film.status.watched && film.status.watchingDate !== null);
+        watchedFilms = films.filter(({status}) => status.watched && status.watchingDate !== null);
         break;
       case StatisticFilter.TODAY:
         watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isSame(currentDate, MomentSetting.DAY));

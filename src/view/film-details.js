@@ -353,8 +353,7 @@ export default class FilmDetail extends SmartView {
   }
 
   addShake() {
-    const newCommentElement = this.getElement().querySelector(`.film-details__new-comment`);
-    newCommentElement.classList.add(`shake`);
+    this.getElement().querySelector(`.film-details__new-comment`).classList.add(`shake`);
   }
 
 }

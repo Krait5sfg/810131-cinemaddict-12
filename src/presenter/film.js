@@ -49,7 +49,6 @@ export default class Film {
     const prevFilmCardElement = this._filmCardElement;
     const prevFilmDetailElement = this._filmDetailElement;
     this._filmCardElement = new FilmCardView(film);
-    this._filmCardElement.setClickHandler(this._showFilmDetail);
     this._filmCardElement.setWatchListClickHandler(this._handleWatchListClick);
     this._filmCardElement.setWatchedClickHandler(this._handleWatchedClick);
     this._filmCardElement.setFavoriteClickHandler(this._handleFavoriteClick);
@@ -65,6 +64,7 @@ export default class Film {
         this._filmComments = data.slice();
         this._filmDetailElement = new FilmDetailView(film, this._filmComments);
 
+        this._filmCardElement.setClickHandler(this._showFilmDetail); // убирает ошибку когда при клике на карточку комментарии не успели загрузиться
         this._filmDetailElement.setClickHandler(() => {
           this._hideFilmDetail();
           document.removeEventListener(`keydown`, this._handleEscKeyDown);

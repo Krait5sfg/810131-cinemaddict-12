@@ -56,11 +56,7 @@ export default class Filter {
 
         this._filterElement.addActiveInStatsElement();
         this._filterElement.removeActiveFromCurrentFilterElement(this._currentFilter);
-      } else {
-        return;
       }
-    } else {
-      return;
     }
   }
 

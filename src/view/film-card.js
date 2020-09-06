@@ -20,7 +20,7 @@ const createFilmCardTemplate = (film) => {
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
         <span class="film-card__duration">${humanizeDuration}</span>
-        <span class="film-card__genre">${genre}</span>
+        <span class="film-card__genre">${genre ? genre : ``}</span>
       </p>
       <img src="${image}" alt="" class="film-card__poster">
       <p class="film-card__description">${description.length > LetterLimit.CUSTOM ? description.slice(LetterLimit.MIN, LetterLimit.MAX).concat(`...`) : description}</p>

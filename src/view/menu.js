@@ -72,10 +72,4 @@ export default class Menu extends AbstractView {
       .querySelector(`.main-navigation__item[data-filter-type="${currentFilter}"]`)
       .classList.remove(`main-navigation__item--active`);
   }
-
-  addActiveInCurrentFilterElement(currentFilter) {
-    this.getElement()
-      .querySelector(`.main-navigation__item[data-filter-type="${currentFilter}"]`)
-      .classList.add(`main-navigation__item--active`);
-  }
 }

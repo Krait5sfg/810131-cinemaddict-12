@@ -69,7 +69,7 @@ export default class Film {
           this._hideFilmDetail();
           document.removeEventListener(`keydown`, this._handleEscKeyDown);
           document.removeEventListener(`keydown`, this._handleEnterKeyDown);
-          this._filmDetailElement.reset(this._film);
+          this._filmDetailElement.reset();
         });
 
         this._filmDetailElement.setWatchListClickHandler(this._handleWatchListClick);
@@ -110,7 +110,7 @@ export default class Film {
       this._hideFilmDetail();
       document.removeEventListener(`keydown`, this._handleEscKeyDown);
       document.removeEventListener(`keydown`, this._handleEnterKeyDown);
-      this._filmDetailElement.reset(this._film);
+      this._filmDetailElement.reset();
     }
   }
 

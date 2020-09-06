@@ -242,4 +242,12 @@ export default class MovieList {
     this._clearBoard({resetRenderedTaskCount: true});
     this._renderBoard();
   }
+
+  getFilmContainerElement() {
+    return this._filmsContainerElement;
+  }
+
+  getSortElement() {
+    return this._sortElement;
+  }
 }

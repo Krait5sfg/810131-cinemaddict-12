@@ -48,27 +48,31 @@ export default class Filter {
   }
 
   _changeStatisticMode() {
-    if (this._statisticMode === StatisticMode.DEFAULT) {
-      this._statisticMode = StatisticMode.OPEN;
-      this._statisticPresenter.init();
-      this._movieListPresenter.hiddenFilmsContainer();
+    if (this._movieListPresenter.getFilmContainerElement() && this._movieListPresenter.getSortElement()) {
+      if (this._statisticMode === StatisticMode.DEFAULT) {
+        this._statisticMode = StatisticMode.OPEN;
+        this._statisticPresenter.init();
+        this._movieListPresenter.hiddenFilmsContainer();
 
-      this._filterElement.getElement().querySelector(`.main-navigation__additional`).classList.add(`main-navigation__item--active`);
-      this._filterElement.getElement()
-        .querySelectorAll(`.main-navigation__item`)
-        .forEach((element) => element.classList.remove(`main-navigation__item--active`));
+        this._filterElement.getElement().querySelector(`.main-navigation__additional`).classList.add(`main-navigation__item--active`);
+        this._filterElement.getElement()
+          .querySelectorAll(`.main-navigation__item`)
+          .forEach((element) => element.classList.remove(`main-navigation__item--active`));
 
+      } else {
+        this._statisticMode = StatisticMode.DEFAULT;
+        this._statisticPresenter.removeStatisticElement();
+        this._movieListPresenter.showFilmsContainer();
+        this._movieListPresenter.resetBoard(); // сбрасывает показанные фильмы
+
+        this._filterElement.getElement()
+          .querySelector(`.main-navigation__additional`).classList.remove(`main-navigation__item--active`);
+        this._filterElement.getElement()
+          .querySelector(`.main-navigation__item[data-filter-type="${this._currentFilter}"]`)
+          .classList.add(`main-navigation__item--active`);
+      }
     } else {
-      this._statisticMode = StatisticMode.DEFAULT;
-      this._statisticPresenter.removeStatisticElement();
-      this._movieListPresenter.showFilmsContainer();
-      this._movieListPresenter.resetBoard(); // сбрасывает показанные фильмы
-
-      this._filterElement.getElement()
-        .querySelector(`.main-navigation__additional`).classList.remove(`main-navigation__item--active`);
-      this._filterElement.getElement()
-        .querySelector(`.main-navigation__item[data-filter-type="${this._currentFilter}"]`)
-        .classList.add(`main-navigation__item--active`);
+      return;
     }
   }
 

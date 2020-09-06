@@ -1,4 +1,4 @@
-import {getHumaniseDuration, getConvertingDate, Key} from '../utils/common.js';
+import {getHumaniseDuration, getConvertingDate, TypeTemplate} from '../utils/common.js';
 import SmartView from './smart.js';
 import he from 'he';
 
@@ -53,7 +53,7 @@ const generateComments = (comments) => {
     <p class="film-details__comment-text">${he.encode(comment)}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${author}</span>
-      <span class="film-details__comment-day">${getConvertingDate(new Date(date), Key.COMMENT)}</span>
+      <span class="film-details__comment-day">${getConvertingDate(new Date(date), TypeTemplate.COMMENT)}</span>
       <button class="film-details__comment-delete" data-comment-id ="${id}">Delete</button>
     </p>
   </div>
@@ -80,7 +80,7 @@ const createFilmDetailsTemplate = (film, emoji, message, filmsComments) => {
   const genreFieldName = genres.length > 1 ? `Genres` : `Genre`;
   const commentsCount = comments.length;
   const humanizeDuration = getHumaniseDuration(duration);
-  const fullReleaseDateFilm = getConvertingDate(releaseDate, Key.FILM_DETAIL);
+  const fullReleaseDateFilm = getConvertingDate(releaseDate, TypeTemplate.FILM_DETAIL);
 
   return `<section class="film-details">
       <form class="film-details__inner" action="" method="get" data-film-id="${id}">

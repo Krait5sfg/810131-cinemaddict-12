@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export const Key = {
+export const TypeTemplate = {
   FILM_CARD: `film card`,
   FILM_DETAIL: `film detail`,
   COMMENT: `comment`
@@ -31,14 +31,14 @@ export const getHumaniseDuration = (minutes) => {
   return moment.utc(duration.as(`milliseconds`)).format(format).toString();
 };
 
-export const getConvertingDate = (date, key) => {
-  if (date instanceof Date && key) {
-    switch (key) {
-      case Key.FILM_CARD:
+export const getConvertingDate = (date, type) => {
+  if (date instanceof Date && type) {
+    switch (type) {
+      case TypeTemplate.FILM_CARD:
         return moment(date).year();
-      case Key.FILM_DETAIL:
+      case TypeTemplate.FILM_DETAIL:
         return moment(date).format(`DD MMMM YYYY`);
-      case Key.COMMENT:
+      case TypeTemplate.COMMENT:
         return moment(date).format(`YYYY/MM/DD HH:mm`);
     }
   }

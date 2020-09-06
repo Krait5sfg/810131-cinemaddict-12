@@ -11,11 +11,7 @@ import {UserAction, UpdateType} from '../const.js';
 import {filter} from '../utils/filter.js';
 import LoadingView from '../view/loading.js';
 
-const CountType = {
-  COMMON_FILMS: 20,
-  EXTRA_FILMS: 2,
-  RENDER_FOR_STEP: 5,
-};
+const RENDER_FOR_STEP = 5;
 
 export default class MovieList {
   constructor(mainElement, bodyElement, moviesModel, filterModel, api) {
@@ -33,7 +29,7 @@ export default class MovieList {
     this._loadingElement = new LoadingView();
     this._showMoreButtonElement = null;
     this._noFilmElement = new NoFilmView();
-    this._renderFilmCount = CountType.RENDER_FOR_STEP;
+    this._renderFilmCount = RENDER_FOR_STEP;
     this._isLoading = true;
 
     this._handleShowMoreButtonElementClick = this._handleShowMoreButtonElementClick.bind(this);
@@ -159,7 +155,7 @@ export default class MovieList {
 
   _handleShowMoreButtonElementClick() {
     const filmCount = this._getFilms().length;
-    const newRenderFilmCount = Math.min(filmCount, this._renderFilmCount + CountType.RENDER_FOR_STEP);
+    const newRenderFilmCount = Math.min(filmCount, this._renderFilmCount + RENDER_FOR_STEP);
     const films = this._getFilms().slice(this._renderFilmCount, newRenderFilmCount);
     this._renderFilms(films);
     this._renderFilmCount = newRenderFilmCount;
@@ -229,7 +225,7 @@ export default class MovieList {
     remove(this._showMoreButtonElement);
 
     if (resetRenderedTaskCount) {
-      this._renderFilmCount = CountType.RENDER_FOR_STEP;
+      this._renderFilmCount = RENDER_FOR_STEP;
     } else {
       this._renderFilmCount = Math.min(filmCount, this._renderFilmCount);
     }

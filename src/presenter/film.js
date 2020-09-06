@@ -116,7 +116,6 @@ export default class Film {
 
   _hideFilmDetail() {
     remove(this._filmDetailElement);
-
     this._bodyElement.classList.remove(`hide-overflow`);
     this._mode = Mode.DEFAULT;
   }

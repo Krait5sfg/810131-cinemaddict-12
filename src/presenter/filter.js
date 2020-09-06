@@ -83,7 +83,12 @@ export default class Filter {
       this._filterElement.removeActiveFromStatsElement();
     }
 
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    // проверка убирает ошибку когда фильмы не загружены, но пользователь делает клик по пункту меню
+    if (this._movieListPresenter.getFilmContainerElement() && this._movieListPresenter.getSortElement()) {
+      this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    } else {
+      return;
+    }
   }
 
   _getFilters() {

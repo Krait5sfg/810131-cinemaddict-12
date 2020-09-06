@@ -7,7 +7,6 @@ import FilterModel from './model/filter.js';
 import FilterPresenter from './presenter/filter.js';
 import Api from './api.js';
 import {UpdateType} from './const.js';
-// import StatisticPresenter from './presenter/statistic.js';
 
 const AUTHORIZATION = `Basic qwertuioy`;
 const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;

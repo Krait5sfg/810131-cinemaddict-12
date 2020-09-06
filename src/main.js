@@ -1,6 +1,6 @@
 import UserProfileView from './view/user-profile.js';
 import MovieListPresenter from './presenter/movie-list.js';
-import StatisticsView from './view/statistics.js';
+import MovieCounterView from './view/movie-counter.js';
 import {render, RenderPosition} from './utils/render.js';
 import MoviesModel from './model/movies.js';
 import FilterModel from './model/filter.js';
@@ -34,5 +34,5 @@ new FilterPresenter(mainElement, filterModel, moviesModel, statisticPresenter, m
 api.getFilms()
   .then((films) => {
     moviesModel.setFilms(UpdateType.INIT, films);
-    render(footerStatisticsElement, new StatisticsView(films.length), RenderPosition.BEFOREEND);
+    render(footerStatisticsElement, new MovieCounterView(films.length), RenderPosition.BEFOREEND);
   });

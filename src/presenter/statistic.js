@@ -64,12 +64,12 @@ export default class Statistic {
     });
 
     if (allGenres.length > 0) {
-      statisticData.countGenre = allGenres.reduce((object, element) => {
-        if (!object[element]) {
-          object[element] = 0;
+      statisticData.countGenre = allGenres.reduce((countGenre, element) => {
+        if (!countGenre[element]) {
+          countGenre[element] = 0;
         }
-        object[element]++;
-        return object;
+        countGenre[element]++;
+        return countGenre;
       }, {});
 
       statisticData.topGenre = Object.keys(statisticData.countGenre).reduce((currentElement, nextElement) => statisticData.countGenre[currentElement] > statisticData.countGenre[nextElement] ? currentElement : nextElement);

@@ -1,6 +1,6 @@
 import SortView, {SortType} from '../view/sort.js';
-import FilmContainerView from '../view/films-container.js';
-import FilmListView from '../view/films-list.js';
+import FilmsContainerView from '../view/films-container.js';
+import FilmsListView from '../view/films-list.js';
 import FilmsListContainerView from '../view/films-list-container.js';
 import ShowMoreButtonView from '../view/show-more-button.js';
 import NoFilmView from '../view/no-film.js';
@@ -27,8 +27,8 @@ export default class MovieList {
     this._bodyElement = bodyElement; // body страницы
     this._mainElement = mainElement; // родитель для всех элементов ниже
     this._sortElement = null;
-    this._filmsContainerElement = new FilmContainerView(); // главный контейнер для фильмов
-    this._filmsListElement = new FilmListView(); // первый внут. контейнер для всех фильмов
+    this._filmsContainerElement = new FilmsContainerView(); // главный контейнер для фильмов
+    this._filmsListElement = new FilmsListView(); // первый внут. контейнер для всех фильмов
     this._filmsListContainerElement = new FilmsListContainerView(); // второй внут. контейнер для фильмов, в нем распорожены фильмы
     this._loadingElement = new LoadingView();
     this._showMoreButtonElement = null;
@@ -50,6 +50,17 @@ export default class MovieList {
 
   init() {
     this._renderBoard();
+  }
+
+  hiddenFilmsContainer() {
+    this._filmsContainerElement.getElement().classList.add(`visually-hidden`);
+    this._sortElement.getElement().classList.add(`visually-hidden`);
+  }
+
+  showFilmsContainer() {
+    this._filmsContainerElement.getElement().classList.remove(`visually-hidden`);
+    this._sortElement.getElement().classList.remove(`visually-hidden`);
+    this._handleSortTypeChange(SortType.DEFAULT);
   }
 
   _getFilms() {
@@ -225,5 +236,10 @@ export default class MovieList {
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
     }
+  }
+
+  resetBoard() {
+    this._clearBoard({resetRenderedTaskCount: true});
+    this._renderBoard();
   }
 }

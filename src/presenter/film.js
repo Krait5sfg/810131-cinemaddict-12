@@ -49,16 +49,22 @@ export default class Film {
     const prevFilmCardElement = this._filmCardElement;
     const prevFilmDetailElement = this._filmDetailElement;
     this._filmCardElement = new FilmCardView(film);
-    this._filmCardElement.setClickHandler(this._showFilmDetail);
     this._filmCardElement.setWatchListClickHandler(this._handleWatchListClick);
     this._filmCardElement.setWatchedClickHandler(this._handleWatchedClick);
     this._filmCardElement.setFavoriteClickHandler(this._handleFavoriteClick);
+
+    // выносим отрисовку карточки сюда. Тогда вне зависимости от запроса по комментариям,
+    // всегда картока будет стоять на нужном месте
+    if (prevFilmCardElement === null) {
+      render(this._container, this._filmCardElement, RenderPosition.BEFOREEND);
+    }
 
     this._api.getComments(film.id)
       .then((data) => {
         this._filmComments = data.slice();
         this._filmDetailElement = new FilmDetailView(film, this._filmComments);
 
+        this._filmCardElement.setClickHandler(this._showFilmDetail); // убирает ошибку когда при клике на карточку комментарии не успели загрузиться
         this._filmDetailElement.setClickHandler(() => {
           this._hideFilmDetail();
           document.removeEventListener(`keydown`, this._handleEscKeyDown);
@@ -72,7 +78,6 @@ export default class Film {
         this._filmDetailElement.setDeleteButtonClickHandler(this._handleDeleteButtonClick);
 
         if (prevFilmCardElement === null || prevFilmDetailElement === null) {
-          render(this._container, this._filmCardElement, RenderPosition.BEFOREEND);
           return;
         }
 
@@ -91,7 +96,12 @@ export default class Film {
 
   destroy() {
     remove(this._filmCardElement);
-    remove(this._filmDetailElement);
+
+    // Это нужно для случая, если сразу после загрузки страницы нажать на любую сортировку, то попап может еще не создаться
+    // (так как он создается в колбэке после получения комментариев). Соотвественно надо проверит что попап есть
+    if (this._filmDetailElement !== null) {
+      remove(this._filmDetailElement);
+    }
   }
 
   _handleEscKeyDown(evt) {
@@ -131,7 +141,8 @@ export default class Film {
   }
 
   _handleWatchedClick() {
-    const status = Object.assign({}, this._film.status, {watched: !this._film.status.watched});
+    // если поле watched true - значит при клике будет false поэтому надо удалить дату когда фильм был просмотрен
+    const status = Object.assign({}, this._film.status, {watched: !this._film.status.watched, watchingDate: this._film.status.watched ? null : new Date()});
     this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status}));
   }
 
@@ -152,6 +163,7 @@ export default class Film {
       const selectedEmojiType = this._filmDetailElement.getSelectedEmojiType();
       if (userMessage && selectedEmojiType) {
         this._filmDetailElement.disableForm();
+        this._filmDetailElement.removeShake();
         const userComment = {
           id: generateId(),
           emotion: EmojiType[selectedEmojiType.toUpperCase()],
@@ -160,6 +172,7 @@ export default class Film {
         };
         this._changeData(UserAction.ADD_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {newComment: userComment}), () => {
           this._filmDetailElement.addShake();
+          this._filmDetailElement.activeForm();
         });
       }
     }

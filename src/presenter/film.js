@@ -60,8 +60,8 @@ export default class Film {
     }
 
     this._api.getComments(film.id)
-      .then((data) => {
-        this._filmComments = data.slice();
+      .then((comments) => {
+        this._filmComments = comments.slice();
         this._filmDetailElement = new FilmDetailView(film, this._filmComments);
 
         this._filmCardElement.setClickHandler(this._showFilmDetail); // убирает ошибку когда при клике на карточку комментарии не успели загрузиться

@@ -2,6 +2,7 @@ import MenuView from '../view/menu.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {UpdateType, FilterType} from '../const.js';
 import {filter} from '../utils/filter.js';
+import StatisticPresenter from './statistic.js';
 
 const StatisticMode = {
   DEFAULT: `DEFAULT`,
@@ -9,12 +10,12 @@ const StatisticMode = {
 };
 
 export default class Filter {
-  constructor(filterContainer, filterModel, filmsModel, statisticPresenter, movieListPresenter) {
-    this._filterContainer = filterContainer;
+  constructor(mainElement, filterModel, moviesModel, movieListPresenter) {
+    this._filterContainer = mainElement;
     this._filterModel = filterModel;
-    this._filmsModel = filmsModel;
+    this._filmsModel = moviesModel;
     this._filterElement = null;
-    this._statisticPresenter = statisticPresenter;
+    this._statisticPresenter = new StatisticPresenter(mainElement, moviesModel);
     this._movieListPresenter = movieListPresenter;
 
     this._currentFilter = null;

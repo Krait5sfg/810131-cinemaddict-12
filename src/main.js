@@ -7,7 +7,7 @@ import FilterModel from './model/filter.js';
 import FilterPresenter from './presenter/filter.js';
 import Api from './api.js';
 import {UpdateType} from './const.js';
-import StatisticPresenter from './presenter/statistic.js';
+// import StatisticPresenter from './presenter/statistic.js';
 
 const AUTHORIZATION = `Basic qwertuioy`;
 const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
@@ -21,9 +21,8 @@ const bodyElement = document.querySelector(`body`);
 const moviesModel = new MoviesModel();
 const api = new Api(END_POINT, AUTHORIZATION);
 const filterModel = new FilterModel();
-const statisticPresenter = new StatisticPresenter(mainElement, moviesModel);
 const movieListPresenter = new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel, api);
-const filterPresenter = new FilterPresenter(mainElement, filterModel, moviesModel, statisticPresenter, movieListPresenter);
+const filterPresenter = new FilterPresenter(mainElement, filterModel, moviesModel, movieListPresenter);
 
 render(headerElement, new UserProfileView(moviesModel), RenderPosition.BEFOREEND);
 movieListPresenter.init();

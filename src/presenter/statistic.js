@@ -43,7 +43,7 @@ export default class Statistic {
   }
 
   _getStatisticDataFromWatchedFilms(watchedFilms, statisticFilter) {
-    const data = {
+    const statisticData = {
       watchedCount: null,
       totalDuration: null,
       countGenre: null,
@@ -53,9 +53,9 @@ export default class Statistic {
 
     const allGenres = [];
 
-    data.watchedCount = watchedFilms.length;
+    statisticData.watchedCount = watchedFilms.length;
 
-    data.totalDuration = watchedFilms.reduce((count, {duration}) => count + duration, 0);
+    statisticData.totalDuration = watchedFilms.reduce((count, {duration}) => count + duration, 0);
 
     watchedFilms.forEach(({genres}) => {
       if (genres.length > 0) {
@@ -64,7 +64,7 @@ export default class Statistic {
     });
 
     if (allGenres.length > 0) {
-      data.countGenre = allGenres.reduce((object, element) => {
+      statisticData.countGenre = allGenres.reduce((object, element) => {
         if (!object[element]) {
           object[element] = 0;
         }
@@ -72,10 +72,10 @@ export default class Statistic {
         return object;
       }, {});
 
-      data.topGenre = Object.keys(data.countGenre).reduce((currentElement, nextElement) => data.countGenre[currentElement] > data.countGenre[nextElement] ? currentElement : nextElement);
+      statisticData.topGenre = Object.keys(statisticData.countGenre).reduce((currentElement, nextElement) => statisticData.countGenre[currentElement] > statisticData.countGenre[nextElement] ? currentElement : nextElement);
     }
 
-    return data;
+    return statisticData;
   }
 
   _setWatchedFilmsForStatistic(films, statisticFilter) {

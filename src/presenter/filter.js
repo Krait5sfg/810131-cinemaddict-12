@@ -77,10 +77,6 @@ export default class Filter {
       this._movieListPresenter.resetBoard(); // сбрасывает показанные фильмы
     }
 
-    if (this._currentFilter === filterType) {
-      return;
-    }
-
     // проверка убирает ошибку когда фильмы не загружены, но пользователь делает клик по пункту меню
     if (this._movieListPresenter.getFilmContainerElement() && this._movieListPresenter.getSortElement()) {
       this._filterModel.setFilter(UpdateType.MAJOR, filterType);

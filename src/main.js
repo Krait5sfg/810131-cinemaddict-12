@@ -12,25 +12,21 @@ import StatisticPresenter from './presenter/statistic.js';
 const AUTHORIZATION = `Basic qwertuioy`;
 const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
 
-// модель
-const moviesModel = new MoviesModel();
-const api = new Api(END_POINT, AUTHORIZATION);
-
-const filterModel = new FilterModel();
-
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 const bodyElement = document.querySelector(`body`);
 
-render(headerElement, new UserProfileView(moviesModel), RenderPosition.BEFOREEND);
-
-// презентер
+// модель, api, презентеры
+const moviesModel = new MoviesModel();
+const api = new Api(END_POINT, AUTHORIZATION);
+const filterModel = new FilterModel();
 const statisticPresenter = new StatisticPresenter(mainElement, moviesModel);
 const movieListPresenter = new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel, api);
+
+render(headerElement, new UserProfileView(moviesModel), RenderPosition.BEFOREEND);
 movieListPresenter.init();
 new FilterPresenter(mainElement, filterModel, moviesModel, statisticPresenter, movieListPresenter).init();
-
 api.getFilms()
   .then((films) => {
     moviesModel.setFilms(UpdateType.INIT, films);

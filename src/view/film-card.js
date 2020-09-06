@@ -7,7 +7,7 @@ const LetterLimit = {
   MAX: 139,
 };
 
-export const createFilmCardTemplate = (film) => {
+const createFilmCardTemplate = (film) => {
 
   const {title, rating, releaseDate, duration, genres, image, description, comments, status} = film;
   const {favorite, watched, watchlist} = status;

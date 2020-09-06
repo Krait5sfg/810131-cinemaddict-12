@@ -1,6 +1,6 @@
 import AbstractView from './abstract.js';
 
-export const SortType = {
+const SortType = {
   DEFAULT: `default`,
   DATE: `date`,
   RATING: `rating`
@@ -13,6 +13,7 @@ const createSortTemplate = (currentSortType) => {
       <li><a href="#" data-sort-type="${SortType.RATING}" class="sort__button ${currentSortType === SortType.RATING ? `sort__button--active` : ``}">Sort by rating</a></li>
     </ul>`;
 };
+
 export default class Sort extends AbstractView {
   constructor(currentSortType) {
     super();
@@ -40,3 +41,5 @@ export default class Sort extends AbstractView {
     evt.target.classList.add(`sort__button--active`);
   }
 }
+
+export {SortType};

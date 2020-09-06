@@ -194,10 +194,10 @@ export default class MovieList {
     }
   }
 
-  _handleModelEvent(updateType, data) {
+  _handleModelEvent(updateType, updatedValue) {
     switch (updateType) {
       case UpdateType.MINOR:
-        this._filmPresenter[data.id].init(data);
+        this._filmPresenter[updatedValue.id].init(updatedValue);
         break;
       case UpdateType.MAJOR:
         this._clearBoard({resetRenderedTaskCount: true, resetSortType: true});

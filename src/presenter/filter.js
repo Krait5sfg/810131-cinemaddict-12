@@ -56,15 +56,8 @@ export default class Filter {
 
         this._filterElement.addActiveInStatsElement();
         this._filterElement.removeActiveFromCurrentFilterElement(this._currentFilter);
-
       } else {
-        this._statisticMode = StatisticMode.DEFAULT;
-        this._statisticPresenter.removeStatisticElement();
-        this._movieListPresenter.showFilmsContainer();
-        this._movieListPresenter.resetBoard(); // сбрасывает показанные фильмы
-
-        this._filterElement.removeActiveFromStatsElement();
-        this._filterElement.addActiveInCurrentFilterElement(this._currentFilter);
+        return;
       }
     } else {
       return;
@@ -81,6 +74,10 @@ export default class Filter {
       this._statisticPresenter.removeStatisticElement();
       this._movieListPresenter.showFilmsContainer();
       this._filterElement.removeActiveFromStatsElement();
+    }
+
+    if (this._currentFilter === filterType) {
+      return;
     }
 
     // проверка убирает ошибку когда фильмы не загружены, но пользователь делает клик по пункту меню

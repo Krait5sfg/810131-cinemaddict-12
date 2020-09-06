@@ -54,10 +54,8 @@ export default class Filter {
         this._statisticPresenter.init();
         this._movieListPresenter.hiddenFilmsContainer();
 
-        this._filterElement.getElement().querySelector(`.main-navigation__additional`).classList.add(`main-navigation__item--active`);
-        this._filterElement.getElement()
-          .querySelectorAll(`.main-navigation__item`)
-          .forEach((element) => element.classList.remove(`main-navigation__item--active`));
+        this._filterElement.addActiveInStatsElement();
+        this._filterElement.removeActiveFromCurrentFilterElement(this._currentFilter);
 
       } else {
         this._statisticMode = StatisticMode.DEFAULT;
@@ -65,11 +63,8 @@ export default class Filter {
         this._movieListPresenter.showFilmsContainer();
         this._movieListPresenter.resetBoard(); // сбрасывает показанные фильмы
 
-        this._filterElement.getElement()
-          .querySelector(`.main-navigation__additional`).classList.remove(`main-navigation__item--active`);
-        this._filterElement.getElement()
-          .querySelector(`.main-navigation__item[data-filter-type="${this._currentFilter}"]`)
-          .classList.add(`main-navigation__item--active`);
+        this._filterElement.removeActiveFromStatsElement();
+        this._filterElement.addActiveInCurrentFilterElement(this._currentFilter);
       }
     } else {
       return;
@@ -85,13 +80,8 @@ export default class Filter {
       this._statisticMode = StatisticMode.DEFAULT;
       this._statisticPresenter.removeStatisticElement();
       this._movieListPresenter.showFilmsContainer();
-      this._filterElement.getElement()
-        .querySelector(`.main-navigation__additional`).classList.remove(`main-navigation__item--active`);
+      this._filterElement.removeActiveFromStatsElement();
     }
-
-    // if (this._currentFilter === filterType) {
-    //   return;
-    // }
 
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }

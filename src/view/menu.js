@@ -54,4 +54,28 @@ export default class Menu extends AbstractView {
     this._callback.statsElementClick = callback;
     this.getElement().querySelector(`.main-navigation__additional`).addEventListener(`click`, this._statsElementClickHandler);
   }
+
+  removeActiveFromStatsElement() {
+    this.getElement()
+      .querySelector(`.main-navigation__additional`)
+      .classList.remove(`main-navigation__item--active`);
+  }
+
+  addActiveInStatsElement() {
+    this.getElement()
+      .querySelector(`.main-navigation__additional`)
+      .classList.add(`main-navigation__item--active`);
+  }
+
+  removeActiveFromCurrentFilterElement(currentFilter) {
+    this.getElement()
+      .querySelector(`.main-navigation__item[data-filter-type="${currentFilter}"]`)
+      .classList.remove(`main-navigation__item--active`);
+  }
+
+  addActiveInCurrentFilterElement(currentFilter) {
+    this.getElement()
+      .querySelector(`.main-navigation__item[data-filter-type="${currentFilter}"]`)
+      .classList.add(`main-navigation__item--active`);
+  }
 }

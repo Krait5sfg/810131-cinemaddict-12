@@ -74,6 +74,7 @@ export default class Filter {
       this._statisticPresenter.removeStatisticElement();
       this._movieListPresenter.showFilmsContainer();
       this._filterElement.removeActiveFromStatsElement();
+      this._movieListPresenter.resetBoard(); // сбрасывает показанные фильмы
     }
 
     if (this._currentFilter === filterType) {

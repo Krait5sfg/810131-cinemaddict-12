@@ -31,37 +31,38 @@ export default class Filter {
 
   init() {
     this._currentFilter = this._filterModel.getFilter();
-
     const filters = this._getFilters();
     const prevFilterElement = this._filterElement;
-
     this._filterElement = new MenuView(filters, this._currentFilter);
-    this._filterElement.setFilterTypeChangeHandler(this._handleFilterTypeChange);
-    this._filterElement.setStatsElementClickHandler(this._changeStatisticMode);
 
     if (prevFilterElement === null) {
       render(this._filterContainer, this._filterElement, RenderPosition.AFTERBEGIN);
       return;
     }
+
     replace(this._filterElement, prevFilterElement);
     remove(prevFilterElement);
   }
 
-  _changeStatisticMode() {
-    if (this._movieListPresenter.getFilmContainerElement() && this._movieListPresenter.getSortElement()) {
-      if (this._statisticMode === StatisticMode.DEFAULT) {
-        this._statisticMode = StatisticMode.OPEN;
-        this._statisticPresenter.init();
-        this._movieListPresenter.hiddenFilmsContainer();
+  activateButtons() {
+    this._filterElement.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._filterElement.setStatsElementClickHandler(this._changeStatisticMode);
+  }
 
-        this._filterElement.addActiveInStatsElement();
-        this._filterElement.removeActiveFromCurrentFilterElement(this._currentFilter);
-      }
+  _changeStatisticMode() {
+    if (this._statisticMode === StatisticMode.DEFAULT) {
+      this._statisticMode = StatisticMode.OPEN;
+      this._statisticPresenter.init();
+      this._movieListPresenter.hiddenFilmsContainer();
+
+      this._filterElement.addActiveInStatsElement();
+      this._filterElement.removeActiveFromCurrentFilterElement(this._currentFilter);
     }
   }
 
   _handleModelEvent() {
     this.init();
+    this.activateButtons();
   }
 
   _handleFilterTypeChange(filterType) {
@@ -73,12 +74,8 @@ export default class Filter {
       this._movieListPresenter.resetBoard(); // сбрасывает показанные фильмы
     }
 
-    // проверка убирает ошибку когда фильмы не загружены, но пользователь делает клик по пункту меню
-    if (this._movieListPresenter.getFilmContainerElement() && this._movieListPresenter.getSortElement()) {
-      this._filterModel.setFilter(UpdateType.MAJOR, filterType);
-    } else {
-      return;
-    }
+    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+
   }
 
   _getFilters() {

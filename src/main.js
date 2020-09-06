@@ -23,12 +23,14 @@ const api = new Api(END_POINT, AUTHORIZATION);
 const filterModel = new FilterModel();
 const statisticPresenter = new StatisticPresenter(mainElement, moviesModel);
 const movieListPresenter = new MovieListPresenter(mainElement, bodyElement, moviesModel, filterModel, api);
+const filterPresenter = new FilterPresenter(mainElement, filterModel, moviesModel, statisticPresenter, movieListPresenter);
 
 render(headerElement, new UserProfileView(moviesModel), RenderPosition.BEFOREEND);
 movieListPresenter.init();
-new FilterPresenter(mainElement, filterModel, moviesModel, statisticPresenter, movieListPresenter).init();
+filterPresenter.init();
 api.getFilms()
   .then((films) => {
     moviesModel.setFilms(UpdateType.INIT, films);
     render(footerStatisticsElement, new MovieCounterView(films.length), RenderPosition.BEFOREEND);
+    filterPresenter.activateButtons();
   });

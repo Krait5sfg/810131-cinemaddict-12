@@ -163,6 +163,7 @@ export default class Film {
       const selectedEmojiType = this._filmDetailElement.getSelectedEmojiType();
       if (userMessage && selectedEmojiType) {
         this._filmDetailElement.disableForm();
+        this._filmDetailElement.removeShake();
         const userComment = {
           id: generateId(),
           emotion: EmojiType[selectedEmojiType.toUpperCase()],
@@ -171,6 +172,7 @@ export default class Film {
         };
         this._changeData(UserAction.ADD_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {newComment: userComment}), () => {
           this._filmDetailElement.addShake();
+          this._filmDetailElement.activeForm();
         });
       }
     }

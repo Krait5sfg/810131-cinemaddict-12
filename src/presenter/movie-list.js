@@ -95,7 +95,7 @@ export default class MovieList {
       return;
     }
     this._currentSortType = sortType;
-    this._clearBoard({resetRenderedTaskCount: true});
+    this._clearBoard({resetRenderedFilmCount: true});
     this._renderBoard();
   }
   // -----конец сортировки
@@ -200,7 +200,7 @@ export default class MovieList {
         this._filmPresenter[updatedValue.id].init(updatedValue);
         break;
       case UpdateType.MAJOR:
-        this._clearBoard({resetRenderedTaskCount: true, resetSortType: true});
+        this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this._renderBoard();
         break;
       case UpdateType.INIT:
@@ -211,7 +211,7 @@ export default class MovieList {
     }
   }
 
-  _clearBoard({resetRenderedTaskCount = false, resetSortType = false} = {}) {
+  _clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
     const filmCount = this._getFilms().length;
 
     Object
@@ -224,7 +224,7 @@ export default class MovieList {
     remove(this._loadingElement);
     remove(this._showMoreButtonElement);
 
-    if (resetRenderedTaskCount) {
+    if (resetRenderedFilmCount) {
       this._renderFilmCount = RENDER_FOR_STEP;
     } else {
       this._renderFilmCount = Math.min(filmCount, this._renderFilmCount);
@@ -235,7 +235,7 @@ export default class MovieList {
   }
 
   resetBoard() {
-    this._clearBoard({resetRenderedTaskCount: true});
+    this._clearBoard({resetRenderedFilmCount: true});
     this._renderBoard();
   }
 }

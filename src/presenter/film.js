@@ -150,10 +150,10 @@ export default class Film {
     this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status}));
   }
 
-  _handleDeleteButtonClick(commentId, callback) {
+  _handleDeleteButtonClick(commentId, handleRequestError) {
     const newComments = this._film.comments.filter((comment) => comment !== commentId);
     this._filmComments = this._filmComments.filter((comment) => comment.id !== commentId);
-    this._changeData(UserAction.DELETE_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}, {deletedIdComment: commentId}), callback);
+    this._changeData(UserAction.DELETE_COMMENT, UpdateType.MINOR, Object.assign({}, this._film, {comments: newComments.slice()}, {deletedIdComment: commentId}), handleRequestError);
   }
 
   _handleEnterKeyDown(evt) {

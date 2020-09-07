@@ -1,5 +1,7 @@
 import AbstractView from './abstract.js';
 
+const LINK_NODE_NAME = `A`;
+
 const SortType = {
   DEFAULT: `default`,
   DATE: `date`,
@@ -31,7 +33,7 @@ export default class Sort extends AbstractView {
   }
 
   _handleSortTypeChange(evt) {
-    if (evt.target.nodeName !== `A`) {
+    if (evt.target.nodeName !== LINK_NODE_NAME) {
       return;
     }
     evt.preventDefault();

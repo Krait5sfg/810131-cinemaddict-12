@@ -16,7 +16,7 @@ export default class Statistic {
     this._statisticElement = null;
     this._moviesModel = moviesModel;
     this._statisticFilter = StatisticFilter.ALL_TIME;
-    this._statisticInputHandler = this._statisticInputHandler.bind(this);
+    this._handleStatisticInput = this._handleStatisticInput.bind(this);
     this._watchedFilms = null;
   }
 
@@ -28,7 +28,7 @@ export default class Statistic {
     remove(this._statisticElement);
   }
 
-  _statisticInputHandler(statisticValue) {
+  _handleStatisticInput(statisticValue) {
     remove(this._statisticElement);
     this._statisticFilter = statisticValue;
     this._renderStatistic();
@@ -39,7 +39,7 @@ export default class Statistic {
     this._setWatchedFilmsForStatistic(this._moviesModel.getFilms(), this._statisticFilter);
     this._statisticElement = new StatisticView(this._getStatisticDataFromWatchedFilms(this._watchedFilms, this._statisticFilter), this._moviesModel);
     render(this._container, this._statisticElement, RenderPosition.BEFOREEND);
-    this._statisticElement.setStatisticInputHandler(this._statisticInputHandler);
+    this._statisticElement.setStatisticInputHandler(this._handleStatisticInput);
   }
 
   _getStatisticDataFromWatchedFilms(watchedFilms, statisticFilter) {

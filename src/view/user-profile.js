@@ -22,6 +22,6 @@ export default class UserProfile extends AbstractView {
   }
 
   setUserRaiting() {
-    document.querySelector(`.profile__rating`).textContent = getUserStatus(this._moviesModel.getWatchedCount());
+    this.getElement().querySelector(`.profile__rating`).textContent = getUserStatus(this._moviesModel.getWatchedCount());
   }
 }

@@ -60,8 +60,8 @@ export default class Film {
     }
 
     this._api.getComments(film.id)
-      .then((data) => {
-        this._filmComments = data.slice();
+      .then((comments) => {
+        this._filmComments = comments.slice();
         this._filmDetailElement = new FilmDetailView(film, this._filmComments);
 
         this._filmCardElement.setClickHandler(this._showFilmDetail); // убирает ошибку когда при клике на карточку комментарии не успели загрузиться
@@ -69,7 +69,7 @@ export default class Film {
           this._hideFilmDetail();
           document.removeEventListener(`keydown`, this._handleEscKeyDown);
           document.removeEventListener(`keydown`, this._handleEnterKeyDown);
-          this._filmDetailElement.reset(this._film);
+          this._filmDetailElement.reset();
         });
 
         this._filmDetailElement.setWatchListClickHandler(this._handleWatchListClick);
@@ -110,13 +110,12 @@ export default class Film {
       this._hideFilmDetail();
       document.removeEventListener(`keydown`, this._handleEscKeyDown);
       document.removeEventListener(`keydown`, this._handleEnterKeyDown);
-      this._filmDetailElement.reset(this._film);
+      this._filmDetailElement.reset();
     }
   }
 
   _hideFilmDetail() {
     remove(this._filmDetailElement);
-
     this._bodyElement.classList.remove(`hide-overflow`);
     this._mode = Mode.DEFAULT;
   }

@@ -41,11 +41,10 @@ export default class Api {
         comment: film.newComment.comment,
         date: film.newComment.date instanceof Date ? film.newComment.date.toISOString() : null,
         emotion: film.newComment.emotion,
-        // author: film.newComment.author
       }),
       headers: new Headers({"Content-Type": `application/json`})
     }).then(Api.toJSON)
-      .then((data) => MoviesModel.adaptToClient(data.movie));
+      .then((valueForFilm) => MoviesModel.adaptToClient(valueForFilm.movie));
   }
 
   updateFilm(film) {
@@ -80,7 +79,7 @@ export default class Api {
     return response.json();
   }
 
-  static catchError(err) {
-    throw err;
+  static catchError(error) {
+    throw error;
   }
 }

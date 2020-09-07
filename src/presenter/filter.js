@@ -67,16 +67,17 @@ export default class Filter {
   }
 
   _handleFilterTypeChange(filterType) {
-    if (this._statisticMode === StatisticMode.OPEN) {
-      this._statisticMode = StatisticMode.DEFAULT;
-      this._statisticPresenter.removeStatisticElement();
-      this._movieListPresenter.showFilmsContainer();
-      this._filterElement.removeActiveFromStatsElement();
-      this._movieListPresenter.resetBoard(); // сбрасывает показанные фильмы
+    if (filterType) {
+      if (this._statisticMode === StatisticMode.OPEN) {
+        this._statisticMode = StatisticMode.DEFAULT;
+        this._statisticPresenter.removeStatisticElement();
+        this._movieListPresenter.showFilmsContainer();
+        this._filterElement.removeActiveFromStatsElement();
+        this._movieListPresenter.resetBoard(); // сбрасывает показанные фильмы
+      }
+
+      this._filterModel.setFilter(UpdateType.MAJOR, filterType);
     }
-
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
-
   }
 
   _getFilters() {

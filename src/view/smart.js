@@ -1,11 +1,6 @@
 import Abstract from './abstract.js';
 
 export default class Smart extends Abstract {
-  constructor() {
-    super();
-    this._data = {};
-  }
-
   restoreHandlers() {
     throw new Error(`Метод restoreHandlers надо переопределить`);
   }
@@ -21,15 +16,5 @@ export default class Smart extends Abstract {
     prevElement = null; // Чтобы окончательно "убить" ссылку на prevElement
 
     this.restoreHandlers();
-  }
-
-  updateData(update, isJustDataUpdating = false) {
-    this._data = Object.assign({}, this._data, update);
-
-    if (isJustDataUpdating) {
-      return;
-    }
-
-    this.updateElement();
   }
 }

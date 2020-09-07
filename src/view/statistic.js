@@ -135,7 +135,7 @@ export default class Statistic extends SmartView {
     super();
     this._statisticData = statisticData;
     this._moviesModel = moviesModel;
-    this._statisticInputHandler = this._statisticInputHandler.bind(this);
+    this._handleStatisticInput = this._handleStatisticInput.bind(this);
     this._setChart();
   }
 
@@ -147,10 +147,10 @@ export default class Statistic extends SmartView {
     this._callback.statisticInput = callback;
     this.getElement()
       .querySelectorAll(`.statistic__filters-input`)
-      .forEach((element) => element.addEventListener(`input`, this._statisticInputHandler));
+      .forEach((element) => element.addEventListener(`input`, this._handleStatisticInput));
   }
 
-  _statisticInputHandler(evt) {
+  _handleStatisticInput(evt) {
     evt.preventDefault();
     this._callback.statisticInput(evt.target.value);
   }

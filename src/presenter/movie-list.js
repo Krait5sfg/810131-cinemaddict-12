@@ -58,6 +58,11 @@ export default class MovieList {
     this._handleSortTypeChange(SortType.DEFAULT);
   }
 
+  resetBoard() {
+    this._clearBoard({resetRenderedFilmCount: true});
+    this._renderBoard();
+  }
+
   _getFilms() {
     const filterType = this._filterModel.getFilter();
     const films = this._moviesModel.getFilms();
@@ -231,10 +236,5 @@ export default class MovieList {
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
     }
-  }
-
-  resetBoard() {
-    this._clearBoard({resetRenderedFilmCount: true});
-    this._renderBoard();
   }
 }

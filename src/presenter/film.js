@@ -104,6 +104,13 @@ export default class Film {
     }
   }
 
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._hideFilmDetail();
+      this._bodyElement.classList.add(`hide-overflow`);
+    }
+  }
+
   _handleEscKeyDown(evt) {
     if (evt.key === Key.ESCAPE || evt.key === Key.ESC) {
       evt.preventDefault();
@@ -174,13 +181,6 @@ export default class Film {
           this._filmDetailElement.activeForm();
         });
       }
-    }
-  }
-
-  resetView() {
-    if (this._mode !== Mode.DEFAULT) {
-      this._hideFilmDetail();
-      this._bodyElement.classList.add(`hide-overflow`);
     }
   }
 }

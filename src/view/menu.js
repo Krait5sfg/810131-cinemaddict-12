@@ -45,11 +45,6 @@ export default class Menu extends AbstractView {
       .forEach((element) => element.addEventListener(`click`, this._handleFilterTypeChangeHandler));
   }
 
-  _handleStatsElementClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.statsElementClick();
-  }
-
   setStatsElementClickHandler(callback) {
     this._callback.statsElementClick = callback;
     this.getElement().querySelector(`.main-navigation__additional`).addEventListener(`click`, this._handleStatsElementClickHandler);
@@ -71,5 +66,10 @@ export default class Menu extends AbstractView {
     this.getElement()
       .querySelector(`.main-navigation__item[data-filter-type="${currentFilter}"]`)
       .classList.remove(`main-navigation__item--active`);
+  }
+
+  _handleStatsElementClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.statsElementClick();
   }
 }

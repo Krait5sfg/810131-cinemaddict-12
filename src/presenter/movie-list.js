@@ -165,7 +165,7 @@ export default class MovieList {
     }
   }
 
-  _handleViewAction(actionType, updateType, update, callback) {
+  _handleViewAction(actionType, updateType, update, handleRequestError) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         this._api.updateFilm(update).then((response) => {
@@ -179,7 +179,7 @@ export default class MovieList {
           })
           .catch(() => {
             // при ошибке удаляемый коментарий трясется
-            callback();
+            handleRequestError();
           });
         break;
       case UserAction.ADD_COMMENT:
@@ -189,7 +189,7 @@ export default class MovieList {
           })
           .catch(() => {
             // при ошибке форма с полем ввода комментария трясется
-            callback();
+            handleRequestError();
           });
     }
   }

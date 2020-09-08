@@ -7,6 +7,11 @@ const Method = {
   POST: `POST`
 };
 
+const Path = {
+  MOVIE: `movies`,
+  COMMENT: `comments`
+};
+
 const SuccessHTTPStatusRange = {
   MIN: 200,
   MAX: 299
@@ -19,23 +24,23 @@ export default class Api {
   }
 
   getFilms() {
-    return this._load({url: `movies`})
+    return this._load({url: Path.MOVIE})
       .then(Api.toJSON)
       .then((films) => films.map(MoviesModel.adaptToClient));
   }
 
   getComments(filmId) {
-    return this._load({url: `comments/${filmId}`})
+    return this._load({url: `${Path.COMMENT}/${filmId}`})
       .then(Api.toJSON);
   }
 
   deleteComment(commentId) {
-    return this._load({url: `comments/${commentId}`, method: Method.DELETE});
+    return this._load({url: `${Path.COMMENT}/${commentId}`, method: Method.DELETE});
   }
 
   addComment(film) {
     return this._load({
-      url: `comments/${film.id}`,
+      url: `${Path.COMMENT}/${film.id}`,
       method: Method.POST,
       body: JSON.stringify({
         comment: film.newComment.comment,
@@ -49,7 +54,7 @@ export default class Api {
 
   updateFilm(film) {
     return this._load({
-      url: `movies/${film.id}`,
+      url: `${Path.MOVIE}/${film.id}`,
       method: Method.PUT,
       body: JSON.stringify(MoviesModel.adaptToServer(film)),
       headers: new Headers({"Content-Type": `application/json`})

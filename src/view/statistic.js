@@ -162,7 +162,7 @@ export default class Statistic extends SmartView {
       const countLine = genres.length;
       const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
       statisticCtx.height = BAR_HEIGHT * countLine;
-      this._chart = renderChart(statisticCtx, genres, counts);
+      renderChart(statisticCtx, genres, counts);
     }
   }
 }

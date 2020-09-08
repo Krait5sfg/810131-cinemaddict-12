@@ -80,9 +80,6 @@ export default class Statistic {
 
   _setWatchedFilmsForStatistic(films, statisticFilter) {
     const currentDate = moment();
-    const dateAWeekAgo = moment().subtract(7, MomentSetting.DAYS);
-    const dateAMonthAgo = moment().subtract(1, MomentSetting.MONTH);
-    const dateAYearAgo = moment().subtract(1, MomentSetting.YEAR);
 
     switch (statisticFilter) {
       case StatisticFilter.ALL_TIME:
@@ -92,12 +89,15 @@ export default class Statistic {
         this._watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isSame(currentDate, MomentSetting.DAY));
         break;
       case StatisticFilter.WEEK:
+        const dateAWeekAgo = moment().subtract(7, MomentSetting.DAYS);
         this._watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isBetween(dateAWeekAgo, currentDate));
         break;
       case StatisticFilter.MONTH:
+        const dateAMonthAgo = moment().subtract(1, MomentSetting.MONTH);
         this._watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isBetween(dateAMonthAgo, currentDate));
         break;
       case StatisticFilter.YEAR:
+        const dateAYearAgo = moment().subtract(1, MomentSetting.YEAR);
         this._watchedFilms = films.filter(({status}) => status.watched && moment(status.watchingDate).isBetween(dateAYearAgo, currentDate));
         break;
       default:

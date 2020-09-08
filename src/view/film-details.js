@@ -213,17 +213,6 @@ export default class FilmDetail extends SmartView {
     this._setInnerHandler();
   }
 
-  _setInnerHandler() {
-    // emoji
-    this.getElement()
-      .querySelectorAll(`.film-details__emoji-label`)
-      .forEach((element) => element.addEventListener(`click`, this._handleEmojiClick));
-
-    this.getElement()
-      .querySelector(`.film-details__comment-input`)
-      .addEventListener(`input`, this._handleCommentInput);
-  }
-
   restoreHandlers() {
     this._setInnerHandler();
     this.setWatchListClickHandler(this._callback.watchListClick);
@@ -233,18 +222,8 @@ export default class FilmDetail extends SmartView {
     this.setClickHandler(this._callback.click);
   }
 
-  _handleCommentInput(evt) {
-    evt.preventDefault();
-    this._message = evt.target.value;
-  }
-
   getTemplate() {
     return createFilmDetailsTemplate(this._film, this._emoji, this._message, this._filmsComments);
-  }
-
-  _handleClick(evt) {
-    evt.preventDefault();
-    this._callback.click();
   }
 
   setClickHandler(callback) {
@@ -257,19 +236,9 @@ export default class FilmDetail extends SmartView {
     this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._handleWatchListClickHandler);
   }
 
-  _handleWatchListClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.watchListClick();
-  }
-
   setWatchedClickHandler(callback) {
     this._callback.watchedClick = callback;
     this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._handleWatchedClickHandler);
-  }
-
-  _handleWatchedClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.watchedClick();
   }
 
   setFavoriteClickHandler(callback) {
@@ -277,53 +246,11 @@ export default class FilmDetail extends SmartView {
     this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._handleFavoriteClickHandler);
   }
 
-  _handleFavoriteClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.favoriteClick();
-  }
-
   setDeleteButtonClickHandler(callback) {
     this._callback.deleteButtonClick = callback;
     this.getElement()
       .querySelectorAll(`.film-details__comment-delete`)
       .forEach((element) => element.addEventListener(`click`, this._handleDeleteButtonClick));
-  }
-
-  _handleDeleteButtonClick(evt) {
-    const commentElement = evt.target.closest(`.film-details__comment`);
-    evt.preventDefault();
-    if (commentElement.classList.contains(`shake`)) {
-      commentElement.classList.remove(`shake`);
-    }
-    evt.target.textContent = `Deleting`;
-    evt.target.disabled = true;
-    this._callback.deleteButtonClick(evt.target.dataset.commentId, () => {
-      commentElement.classList.add(`shake`);
-      evt.target.textContent = `Delete`;
-      evt.target.disabled = false;
-    });
-  }
-
-  _handleEmojiClick(evt) {
-    this._updateEmoji(evt.target.dataset.emojiType);
-  }
-
-  _updateEmoji(emojiType) {
-    switch (emojiType) {
-      case EmojiType.SMILE:
-        this._emoji = EmojiType.SMILE;
-        break;
-      case EmojiType.SLEEPING:
-        this._emoji = EmojiType.SLEEPING;
-        break;
-      case EmojiType.ANGRY:
-        this._emoji = EmojiType.ANGRY;
-        break;
-      case EmojiType.PUKE:
-        this._emoji = EmojiType.PUKE;
-        break;
-    }
-    this.getElement().querySelector(`.film-details__add-emoji-label`).innerHTML = getEmojiImageElement(this._emoji);
   }
 
   getSelectedEmojiType() {
@@ -368,5 +295,78 @@ export default class FilmDetail extends SmartView {
     this.getElement()
       .querySelectorAll(`.film-details__emoji-label`)
       .forEach((element) => element.addEventListener(`click`, this._handleEmojiClick));
+  }
+
+  _setInnerHandler() {
+    // emoji
+    this.getElement()
+      .querySelectorAll(`.film-details__emoji-label`)
+      .forEach((element) => element.addEventListener(`click`, this._handleEmojiClick));
+
+    this.getElement()
+      .querySelector(`.film-details__comment-input`)
+      .addEventListener(`input`, this._handleCommentInput);
+  }
+
+  _handleDeleteButtonClick(evt) {
+    const commentElement = evt.target.closest(`.film-details__comment`);
+    evt.preventDefault();
+    if (commentElement.classList.contains(`shake`)) {
+      commentElement.classList.remove(`shake`);
+    }
+    evt.target.textContent = `Deleting`;
+    evt.target.disabled = true;
+    this._callback.deleteButtonClick(evt.target.dataset.commentId, () => {
+      commentElement.classList.add(`shake`);
+      evt.target.textContent = `Delete`;
+      evt.target.disabled = false;
+    });
+  }
+
+  _handleClick(evt) {
+    evt.preventDefault();
+    this._callback.click();
+  }
+
+  _handleWatchListClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.watchListClick();
+  }
+
+  _handleFavoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  _handleWatchedClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.watchedClick();
+  }
+
+  _handleCommentInput(evt) {
+    evt.preventDefault();
+    this._message = evt.target.value;
+  }
+
+  _handleEmojiClick(evt) {
+    this._updateEmoji(evt.target.dataset.emojiType);
+  }
+
+  _updateEmoji(emojiType) {
+    switch (emojiType) {
+      case EmojiType.SMILE:
+        this._emoji = EmojiType.SMILE;
+        break;
+      case EmojiType.SLEEPING:
+        this._emoji = EmojiType.SLEEPING;
+        break;
+      case EmojiType.ANGRY:
+        this._emoji = EmojiType.ANGRY;
+        break;
+      case EmojiType.PUKE:
+        this._emoji = EmojiType.PUKE;
+        break;
+    }
+    this.getElement().querySelector(`.film-details__add-emoji-label`).innerHTML = getEmojiImageElement(this._emoji);
   }
 }

@@ -1,4 +1,4 @@
-import {getRandomValueFromArray, getConvertingDate, getHumaniseDuration, TypeTemplate} from '../utils/common.js';
+import {getConvertingDate, getHumaniseDuration, TypeTemplate} from '../utils/common.js';
 import AbstractView from './abstract.js';
 
 const LetterLimit = {
@@ -11,7 +11,7 @@ const createFilmCardTemplate = (film) => {
 
   const {title, rating, releaseDate, duration, genres, image, description, comments, status} = film;
   const {favorite, watched, watchlist} = status;
-  const genre = getRandomValueFromArray(genres);
+  const genre = genres[0];
   const year = getConvertingDate(releaseDate, TypeTemplate.FILM_CARD);
   const humanizeDuration = getHumaniseDuration(duration);
   return `<article class="film-card">
@@ -48,10 +48,6 @@ export default class FilmCard extends AbstractView {
     return createFilmCardTemplate(this._film);
   }
 
-  _handleClick() {
-    this._callback.click();
-  }
-
   setClickHandler(callback) {
     this._callback.click = callback;
     this.getElement()
@@ -66,19 +62,9 @@ export default class FilmCard extends AbstractView {
     this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, this._handleWatchListClick);
   }
 
-  _handleWatchListClick(evt) {
-    evt.preventDefault();
-    this._callback.watchListClick();
-  }
-
   setWatchedClickHandler(callback) {
     this._callback.watchedClick = callback;
     this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).addEventListener(`click`, this._handleWatchedClick);
-  }
-
-  _handleWatchedClick(evt) {
-    evt.preventDefault();
-    this._callback.watchedClick();
   }
 
   setFavoriteClickHandler(callback) {
@@ -89,5 +75,19 @@ export default class FilmCard extends AbstractView {
   _handleFavoriteClick(evt) {
     evt.preventDefault();
     this._callback.favoriteClick();
+  }
+
+  _handleClick() {
+    this._callback.click();
+  }
+
+  _handleWatchListClick(evt) {
+    evt.preventDefault();
+    this._callback.watchListClick();
+  }
+
+  _handleWatchedClick(evt) {
+    evt.preventDefault();
+    this._callback.watchedClick();
   }
 }

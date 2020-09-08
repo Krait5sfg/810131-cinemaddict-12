@@ -17,7 +17,6 @@ export default class MovieList {
   constructor(mainElement, bodyElement, moviesModel, filterModel, api) {
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
-    this._filmsComments = null;
     this._api = api;
 
     this._bodyElement = bodyElement; // body страницы
@@ -57,6 +56,11 @@ export default class MovieList {
     this._filmsContainerElement.getElement().classList.remove(`visually-hidden`);
     this._sortElement.getElement().classList.remove(`visually-hidden`);
     this._handleSortTypeChange(SortType.DEFAULT);
+  }
+
+  resetBoard() {
+    this._clearBoard({resetRenderedFilmCount: true});
+    this._renderBoard();
   }
 
   _getFilms() {
@@ -232,10 +236,5 @@ export default class MovieList {
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
     }
-  }
-
-  resetBoard() {
-    this._clearBoard({resetRenderedFilmCount: true});
-    this._renderBoard();
   }
 }

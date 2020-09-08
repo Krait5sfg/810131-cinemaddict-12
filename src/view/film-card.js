@@ -1,4 +1,4 @@
-import {getRandomValueFromArray, getConvertingDate, getHumaniseDuration, TypeTemplate} from '../utils/common.js';
+import {getConvertingDate, getHumaniseDuration, TypeTemplate} from '../utils/common.js';
 import AbstractView from './abstract.js';
 
 const LetterLimit = {
@@ -11,7 +11,7 @@ const createFilmCardTemplate = (film) => {
 
   const {title, rating, releaseDate, duration, genres, image, description, comments, status} = film;
   const {favorite, watched, watchlist} = status;
-  const genre = getRandomValueFromArray(genres);
+  const genre = genres[0];
   const year = getConvertingDate(releaseDate, TypeTemplate.FILM_CARD);
   const humanizeDuration = getHumaniseDuration(duration);
   return `<article class="film-card">

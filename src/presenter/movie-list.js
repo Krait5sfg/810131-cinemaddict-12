@@ -17,7 +17,6 @@ export default class MovieList {
   constructor(mainElement, bodyElement, moviesModel, filterModel, api) {
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
-    this._filmsComments = null;
     this._api = api;
 
     this._bodyElement = bodyElement; // body страницы

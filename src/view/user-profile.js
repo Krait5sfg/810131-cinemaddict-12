@@ -13,15 +13,15 @@ export default class UserProfile extends AbstractView {
   constructor(moviesModel) {
     super();
     this._moviesModel = moviesModel;
-    this.setUserRaiting = this.setUserRaiting.bind(this);
-    this._moviesModel.addObserver(this.setUserRaiting);
+    this.setUserRating = this.setUserRating.bind(this);
+    this._moviesModel.addObserver(this.setUserRating);
   }
 
   getTemplate() {
     return createUserProfileTemplate(getUserStatus(this._moviesModel.getWatchedCount()));
   }
 
-  setUserRaiting() {
+  setUserRating() {
     this.getElement().querySelector(`.profile__rating`).textContent = getUserStatus(this._moviesModel.getWatchedCount());
   }
 }

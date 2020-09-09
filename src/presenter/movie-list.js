@@ -203,6 +203,10 @@ export default class MovieList {
       case UpdateType.MINOR:
         this._filmPresenter[updatedValue.id].init(updatedValue);
         break;
+      case UpdateType.MEDIUM:
+        this._clearBoard();
+        this._renderBoard();
+        break;
       case UpdateType.MAJOR:
         this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this._renderBoard();

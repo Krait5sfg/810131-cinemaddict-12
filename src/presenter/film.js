@@ -70,6 +70,10 @@ export default class Film {
           document.removeEventListener(`keydown`, this._handleEscKeyDown);
           document.removeEventListener(`keydown`, this._handleEnterKeyDown);
           this._filmDetailElement.reset();
+
+          if (this._status) {
+            this._updateFilmDataOnClose();
+          }
         });
 
         this._filmDetailElement.setWatchListClickHandler(this._handleWatchListClick);
@@ -118,6 +122,10 @@ export default class Film {
       document.removeEventListener(`keydown`, this._handleEscKeyDown);
       document.removeEventListener(`keydown`, this._handleEnterKeyDown);
       this._filmDetailElement.reset();
+
+      if (this._status) {
+        this._updateFilmDataOnClose();
+      }
     }
   }
 
@@ -142,19 +150,20 @@ export default class Film {
 
   // изменения данных
   _handleWatchListClick() {
-    const status = Object.assign({}, this._film.status, {watchlist: !this._film.status.watchlist});
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status}));
+    // const status = Object.assign({}, this._film.status, {watchlist: !this._film.status.watchlist});
+    this._status = Object.assign({}, this._film.status, {watchlist: !this._film.status.watchlist});
+    this._updateFilmData();
   }
 
   _handleWatchedClick() {
     // если поле watched true - значит при клике будет false поэтому надо удалить дату когда фильм был просмотрен
-    const status = Object.assign({}, this._film.status, {watched: !this._film.status.watched, watchingDate: this._film.status.watched ? null : new Date()});
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status}));
+    this._status = Object.assign({}, this._film.status, {watched: !this._film.status.watched, watchingDate: this._film.status.watched ? null : new Date()});
+    this._updateFilmData();
   }
 
   _handleFavoriteClick() {
-    const status = Object.assign({}, this._film.status, {favorite: !this._film.status.favorite});
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status}));
+    this._status = Object.assign({}, this._film.status, {favorite: !this._film.status.favorite});
+    this._updateFilmData();
   }
 
   _handleDeleteButtonClick(commentId, handleRequestError) {
@@ -182,5 +191,18 @@ export default class Film {
         });
       }
     }
+  }
+
+  _updateFilmData() {
+    if (this._mode === Mode.DEFAULT) {
+      this._changeData(UserAction.UPDATE_FILM, UpdateType.MEDIUM, Object.assign({}, this._film, {status: this._status}));
+    } else {
+      this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, Object.assign({}, this._film, {status: this._status}));
+    }
+  }
+
+  _updateFilmDataOnClose() {
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MEDIUM, Object.assign({}, this._film, {status: this._status}));
+    this._status = null;
   }
 }

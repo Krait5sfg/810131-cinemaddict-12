@@ -31,11 +31,6 @@ export default class Menu extends AbstractView {
     return createMenuTemplate(this._filter, this._currentFilter);
   }
 
-  _handleFilterTypeChangeHandler(evt) {
-    evt.preventDefault();
-    this._callback.filterTypeChange(evt.target.dataset.filterType);
-  }
-
   setFilterTypeChangeHandler(callback) {
     this._callback.filterTypeChange = callback;
     this.getElement()
@@ -69,5 +64,10 @@ export default class Menu extends AbstractView {
   _handleStatsElementClickHandler(evt) {
     evt.preventDefault();
     this._callback.statsElementClick();
+  }
+
+  _handleFilterTypeChangeHandler(evt) {
+    evt.preventDefault();
+    this._callback.filterTypeChange(evt.target.dataset.filterType);
   }
 }

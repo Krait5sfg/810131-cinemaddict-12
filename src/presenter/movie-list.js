@@ -220,6 +220,10 @@ export default class MovieList {
   }
 
   _clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
+    if (this._bodyElement.classList.contains(`hide-overflow`)) {
+      this._bodyElement.classList.remove(`hide-overflow`);
+    }
+
     const filmCount = this._getFilms().length;
 
     Object

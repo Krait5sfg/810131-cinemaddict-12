@@ -33,7 +33,7 @@ export default class Sort extends AbstractView {
   }
 
   _handleSortTypeChange(evt) {
-    if (evt.target.nodeName !== LINK_NODE_NAME || document.querySelector(`.film-details`)) {
+    if (evt.target.nodeName !== LINK_NODE_NAME) {
       return;
     }
     evt.preventDefault();

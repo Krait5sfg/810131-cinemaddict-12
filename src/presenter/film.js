@@ -150,7 +150,6 @@ export default class Film {
 
   // изменения данных
   _handleWatchListClick() {
-    // const status = Object.assign({}, this._film.status, {watchlist: !this._film.status.watchlist});
     this._status = Object.assign({}, this._film.status, {watchlist: !this._film.status.watchlist});
     this._updateFilmData();
   }

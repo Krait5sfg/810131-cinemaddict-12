@@ -203,6 +203,10 @@ export default class MovieList {
       case UpdateType.MINOR:
         this._filmPresenter[updatedValue.id].init(updatedValue);
         break;
+      case UpdateType.MEDIUM:
+        this._clearBoard();
+        this._renderBoard();
+        break;
       case UpdateType.MAJOR:
         this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this._renderBoard();
@@ -216,6 +220,10 @@ export default class MovieList {
   }
 
   _clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
+    if (this._bodyElement.classList.contains(`hide-overflow`)) {
+      this._bodyElement.classList.remove(`hide-overflow`);
+    }
+
     const filmCount = this._getFilms().length;
 
     Object
